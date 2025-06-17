@@ -1,4 +1,5 @@
-﻿using GeekCli.Commands.Rx.Common;
+﻿using GeekCli.Commands.Db;
+using GeekCli.Commands.Rx.Common;
 using GeekCli.Commands.Rx.Native;
 using Spectre.Console.Cli;
 
@@ -31,6 +32,20 @@ namespace GeekCli
 
                         native.AddCommand<RxNativeComponentCommand>("component")
                               .WithDescription("Creates a new React Native component with style file.");
+                    });
+                });
+
+                config.AddBranch("db", db =>
+                {
+                    db.SetDescription("Database utilities");
+
+                    db.AddBranch("migration", migration =>
+                    {
+                        migration.AddCommand<DbAddMigrationCommand>("add")
+                                 .WithDescription("Generates a new React Context with related files.");
+
+                        migration.AddCommand<DbRemoveMigrationCommand>("remove")
+                                 .WithDescription("Generates a new React Context with related files.");
                     });
                 });
             });

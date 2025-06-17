@@ -8,6 +8,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <PackAsTool>true</PackAsTool>
 	<ToolCommandName>geek-cli</ToolCommandName>
+	<Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
