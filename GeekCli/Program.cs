@@ -1,4 +1,5 @@
 ﻿using GeekCli.Commands.Db;
+using GeekCli.Commands.Ngx;
 using GeekCli.Commands.Rx.Common;
 using GeekCli.Commands.Rx.Native;
 using Spectre.Console.Cli;
@@ -18,7 +19,7 @@ namespace GeekCli
                     rx.SetDescription("React utilities and generators");
 
                     rx.AddCommand<RxContextCommand>("context")
-                        .WithDescription("Generates a new React Context with related files.");
+                      .WithDescription("Generates a new React Context with related files.");
 
                     rx.AddBranch("native", native =>
                     {
@@ -47,6 +48,17 @@ namespace GeekCli
                         migration.AddCommand<DbRemoveMigrationCommand>("remove")
                                  .WithDescription("Generates a new React Context with related files.");
                     });
+                });
+
+                config.AddBranch("ngx" ,ngx => 
+                {
+                    ngx.SetDescription("Angular utilities");
+
+                    ngx.AddCommand<NgxPageCommand>("page")
+                       .WithDescription("Generates a new Angular page with related files.");
+
+                    ngx.AddCommand<NgxComponentCommand>("component")
+                       .WithDescription("Generates a new Angular component with related files.");
                 });
             });
 

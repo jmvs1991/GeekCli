@@ -1,12 +1,6 @@
-﻿using Spectre.Console.Cli;
-using System.ComponentModel;
-
-namespace GeekCli.Commands.Rx.Native
+﻿namespace GeekCli.Commands.Rx.Native
 {
-    class RxNativeModuleSettings : CommandSettings
+    class RxNativeModuleSettings : RxSettingBase
     {
-        [CommandArgument(0, "<name>")]
-        [Description("The name of the module to create.")]
-        public string Name { get; set; }
     }
 }
