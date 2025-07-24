@@ -43,10 +43,13 @@ namespace GeekCli
                     db.AddBranch("migration", migration =>
                     {
                         migration.AddCommand<DbAddMigrationCommand>("add")
-                                 .WithDescription("Generates a new React Context with related files.");
+                                 .WithDescription("Creates a new database migration and related files.");
 
                         migration.AddCommand<DbRemoveMigrationCommand>("remove")
-                                 .WithDescription("Generates a new React Context with related files.");
+                                 .WithDescription("Removes the last generated database migration.");
+
+                        migration.AddCommand<DbRollbackMigrationCommand>("rollback")
+                                 .WithDescription("Rolls back the database to the previous migration state.");
                     });
                 });
 

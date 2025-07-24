@@ -67,7 +67,7 @@ This will generate a file like:
 ## 📥 Install the CLI globally
 
 ```bash
-dotnet tool install -g geek-cli --add-source ./bin/Release
+dotnet tool install --global --add-source ./bin/Release GeekCli --verbosity detailed
 ```
 
 > You can now run `geek-cli` from anywhere in your terminal.
@@ -79,7 +79,7 @@ dotnet tool install -g geek-cli --add-source ./bin/Release
 If you made changes and re-packed:
 
 ```bash
-dotnet tool update -g geek-cli --add-source ./bin/Release
+dotnet tool update -g GeekCli --add-source ./bin/Release
 ```
 
 ---
@@ -87,7 +87,7 @@ dotnet tool update -g geek-cli --add-source ./bin/Release
 ## 🗑️ Uninstall the CLI
 
 ```bash
-dotnet tool uninstall -g geek-cli
+dotnet tool uninstall -g GeekCli
 ```
 
 ---
