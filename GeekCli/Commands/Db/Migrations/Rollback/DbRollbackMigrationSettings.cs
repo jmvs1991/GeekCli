@@ -1,7 +1,7 @@
 ﻿using Spectre.Console.Cli;
 using System.ComponentModel;
 
-namespace GeekCli.Commands.Db
+namespace GeekCli.Commands.Db.Migrations.Rollback
 {
     internal class DbRollbackMigrationSettings : DbSettingBase
     {

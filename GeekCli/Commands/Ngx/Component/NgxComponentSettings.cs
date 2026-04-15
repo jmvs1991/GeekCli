@@ -1,4 +1,4 @@
-﻿namespace GeekCli.Commands.Ngx
+﻿namespace GeekCli.Commands.Ngx.Component
 {
     class NgxComponentSettings : NgxSettingsBase
     {

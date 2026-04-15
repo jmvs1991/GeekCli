@@ -1,4 +1,4 @@
-﻿namespace GeekCli.Commands.Db
+﻿namespace GeekCli.Commands.Db.Migrations.Remove
 {
     class DbRemoveMigrationSettings : DbSettingBase
     {

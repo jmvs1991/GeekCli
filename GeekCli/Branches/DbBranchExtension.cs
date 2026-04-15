@@ -1,4 +1,6 @@
-﻿using GeekCli.Commands.Db;
+﻿using GeekCli.Commands.Db.Migrations.Add;
+using GeekCli.Commands.Db.Migrations.Remove;
+using GeekCli.Commands.Db.Migrations.Rollback;
 using Spectre.Console.Cli;
 
 namespace GeekCli.Branches

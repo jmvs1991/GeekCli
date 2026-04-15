@@ -1,4 +1,4 @@
-﻿namespace GeekCli.Commands.Db
+﻿namespace GeekCli.Commands.Db.Migrations.Add
 {
     class DbAddMigrationCommand : DbCommandBase<DbAddMigrationSettings>
     {
