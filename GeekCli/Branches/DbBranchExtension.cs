@@ -1,6 +1,7 @@
 ﻿using GeekCli.Commands.Db.Migrations.Add;
 using GeekCli.Commands.Db.Migrations.Remove;
 using GeekCli.Commands.Db.Migrations.Rollback;
+using GeekCli.Commands.Db.Wizard;
 using Spectre.Console.Cli;
 
 namespace GeekCli.Branches
@@ -12,6 +13,7 @@ namespace GeekCli.Branches
             return configurator.AddBranch("db", db =>
             {
                 db.SetDescription("Database utilities");
+                db.SetDefaultCommand<DbWizardCommand>();
 
                 db.AddBranch("migration", migration =>
                 {

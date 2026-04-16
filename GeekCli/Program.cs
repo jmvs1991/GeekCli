@@ -1,4 +1,9 @@
 using GeekCli.Branches;
+using GeekCli.Commands.Db.Wizard;
+using GeekCli.Commands.Ngx.Wizard;
+using GeekCli.Commands.Rx.Wizard;
+using GeekCli.Commands.Wizard;
+using GeekCli.Infrastructure.DependencyInjection;
 using GeekCliServices.Services.Db.Migrations.Add;
 using GeekCliServices.Services.Db.Migrations.Remove;
 using GeekCliServices.Services.Db.Migrations.Rollback;
@@ -27,10 +32,14 @@ namespace GeekCli
             services.AddSingleton<IRxNativeComponentService, RxNativeComponentService>();
             services.AddSingleton<IRxNativeModuleService, RxNativeModuleService>();
             services.AddSingleton<IRxNativeScreenService, RxNativeScreenService>();
+            services.AddSingleton<IDbWizard>(provider => provider.GetRequiredService<DbWizardCommand>());
+            services.AddSingleton<INgxWizard>(provider => provider.GetRequiredService<NgxWizardCommand>());
+            services.AddSingleton<IRxWizard>(provider => provider.GetRequiredService<RxWizardCommand>());
 
             var registrar = new TypeRegistrar(services);
 
             var app = new CommandApp(registrar);
+            app.SetDefaultCommand<GeneralWizardCommand>();
 
             app.Configure(config =>
             {
