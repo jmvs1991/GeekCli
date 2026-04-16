@@ -1,4 +1,5 @@
-﻿using GeekCli.Branches;
+using GeekCli.Branches;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
 namespace GeekCli
@@ -7,7 +8,11 @@ namespace GeekCli
     {
         static int Main(string[] args)
         {
-            var app = new CommandApp();
+            var services = new ServiceCollection();
+
+            var registrar = new TypeRegistrar(services);
+
+            var app = new CommandApp(registrar);
 
             app.Configure(config =>
             {
