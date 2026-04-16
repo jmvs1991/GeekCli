@@ -1,5 +1,8 @@
-﻿using GeekCli.Commands.Rx.Common;
-using GeekCli.Commands.Rx.Native;
+using GeekCli.Commands.Rx.Common.Context;
+using GeekCli.Commands.Rx.Native.Component;
+using GeekCli.Commands.Rx.Native.Module;
+using GeekCli.Commands.Rx.Native.Screen;
+using GeekCli.Commands.Rx.Wizard;
 using Spectre.Console.Cli;
 
 namespace GeekCli.Branches
@@ -11,6 +14,7 @@ namespace GeekCli.Branches
             return configurator.AddBranch("rx", rx =>
             {
                 rx.SetDescription("React utilities and generators");
+                rx.SetDefaultCommand<RxWizardCommand>();
 
                 rx.AddCommand<RxContextCommand>("context")
                   .WithDescription("Generates a new React Context with related files.");

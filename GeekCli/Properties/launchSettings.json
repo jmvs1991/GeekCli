@@ -2,7 +2,6 @@
   "profiles": {
     "GeekCli": {
       "commandName": "Project",
-      "commandLineArgs": "rx"
     },
     "Container (Dockerfile)": {
       "commandName": "Docker"

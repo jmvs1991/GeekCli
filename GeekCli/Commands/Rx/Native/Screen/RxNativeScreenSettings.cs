@@ -1,7 +1,7 @@
 ﻿using Spectre.Console.Cli;
 using System.ComponentModel;
 
-namespace GeekCli.Commands.Rx.Native
+namespace GeekCli.Commands.Rx.Native.Screen
 {
     class RxNativeScreenSettings : RxSettingBase
     {

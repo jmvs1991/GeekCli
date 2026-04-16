@@ -1,10 +1,11 @@
-﻿namespace GeekCli.Commands.Ngx.Component
+﻿using GeekCliServices.Services.Ngx.Component;
+
+namespace GeekCli.Commands.Ngx.Component
 {
-    class NgxComponentCommand : NgxCommandBase<NgxComponentSettings>
+    class NgxComponentCommand : NgxCommandBase<INgxComponentService>
     {
-        protected override string BuildArgs(NgxComponentSettings settings)
+        public NgxComponentCommand(INgxComponentService service) : base(service)
         {
-            return $"g c {settings.Name} --prefix ngx";
         }
     }
 }

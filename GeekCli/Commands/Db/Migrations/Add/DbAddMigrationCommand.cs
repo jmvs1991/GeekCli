@@ -1,20 +1,17 @@
-﻿namespace GeekCli.Commands.Db.Migrations.Add
+﻿using GeekCliServices.Services.Db.Migrations.Add;
+using GeekCliServices.Services.Db.Migrations.Add.Models;
+
+namespace GeekCli.Commands.Db.Migrations.Add
 {
-    class DbAddMigrationCommand : DbCommandBase<DbAddMigrationSettings>
+    class DbAddMigrationCommand : DbCommandBase<DbAddMigrationSettings, IAddMigrationService, AddMigrationCommand>
     {
-        protected override string BuildArgs(DbAddMigrationSettings settings)
+        public DbAddMigrationCommand(IAddMigrationService service) : base(service)
         {
-            string project = settings.Init ? $"{settings.ProjectName}.SchemaInitialization" : $"{settings.ProjectName}.SchemaUpdates";
-            string issue = settings.Issue;
-            string migration = settings.MigrationName;
-            string manager = $"{settings.ProjectName}.Manager";
-
-
-            return $"ef migrations add {migration} " +
-                   $"--project .\\{project}\\{project}.csproj " +
-                   $"--startup-project .\\{manager}\\{manager}.csproj " +
-                   $"-o Migrations/{issue} -v -- --Assembly:{project}";
         }
-               
+
+        protected override AddMigrationCommand MapToCommand(DbAddMigrationSettings settings)
+        {
+            return new AddMigrationCommand(settings.ProjectName, settings.Init, settings.MigrationName, settings.Issue);
+        }
     }
 }

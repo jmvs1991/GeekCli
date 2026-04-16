@@ -1,14 +1,14 @@
-﻿using Spectre.Console.Cli;
+﻿using GeekCliServices.Services;
+using GeekCliServices.Services.Db.Models;
 
 namespace GeekCli.Commands.Db
 {
-    abstract class DbCommandBase<S> : CommandBase<S> where S : DbSettingBase
+    abstract class DbCommandBase<TSettings, TService, TCommand> : CommandBase<TSettings, TService, TCommand> where TSettings : DbSettingBase
+                                                                                                             where TService : ICommandService<TCommand>
+                                                                                                             where TCommand : DbCommandBase
     {
-        public override int Execute(CommandContext context, S settings)
+        public DbCommandBase(TService service) : base(service, "dotnet")
         {
-           return RunProcess("dotnet",BuildArgs(settings));
         }
-
-        protected abstract string BuildArgs(S settings);
     }
 }
