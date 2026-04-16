@@ -1,129 +1,183 @@
 # 🛠️ geek-cli
 
-A powerful developer CLI tool built with [Spectre.Console](https://spectreconsole.net/cli), focused on automating common tasks for React, React Native, and .NET development.
+A developer CLI built with [Spectre.Console](https://spectreconsole.net/cli) for common React, React Native, Angular, and .NET workflows.
 
 ---
 
 ## ✨ Features
 
-- 🧠 Generate React Contexts
-- 📱 Scaffold React Native modules, screens, and components
-- 🧩 Create EF Core migrations with project conventions
-- 📦 CLI commands with both structured and interactive workflows
+- Generate React contexts
+- Scaffold React Native modules, screens, and components
+- Generate Angular pages and components
+- Create, remove, and rollback EF Core migrations
+- Use branch-specific wizards or a general root wizard
 
 ---
 
 ## 📂 Command Structure
 
-```
+```text
 geek-cli
-├── rx
-│   ├── context
-│   └── native
-│       ├── module
-│       ├── screen
-│       └── component
-└── db
-    └── migration
-        ├── add
-        └── remove
+├── db
+│   └── migration
+│       ├── add
+│       ├── remove
+│       └── rollback
+├── ngx
+│   ├── page
+│   └── component
+└── rx
+    ├── context
+    └── native
+        ├── module
+        ├── screen
+        └── component
 ```
+
+Running `geek-cli` with no arguments opens the general wizard.
+
+Running `geek-cli db`, `geek-cli ngx`, or `geek-cli rx` opens the wizard for that branch.
 
 ---
 
 ## 🚀 Getting Started
 
-### 🧱 Prerequisites
+### Prerequisites
 
 - [.NET SDK 8.0+](https://dotnet.microsoft.com/en-us/download)
-- Windows, macOS or Linux terminal
+- A terminal on Windows, macOS, or Linux
 
 ---
 
-## 🔨 Build the project
+## 🔨 Build
 
 ```bash
-dotnet build -c Release
-```
-
----
-
-## 📦 Package as a global tool
-
-Create the `.nupkg` file:
-
-```bash
-dotnet pack -c Release
-```
-
-This will generate a file like:
-
-```
-./bin/Release/geek-cli.<version>.nupkg
+dotnet build .\GeekCli\GeekCli.csproj -c Release
 ```
 
 ---
 
-## 📥 Install the CLI globally
+## 📦 Pack As A Tool
+
+Create the tool package:
 
 ```bash
-dotnet tool install --global --add-source ./bin/Release GeekCli --verbosity detailed
+dotnet pack .\GeekCli\GeekCli.csproj -c Release
 ```
 
-> You can now run `geek-cli` from anywhere in your terminal.
+This generates a package under:
+
+```text
+.\GeekCli\bin\Release\
+```
+
+The executable command name is:
+
+```text
+geek-cli
+```
+
+The package id used by `dotnet tool install` is currently:
+
+```text
+GeekCli
+```
 
 ---
 
-## 🔁 Update the CLI
-
-If you made changes and re-packed:
+## 📥 Install Globally
 
 ```bash
-dotnet tool update -g GeekCli --add-source ./bin/Release
+dotnet tool install --global --add-source .\GeekCli\bin\Release GeekCli --verbosity detailed
+```
+
+After installation, run:
+
+```bash
+geek-cli
 ```
 
 ---
 
-## 🗑️ Uninstall the CLI
+## 🔁 Update The Tool
+
+After packing a new version:
 
 ```bash
-dotnet tool uninstall -g GeekCli
+dotnet tool update --global --add-source .\GeekCli\bin\Release GeekCli
 ```
 
 ---
 
-## 🧪 Example Usages
-
-### Create a React Context
+## 🗑️ Uninstall
 
 ```bash
-geek-cli rx context Auth --flat false
+dotnet tool uninstall --global GeekCli
 ```
 
-### Generate a React Native screen
+---
+
+## 🧪 Usage Examples
+
+### Open the general wizard
 
 ```bash
-geek-cli rx native screen Login --flat false --schema true --wrapper true
+geek-cli
 ```
 
-### Create a new EF Core migration
+### Open the database wizard
 
 ```bash
-geek-cli db migration add InitSchema --project Booking --version 1.0 --issue 123 --init true --update true
+geek-cli db
+```
+
+### Add a migration directly
+
+```bash
+geek-cli db migration add InitSchema --project Booking --issue ABC-123 --init
+```
+
+### Roll back to a migration directly
+
+```bash
+geek-cli db migration rollback InitSchema --project Booking
+```
+
+### Open the Angular wizard
+
+```bash
+geek-cli ngx
+```
+
+### Generate an Angular component directly
+
+```bash
+geek-cli ngx component user-profile
+```
+
+### Open the React wizard
+
+```bash
+geek-cli rx
+```
+
+### Generate a React context directly
+
+```bash
+geek-cli rx context Auth --flat
+```
+
+### Generate a React Native screen directly
+
+```bash
+geek-cli rx native screen Login --schema --wrapper
 ```
 
 ---
 
 ## 🤝 Contributing
 
-Pull requests are welcome! If you'd like to suggest features or report bugs, feel free to open an issue.
-
----
-
-## 🧠 Built With
-
-- [Spectre.Console](https://spectreconsole.net/)
-- 💡 Designed for developer speed and consistency
+Pull requests are welcome. If you want to suggest a feature or report a bug, open an issue.
 
 ---
 
