@@ -1,5 +1,7 @@
-﻿using GeekCli.Commands.Rx.Common;
-using GeekCli.Commands.Rx.Native;
+﻿using GeekCli.Commands.Rx.Common.Context;
+using GeekCli.Commands.Rx.Native.Component;
+using GeekCli.Commands.Rx.Native.Module;
+using GeekCli.Commands.Rx.Native.Screen;
 using Spectre.Console.Cli;
 
 namespace GeekCli.Branches

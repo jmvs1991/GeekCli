@@ -1,10 +1,11 @@
-﻿namespace GeekCli.Commands.Ngx.Page
+﻿using GeekCliServices.Services.Ngx.Page;
+
+namespace GeekCli.Commands.Ngx.Page
 {
-    class NgxPageCommand : NgxCommandBase<NgxPageSettings>
+    class NgxPageCommand : NgxCommandBase<INgxPageService>
     {
-        protected override string BuildArgs(NgxPageSettings settings)
+        public NgxPageCommand(INgxPageService service) : base(service)
         {
-            return $"g c {settings.Name} --type page";
         }
     }
 }

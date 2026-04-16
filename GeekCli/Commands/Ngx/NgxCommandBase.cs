@@ -1,14 +1,17 @@
-﻿using Spectre.Console.Cli;
+﻿using GeekCliServices.Services;
+using GeekCliServices.Services.Ngx.Models;
 
 namespace GeekCli.Commands.Ngx
 {
-    abstract class NgxCommandBase<S> : CommandBase<S> where S : NgxSettingsBase
+    abstract class NgxCommandBase<TService> : CommandBase<NgxSettingsBase, TService, NgxCommand> where TService : ICommandService<NgxCommand>
     {
-        protected abstract string BuildArgs(S settings);
-
-        public override int Execute(CommandContext context, S settings)
+        public NgxCommandBase(TService service) : base(service, "cmd")
         {
-            return RunProcess("cmd", $"/c ng {BuildArgs(settings)}");
+        }
+
+        protected override NgxCommand MapToCommand(NgxSettingsBase settings)
+        {
+            return new NgxCommand(settings.Name);
         }
     }
 }

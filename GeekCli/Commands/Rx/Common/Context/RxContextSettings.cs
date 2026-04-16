@@ -1,4 +1,4 @@
-﻿namespace GeekCli.Commands.Rx.Common
+﻿namespace GeekCli.Commands.Rx.Common.Context
 {
     class RxContextSettings : RxSettingBase
     {

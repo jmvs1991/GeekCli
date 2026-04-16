@@ -1,17 +1,17 @@
-﻿namespace GeekCli.Commands.Db.Migrations.Remove
+﻿using GeekCliServices.Services.Db.Migrations.Remove;
+using GeekCliServices.Services.Db.Migrations.Remove.Models;
+
+namespace GeekCli.Commands.Db.Migrations.Remove
 {
-    class DbRemoveMigrationCommand : DbCommandBase<DbRemoveMigrationSettings>
+    class DbRemoveMigrationCommand : DbCommandBase<DbRemoveMigrationSettings, IRemoveMigrationService, RemoveMigrationCommand>
     {
-        protected override string BuildArgs(DbRemoveMigrationSettings settings)
+        public DbRemoveMigrationCommand(IRemoveMigrationService service) : base(service)
         {
-            string project = settings.Init ? $"{settings.ProjectName}.SchemaInitialization" : $"{settings.ProjectName}.SchemaUpdates";
-            string manager = $"{settings.ProjectName}.Manager";
+        }
 
-
-            return $"ef migrations remove " +
-                   $"--project .\\{project}\\{project}.csproj " +
-                   $"--startup-project .\\{manager}\\{manager}.csproj " +
-                   $"-v -- --Assembly:{project}";
+        protected override RemoveMigrationCommand MapToCommand(DbRemoveMigrationSettings settings)
+        {
+            return new RemoveMigrationCommand(settings.ProjectName, settings.Init);
         }
     }
 }

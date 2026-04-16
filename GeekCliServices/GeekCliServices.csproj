@@ -7,10 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Db\" />
     <Folder Include="Services\Dotnet\" />
-    <Folder Include="Services\Rx\" />
-    <Folder Include="Services\Ngx\" />
   </ItemGroup>
 
   <ItemGroup>
