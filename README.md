@@ -9,6 +9,7 @@ A developer CLI built with [Spectre.Console](https://spectreconsole.net/cli) for
 - Generate React contexts
 - Scaffold React Native modules, screens, and components
 - Generate Angular pages and components
+- Run Geek .NET template pack commands
 - Create, remove, and rollback EF Core migrations
 - Scaffold EF Core entities from an existing database table
 - Use branch-specific wizards or a general root wizard
@@ -25,6 +26,16 @@ geek-cli
 │       ├── add
 │       ├── remove
 │       └── rollback
+├── dotnet
+│   ├── list
+│   ├── dto
+│   ├── resource
+│   ├── cache
+│   ├── sp
+│   ├── read
+│   ├── write
+│   ├── controller
+│   └── service
 ├── ngx
 │   ├── page
 │   └── component
@@ -39,6 +50,8 @@ geek-cli
 Running `geek-cli` with no arguments opens the general wizard.
 
 Running `geek-cli db`, `geek-cli ngx`, or `geek-cli rx` opens the wizard for that branch.
+
+Running `geek-cli dotnet` lists the installed Geek .NET templates.
 
 ---
 
@@ -149,6 +162,48 @@ geek-cli db scaffold --table TR_TAG_INVOICE --output-dir Parking/Entities --conn
 
 ```bash
 geek-cli db migration rollback InitSchema --project Booking
+```
+
+### List the installed Geek .NET templates
+
+```bash
+geek-cli dotnet list
+```
+
+### Generate a DTO directly
+
+```bash
+geek-cli dotnet dto Customer --projectName Billing --scope corp-co
+```
+
+### Generate a View DTO directly
+
+```bash
+geek-cli dotnet dto Customer --projectName Billing --view --scope corp-co
+```
+
+### Generate a resource directly
+
+```bash
+geek-cli dotnet resource Customer --projectName Billing --scope corp-co-code
+```
+
+### Generate a read repository directly
+
+```bash
+geek-cli dotnet read Customer --dbSchema Sales --contextName BillingContext --view --scope corp-co
+```
+
+### Generate a controller directly
+
+```bash
+geek-cli dotnet controller Customer --projectName Billing --codeField CustomerCode --view
+```
+
+### Generate a service directly
+
+```bash
+geek-cli dotnet service Customer --projectName Billing --view --scope corp-co-code
 ```
 
 ### Open the Angular wizard

@@ -1,9 +1,19 @@
 using GeekCli.Branches;
 using GeekCli.Commands.Db.Wizard;
+using GeekCli.Commands.Dotnet.Wizard;
 using GeekCli.Commands.Ngx.Wizard;
 using GeekCli.Commands.Rx.Wizard;
 using GeekCli.Commands.Wizard;
 using GeekCli.Infrastructure.DependencyInjection;
+using GeekCliServices.Services.Dotnet.Cache;
+using GeekCliServices.Services.Dotnet.Controller;
+using GeekCliServices.Services.Dotnet.Dto;
+using GeekCliServices.Services.Dotnet.List;
+using GeekCliServices.Services.Dotnet.Read;
+using GeekCliServices.Services.Dotnet.Resource;
+using GeekCliServices.Services.Dotnet.Service;
+using GeekCliServices.Services.Dotnet.Sp;
+using GeekCliServices.Services.Dotnet.Write;
 using GeekCliServices.Services.Db.Migrations.Add;
 using GeekCliServices.Services.Db.Migrations.Remove;
 using GeekCliServices.Services.Db.Migrations.Rollback;
@@ -24,6 +34,15 @@ namespace GeekCli
         static int Main(string[] args)
         {
             var services = new ServiceCollection();
+            services.AddSingleton<IDotnetListService, DotnetListService>();
+            services.AddSingleton<IDotnetDtoService, DotnetDtoService>();
+            services.AddSingleton<IDotnetResourceService, DotnetResourceService>();
+            services.AddSingleton<IDotnetCacheService, DotnetCacheService>();
+            services.AddSingleton<IDotnetSpService, DotnetSpService>();
+            services.AddSingleton<IDotnetReadService, DotnetReadService>();
+            services.AddSingleton<IDotnetWriteService, DotnetWriteService>();
+            services.AddSingleton<IDotnetControllerService, DotnetControllerService>();
+            services.AddSingleton<IDotnetServiceService, DotnetServiceService>();
             services.AddSingleton<IAddMigrationService, AddMigrationService>();
             services.AddSingleton<IRemoveMigrationService, RemoveMigrationService>();
             services.AddSingleton<IRollbackMigrationService, RollbackMigrationService>();
@@ -35,6 +54,7 @@ namespace GeekCli
             services.AddSingleton<IRxNativeModuleService, RxNativeModuleService>();
             services.AddSingleton<IRxNativeScreenService, RxNativeScreenService>();
             services.AddSingleton<IDbWizard>(provider => provider.GetRequiredService<DbWizardCommand>());
+            services.AddSingleton<IDotnetWizard>(provider => provider.GetRequiredService<DotnetWizardCommand>());
             services.AddSingleton<INgxWizard>(provider => provider.GetRequiredService<NgxWizardCommand>());
             services.AddSingleton<IRxWizard>(provider => provider.GetRequiredService<RxWizardCommand>());
 
@@ -50,6 +70,8 @@ namespace GeekCli
                 config.AddDB();
 
                 config.AddNgx();
+
+                config.AddDotnet();
             });
 
             return app.Run(args);
