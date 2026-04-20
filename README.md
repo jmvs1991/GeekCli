@@ -10,6 +10,7 @@ A developer CLI built with [Spectre.Console](https://spectreconsole.net/cli) for
 - Scaffold React Native modules, screens, and components
 - Generate Angular pages and components
 - Create, remove, and rollback EF Core migrations
+- Scaffold EF Core entities from an existing database table
 - Use branch-specific wizards or a general root wizard
 
 ---
@@ -19,6 +20,7 @@ A developer CLI built with [Spectre.Console](https://spectreconsole.net/cli) for
 ```text
 geek-cli
 ├── db
+│   ├── scaffold
 │   └── migration
 │       ├── add
 │       ├── remove
@@ -135,6 +137,12 @@ geek-cli db
 
 ```bash
 geek-cli db migration add InitSchema --project Booking --issue ABC-123 --init
+```
+
+### Scaffold a table directly
+
+```bash
+geek-cli db scaffold --table TR_TAG_INVOICE --output-dir Parking/Entities --connection-string "Data Source=localhost;Initial Catalog=ParkingDevelop;User ID=SA;Password=YourStrong!Passw0rd;TrustServerCertificate=True" --provider SqlServer
 ```
 
 ### Roll back to a migration directly

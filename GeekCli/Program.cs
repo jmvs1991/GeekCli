@@ -7,6 +7,7 @@ using GeekCli.Infrastructure.DependencyInjection;
 using GeekCliServices.Services.Db.Migrations.Add;
 using GeekCliServices.Services.Db.Migrations.Remove;
 using GeekCliServices.Services.Db.Migrations.Rollback;
+using GeekCliServices.Services.Db.Scaffold;
 using GeekCliServices.Services.Ngx.Component;
 using GeekCliServices.Services.Ngx.Page;
 using GeekCliServices.Services.Rx.Common.Context;
@@ -26,6 +27,7 @@ namespace GeekCli
             services.AddSingleton<IAddMigrationService, AddMigrationService>();
             services.AddSingleton<IRemoveMigrationService, RemoveMigrationService>();
             services.AddSingleton<IRollbackMigrationService, RollbackMigrationService>();
+            services.AddSingleton<IDbScaffoldService, DbScaffoldService>();
             services.AddSingleton<INgxComponentService, NgxComponentService>();
             services.AddSingleton<INgxPageService, NgxPageService>();
             services.AddSingleton<IRxContextService, RxContextService>();
