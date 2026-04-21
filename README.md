@@ -236,6 +236,14 @@ geek-cli rx context Auth --flat
 geek-cli rx native screen Login --schema --wrapper
 ```
 
+### Start the MCP server
+
+```bash
+geek-cli mcp
+```
+
+This starts `geek-cli` as a stdio MCP server and exposes the existing CLI generators as MCP tools.
+
 ---
 
 ## 🤝 Contributing

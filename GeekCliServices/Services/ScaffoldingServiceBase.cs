@@ -1,4 +1,3 @@
-﻿using Spectre.Console;
 using System.Globalization;
 
 namespace GeekCliServices.Services
@@ -14,11 +13,11 @@ namespace GeekCliServices.Services
             if (!Directory.Exists(targetPath))
             {
                 Directory.CreateDirectory(targetPath);
-                AnsiConsole.MarkupLine($"[bold green]Created folder:[/] {targetPath}");
+                CommandOutput.Info($"Created folder: {targetPath}");
             }
             else
             {
-                AnsiConsole.MarkupLine($"[red]Skipped (already exists):[/] {targetPath}");
+                CommandOutput.Info($"Skipped (already exists): {targetPath}");
             }
         }
 
@@ -28,12 +27,12 @@ namespace GeekCliServices.Services
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                AnsiConsole.MarkupLine($"[grey]Created:[/] [yellow]{name}[/]");
+                CommandOutput.Info($"Created: {name}");
             }
 
             string keepFilePath = Path.Combine(path, ".keep");
             File.WriteAllText(keepFilePath, string.Empty);
-            AnsiConsole.MarkupLine($"[grey]Added:[/] [blue]{name}/.keep[/]");
+            CommandOutput.Info($"Added: {name}/.keep");
         }
 
         protected void CreateFile(string path, string filename, string content)
@@ -43,17 +42,16 @@ namespace GeekCliServices.Services
             if (!File.Exists(filePath))
             {
                 File.WriteAllText(filePath, content);
-                AnsiConsole.MarkupLine($"[bold grey]Generated:[/] [yellow]{filename}[/]");
+                CommandOutput.Info($"Generated: {filename}");
             }
             else
             {
-                AnsiConsole.MarkupLine($"[red]Skipped (already exists):[/] [yellow]{filename}[/]");
+                CommandOutput.Info($"Skipped (already exists): {filename}");
             }
         }
-        
+
         public abstract int RunProcess(string processToRun, TCommand command);
 
         protected abstract void Execute(string targetPath, string name, TCommand command);
-
     }
 }

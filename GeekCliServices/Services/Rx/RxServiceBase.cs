@@ -1,5 +1,4 @@
-﻿using GeekCliServices.Services.Rx.Models;
-using Spectre.Console;
+using GeekCliServices.Services.Rx.Models;
 
 namespace GeekCliServices.Services.Rx
 {
@@ -8,21 +7,16 @@ namespace GeekCliServices.Services.Rx
         public override int RunProcess(string processToRun, TCommand command)
         {
             string name = _textInfo.ToTitleCase(command.Name.ToLower());
-            string targetPath = "";
+            string targetPath = Path.Combine(_basePath, command.Name);
 
             if (!command.Flat)
             {
-                targetPath = _basePath;
                 CreateDirectory(targetPath);
-            }
-            else
-            {
-                targetPath = Path.Combine(_basePath, command.Name);
             }
 
             Execute(targetPath, name, command);
 
-            AnsiConsole.MarkupLine($"[bold green]✔ Files created successfully in:[/] [blue]{targetPath}[/]");
+            CommandOutput.Info($"Files created successfully in: {targetPath}");
 
             return 0;
         }
