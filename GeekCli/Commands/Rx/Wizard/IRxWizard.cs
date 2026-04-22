@@ -2,6 +2,6 @@ namespace GeekCli.Commands.Rx.Wizard
 {
     internal interface IRxWizard
     {
-        int RunWizard();
+        int RunWizard(bool showBackOption = false);
     }
 }

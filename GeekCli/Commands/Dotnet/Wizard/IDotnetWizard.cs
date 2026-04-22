@@ -2,6 +2,6 @@ namespace GeekCli.Commands.Dotnet.Wizard
 {
     internal interface IDotnetWizard
     {
-        int RunWizard();
+        int RunWizard(bool showBackOption = false);
     }
 }

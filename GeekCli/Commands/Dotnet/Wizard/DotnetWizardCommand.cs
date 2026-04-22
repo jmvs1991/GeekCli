@@ -25,6 +25,7 @@ namespace GeekCli.Commands.Dotnet.Wizard
     internal sealed class DotnetWizardCommand : Command, IDotnetWizard
     {
         private const string ProcessToRun = "dotnet";
+        private const string BackAction = "Back";
         private const string ListTemplatesAction = "List installed Geek templates";
         private const string CreateDtoAction = "Create a DTO or View DTO";
         private const string CreateResourceAction = "Create a resource";
@@ -71,11 +72,16 @@ namespace GeekCli.Commands.Dotnet.Wizard
             return RunWizard();
         }
 
-        public int RunWizard()
+        public int RunWizard(bool showBackOption = false)
         {
             ShowHeader();
 
-            var action = AskAction();
+            var action = AskAction(showBackOption);
+
+            if (showBackOption && action == BackAction)
+            {
+                return 0;
+            }
 
             return action switch
             {
@@ -99,21 +105,31 @@ namespace GeekCli.Commands.Dotnet.Wizard
             AnsiConsole.WriteLine();
         }
 
-        private static string AskAction()
+        private static string AskAction(bool showBackOption)
         {
+            var choices = new List<string>
+            {
+                ListTemplatesAction,
+                CreateDtoAction,
+                CreateResourceAction,
+                CreateCacheAction,
+                CreateSpAction,
+                CreateReadAction,
+                CreateWriteAction,
+                CreateControllerAction,
+                CreateServiceAction
+            };
+
+            if (showBackOption)
+            {
+                choices.Add(BackAction);
+            }
+
             return AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Choose the .NET template task you want to run")
                     .PageSize(12)
-                    .AddChoices(ListTemplatesAction,
-                                CreateDtoAction,
-                                CreateResourceAction,
-                                CreateCacheAction,
-                                CreateSpAction,
-                                CreateReadAction,
-                                CreateWriteAction,
-                                CreateControllerAction,
-                                CreateServiceAction));
+                    .AddChoices(choices));
         }
 
         private static string AskName(string example)

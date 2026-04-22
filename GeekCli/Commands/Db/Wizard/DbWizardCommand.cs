@@ -14,6 +14,7 @@ namespace GeekCli.Commands.Db.Wizard
     internal sealed class DbWizardCommand : Command, IDbWizard
     {
         private const string ProcessToRun = "dotnet";
+        private const string BackAction = "Back";
         private const string CreateMigrationAction = "Create a new migration";
         private const string RemoveMigrationAction = "Remove the last migration";
         private const string RollbackMigrationAction = "Rollback to a specific migration";
@@ -40,11 +41,16 @@ namespace GeekCli.Commands.Db.Wizard
             return RunWizard();
         }
 
-        public int RunWizard()
+        public int RunWizard(bool showBackOption = false)
         {
             ShowHeader();
 
-            var action = AskAction();
+            var action = AskAction(showBackOption);
+
+            if (showBackOption && action == BackAction)
+            {
+                return 0;
+            }
 
             return action switch
             {
@@ -73,13 +79,26 @@ namespace GeekCli.Commands.Db.Wizard
             return AnsiConsole.Confirm("Should this use the [green]init[/] schema project?", false);
         }
 
-        private static string AskAction()
+        private static string AskAction(bool showBackOption)
         {
+            var choices = new List<string>
+            {
+                CreateMigrationAction,
+                RemoveMigrationAction,
+                RollbackMigrationAction,
+                ScaffoldTableAction
+            };
+
+            if (showBackOption)
+            {
+                choices.Add(BackAction);
+            }
+
             return AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Choose the database task you want to run")
                     .PageSize(10)
-                    .AddChoices(CreateMigrationAction, RemoveMigrationAction, RollbackMigrationAction, ScaffoldTableAction));
+                    .AddChoices(choices));
         }
 
         private static void ShowMigrationSummary(string action, string projectName, bool init, string? migrationName = null, string? issue = null)

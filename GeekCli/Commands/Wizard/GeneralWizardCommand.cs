@@ -13,6 +13,7 @@ namespace GeekCli.Commands.Wizard
         private const string DotnetOption = ".NET Templates";
         private const string AngularOption = "Angular";
         private const string ReactOption = "React / React Native";
+        private const string ExitOption = "Exit";
 
         private readonly IDbWizard _dbWizardCommand;
         private readonly IDotnetWizard _dotnetWizardCommand;
@@ -33,23 +34,38 @@ namespace GeekCli.Commands.Wizard
         protected override int Execute(CommandContext context, CancellationToken cancellationToken)
         {
             AnsiConsole.Write(new Rule("[green]Geek CLI Wizard[/]").RuleStyle("grey"));
-            AnsiConsole.MarkupLine("[grey]Choose an area and the wizard will guide you through the next steps.[/]");
-            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("[grey]Choose an area and move back between sections without restarting the CLI.[/]");
 
-            var area = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("What do you want to work on?")
-                    .PageSize(10)
-                    .AddChoices(DatabaseOption, DotnetOption, AngularOption, ReactOption));
-
-            return area switch
+            while (true)
             {
-                DatabaseOption => _dbWizardCommand.RunWizard(),
-                DotnetOption => _dotnetWizardCommand.RunWizard(),
-                AngularOption => _ngxWizardCommand.RunWizard(),
-                ReactOption => _rxWizardCommand.RunWizard(),
-                _ => 1
-            };
+                AnsiConsole.WriteLine();
+
+                var area = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("What do you want to work on?")
+                        .PageSize(10)
+                        .AddChoices(DatabaseOption, DotnetOption, AngularOption, ReactOption, ExitOption));
+
+                switch (area)
+                {
+                    case DatabaseOption:
+                        _dbWizardCommand.RunWizard(showBackOption: true);
+                        break;
+                    case DotnetOption:
+                        _dotnetWizardCommand.RunWizard(showBackOption: true);
+                        break;
+                    case AngularOption:
+                        _ngxWizardCommand.RunWizard(showBackOption: true);
+                        break;
+                    case ReactOption:
+                        _rxWizardCommand.RunWizard(showBackOption: true);
+                        break;
+                    case ExitOption:
+                        return 0;
+                    default:
+                        return 1;
+                }
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ namespace GeekCli.Commands.Ngx.Wizard
     internal sealed class NgxWizardCommand : Command, INgxWizard
     {
         private const string ProcessToRun = "cmd";
+        private const string BackAction = "Back";
         private const string CreatePageAction = "Create an Angular page";
         private const string CreateComponentAction = "Create an Angular component";
 
@@ -26,15 +27,31 @@ namespace GeekCli.Commands.Ngx.Wizard
             return RunWizard();
         }
 
-        public int RunWizard()
+        public int RunWizard(bool showBackOption = false)
         {
             ShowHeader();
+
+            var choices = new List<string>
+            {
+                CreatePageAction,
+                CreateComponentAction
+            };
+
+            if (showBackOption)
+            {
+                choices.Add(BackAction);
+            }
 
             var action = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Choose what you want to generate")
                     .PageSize(10)
-                    .AddChoices(CreatePageAction, CreateComponentAction));
+                    .AddChoices(choices));
+
+            if (showBackOption && action == BackAction)
+            {
+                return 0;
+            }
 
             var name = AnsiConsole.Ask<string>("Angular [green]name[/] ([grey]example: user-profile[/])?");
             var command = new NgxCommand(name);

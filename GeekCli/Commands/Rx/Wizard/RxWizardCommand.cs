@@ -11,6 +11,7 @@ namespace GeekCli.Commands.Rx.Wizard
 {
     internal sealed class RxWizardCommand : Command, IRxWizard
     {
+        private const string BackAction = "Back";
         private const string CreateContextAction = "Create a React context";
         private const string CreateNativeModuleAction = "Create a React Native module";
         private const string CreateNativeScreenAction = "Create a React Native screen";
@@ -37,15 +38,33 @@ namespace GeekCli.Commands.Rx.Wizard
             return RunWizard();
         }
 
-        public int RunWizard()
+        public int RunWizard(bool showBackOption = false)
         {
             ShowHeader();
+
+            var choices = new List<string>
+            {
+                CreateContextAction,
+                CreateNativeModuleAction,
+                CreateNativeScreenAction,
+                CreateNativeComponentAction
+            };
+
+            if (showBackOption)
+            {
+                choices.Add(BackAction);
+            }
 
             var action = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Choose what you want to generate")
                     .PageSize(10)
-                    .AddChoices(CreateContextAction, CreateNativeModuleAction, CreateNativeScreenAction, CreateNativeComponentAction));
+                    .AddChoices(choices));
+
+            if (showBackOption && action == BackAction)
+            {
+                return 0;
+            }
 
             return action switch
             {
