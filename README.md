@@ -39,6 +39,7 @@ geek-cli
 ├── ngx
 │   ├── page
 │   └── component
+├── mcp
 └── rx
     ├── context
     └── native
@@ -69,6 +70,13 @@ Running `geek-cli dotnet` lists the installed Geek .NET templates.
 ```bash
 dotnet build .\GeekCli\GeekCli.csproj -c Release
 ```
+
+`Taskfile.yml` also includes ready-to-run tasks for:
+
+- `task geek-cli:build`
+- `task geek-cli:pack`
+- `task geek-cli:install-tool`
+- `task geek-cli:update-tool`
 
 ---
 
@@ -111,6 +119,48 @@ After installation, run:
 ```bash
 geek-cli
 ```
+
+---
+
+## 🔌 Install As An MCP Server
+
+`geek-cli` exposes its generators through MCP over stdio.
+
+1. Install the tool globally:
+
+```bash
+dotnet tool install --global --add-source .\GeekCli\bin\Release GeekCli --verbosity detailed
+```
+
+2. Register it in your MCP client using `geek-cli mcp` as the server command.
+
+Example MCP client configuration:
+
+```json
+{
+  "mcpServers": {
+    "geek-cli": {
+      "command": "geek-cli",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+If you do not want to install the tool globally, you can also point your MCP client at a local build:
+
+```json
+{
+  "mcpServers": {
+    "geek-cli": {
+      "command": "dotnet",
+      "args": ["run", "--project", ".\\GeekCli\\GeekCli.csproj", "--", "mcp"]
+    }
+  }
+}
+```
+
+After registration, start or reload your MCP client and it will discover the `geek-cli` tools from the stdio server.
 
 ---
 
@@ -242,7 +292,7 @@ geek-cli rx native screen Login --schema --wrapper
 geek-cli mcp
 ```
 
-This starts `geek-cli` as a stdio MCP server and exposes the existing CLI generators as MCP tools.
+This starts `geek-cli` as a stdio MCP server and exposes the existing CLI generators as MCP tools. Use this command in your MCP client configuration.
 
 ---
 

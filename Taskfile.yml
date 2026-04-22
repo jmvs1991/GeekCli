@@ -1,0 +1,28 @@
+version: '3'
+
+tasks:
+  geek-cli:build:
+    desc: Build the Geek CLI project in Release mode
+    dir: ./GeekCli
+    cmds:
+      - dotnet build GeekCli.csproj -c Release
+
+  geek-cli:pack:
+    desc: Pack the Geek CLI tool in Release mode
+    dir: ./GeekCli
+    cmds:
+      - dotnet pack GeekCli.csproj -c Release
+
+  geek-cli:install-tool:
+    desc: Pack and install the Geek CLI tool globally from the local package output
+    deps:
+      - geek-cli:pack
+    cmds:
+      - dotnet tool install --global --add-source ./GeekCli/bin/Release GeekCli --verbosity detailed
+
+  geek-cli:update-tool:
+    desc: Pack and update the Geek CLI tool globally from the local package output
+    deps:
+      - geek-cli:pack
+    cmds:
+      - dotnet tool update --global --add-source ./GeekCli/bin/Release GeekCli --verbosity detailed
