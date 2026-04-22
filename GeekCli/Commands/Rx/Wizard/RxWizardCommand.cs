@@ -118,11 +118,21 @@ namespace GeekCli.Commands.Rx.Wizard
                 .BorderStyle(new Style(Color.Grey)));
         }
 
+        private static bool ConfirmExecution()
+        {
+            return AnsiConsole.Confirm("Run this [green]command[/] now?", true);
+        }
+
         private int RunCreateContext()
         {
             var name = AskName();
             var flat = AskFlat();
             ShowSummary(CreateContextAction, name, flat);
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
 
             var command = new RxCommand(name, flat);
             return _rxContextService.RunProcess(string.Empty, command);
@@ -133,6 +143,11 @@ namespace GeekCli.Commands.Rx.Wizard
             var name = AskName();
             var flat = AskFlat();
             ShowSummary(CreateNativeModuleAction, name, flat);
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
 
             var command = new RxCommand(name, flat);
             return _rxNativeModuleService.RunProcess(string.Empty, command);
@@ -146,6 +161,11 @@ namespace GeekCli.Commands.Rx.Wizard
             var wrapper = AnsiConsole.Confirm("Generate a [green]wrapper[/] file?", false);
             ShowSummary(CreateNativeScreenAction, name, flat, schema, wrapper);
 
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
+
             var command = new RxScreenCommand(name, flat, schema, wrapper);
             return _rxNativeScreenService.RunProcess(string.Empty, command);
         }
@@ -155,6 +175,11 @@ namespace GeekCli.Commands.Rx.Wizard
             var name = AskName();
             var flat = AskFlat();
             ShowSummary(CreateNativeComponentAction, name, flat);
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
 
             var command = new RxCommand(name, flat);
             return _rxNativeComponentService.RunProcess(string.Empty, command);

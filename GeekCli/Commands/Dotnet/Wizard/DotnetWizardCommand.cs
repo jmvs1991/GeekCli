@@ -85,7 +85,7 @@ namespace GeekCli.Commands.Dotnet.Wizard
 
             return action switch
             {
-                ListTemplatesAction => _dotnetListService.RunProcess(ProcessToRun, new DotnetListCommand()),
+                ListTemplatesAction => RunListTemplates(),
                 CreateDtoAction => RunCreateDto(),
                 CreateResourceAction => RunCreateResource(),
                 CreateCacheAction => RunCreateCache(),
@@ -187,6 +187,23 @@ namespace GeekCli.Commands.Dotnet.Wizard
                 .BorderStyle(new Style(Color.Grey)));
         }
 
+        private static bool ConfirmExecution()
+        {
+            return AnsiConsole.Confirm("Run this [green]command[/] now?", true);
+        }
+
+        private int RunListTemplates()
+        {
+            ShowSummary($"[grey]Action:[/] [green]{ListTemplatesAction}[/]");
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
+
+            return _dotnetListService.RunProcess(ProcessToRun, new DotnetListCommand());
+        }
+
         private int RunCreateDto()
         {
             var name = AskName("Customer");
@@ -199,6 +216,11 @@ namespace GeekCli.Commands.Dotnet.Wizard
                         $"[grey]Project:[/] [green]{projectName}[/]",
                         $"[grey]View:[/] [green]{(view ? "Yes" : "No")}[/]",
                         $"[grey]Scope:[/] [green]{scope}[/]");
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
 
             return _dotnetDtoService.RunProcess(ProcessToRun, new DotnetDtoCommand(name, projectName, scope, view));
         }
@@ -214,6 +236,11 @@ namespace GeekCli.Commands.Dotnet.Wizard
                         $"[grey]Project:[/] [green]{projectName}[/]",
                         $"[grey]Scope:[/] [green]{scope}[/]");
 
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
+
             return _dotnetResourceService.RunProcess(ProcessToRun, new DotnetResourceCommand(name, projectName, scope));
         }
 
@@ -228,6 +255,11 @@ namespace GeekCli.Commands.Dotnet.Wizard
                         $"[grey]Project:[/] [green]{projectName}[/]",
                         $"[grey]Scope:[/] [green]{scope}[/]");
 
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
+
             return _dotnetCacheService.RunProcess(ProcessToRun, new DotnetCacheCommand(name, projectName, scope));
         }
 
@@ -241,6 +273,11 @@ namespace GeekCli.Commands.Dotnet.Wizard
                         $"[grey]Name:[/] [green]{name}[/]",
                         $"[grey]Project:[/] [green]{projectName}[/]",
                         $"[grey]Scope:[/] [green]{scope}[/]");
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
 
             return _dotnetSpService.RunProcess(ProcessToRun, new DotnetSpCommand(name, projectName, scope));
         }
@@ -260,6 +297,11 @@ namespace GeekCli.Commands.Dotnet.Wizard
                         $"[grey]View:[/] [green]{(view ? "Yes" : "No")}[/]",
                         $"[grey]Scope:[/] [green]{scope}[/]");
 
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
+
             return _dotnetReadService.RunProcess(ProcessToRun, new DotnetReadCommand(name, dbSchema, contextName, scope, view));
         }
 
@@ -273,6 +315,11 @@ namespace GeekCli.Commands.Dotnet.Wizard
                         $"[grey]Name:[/] [green]{name}[/]",
                         $"[grey]Schema:[/] [green]{dbSchema}[/]",
                         $"[grey]Context:[/] [green]{contextName}[/]");
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
 
             return _dotnetWriteService.RunProcess(ProcessToRun, new DotnetWriteCommand(name, dbSchema, contextName));
         }
@@ -290,6 +337,11 @@ namespace GeekCli.Commands.Dotnet.Wizard
                         $"[grey]Code field:[/] [green]{codeField}[/]",
                         $"[grey]View:[/] [green]{(view ? "Yes" : "No")}[/]");
 
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
+
             return _dotnetControllerService.RunProcess(ProcessToRun, new DotnetControllerCommand(name, projectName, codeField, view));
         }
 
@@ -305,6 +357,11 @@ namespace GeekCli.Commands.Dotnet.Wizard
                         $"[grey]Project:[/] [green]{projectName}[/]",
                         $"[grey]View:[/] [green]{(view ? "Yes" : "No")}[/]",
                         $"[grey]Scope:[/] [green]{scope}[/]");
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
 
             return _dotnetServiceService.RunProcess(ProcessToRun, new DotnetServiceCommand(name, projectName, scope, view));
         }

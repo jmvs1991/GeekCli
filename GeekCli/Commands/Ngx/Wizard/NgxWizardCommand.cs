@@ -55,15 +55,7 @@ namespace GeekCli.Commands.Ngx.Wizard
 
             var name = AnsiConsole.Ask<string>("Angular [green]name[/] ([grey]example: user-profile[/])?");
             var command = new NgxCommand(name);
-
-            ShowSummary(action, name);
-
-            return action switch
-            {
-                CreatePageAction => _ngxPageService.RunProcess(ProcessToRun, command),
-                CreateComponentAction => _ngxComponentService.RunProcess(ProcessToRun, command),
-                _ => 1
-            };
+            return RunSelectedAction(action, command);
         }
 
         private static void ShowHeader()
@@ -85,6 +77,28 @@ namespace GeekCli.Commands.Ngx.Wizard
                 .Header("Ready to run")
                 .Border(BoxBorder.Rounded)
                 .BorderStyle(new Style(Color.Grey)));
+        }
+
+        private static bool ConfirmExecution()
+        {
+            return AnsiConsole.Confirm("Run this [green]command[/] now?", true);
+        }
+
+        private int RunSelectedAction(string action, NgxCommand command)
+        {
+            ShowSummary(action, command.Name);
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
+
+            return action switch
+            {
+                CreatePageAction => _ngxPageService.RunProcess(ProcessToRun, command),
+                CreateComponentAction => _ngxComponentService.RunProcess(ProcessToRun, command),
+                _ => 1
+            };
         }
     }
 }

@@ -144,6 +144,11 @@ namespace GeekCli.Commands.Db.Wizard
                 .BorderStyle(new Style(Color.Grey)));
         }
 
+        private static bool ConfirmExecution()
+        {
+            return AnsiConsole.Confirm("Run this [green]command[/] now?", true);
+        }
+
         private int RunCreateMigration()
         {
             var projectName = AskProjectName();
@@ -152,6 +157,11 @@ namespace GeekCli.Commands.Db.Wizard
             var issue = AnsiConsole.Ask<string>("Issue or ticket ([grey]optional, example: ABC-123[/])?", string.Empty);
 
             ShowMigrationSummary(CreateMigrationAction, projectName, init, migrationName, issue);
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
 
             var command = new AddMigrationCommand(projectName, init, migrationName, issue);
             return _addMigrationService.RunProcess(ProcessToRun, command);
@@ -164,6 +174,11 @@ namespace GeekCli.Commands.Db.Wizard
 
             ShowMigrationSummary(RemoveMigrationAction, projectName, init);
 
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
+
             var command = new RemoveMigrationCommand(projectName, init);
             return _removeMigrationService.RunProcess(ProcessToRun, command);
         }
@@ -175,6 +190,11 @@ namespace GeekCli.Commands.Db.Wizard
             var migrationName = AnsiConsole.Ask<string>("Target [green]migration[/] name ([grey]example: AddUserAuditTable[/])?");
 
             ShowMigrationSummary(RollbackMigrationAction, projectName, init, migrationName);
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
 
             var command = new RollbackMigrationCommand(projectName, init, migrationName);
             return _rollbackMigrationService.RunProcess(ProcessToRun, command);
@@ -194,6 +214,11 @@ namespace GeekCli.Commands.Db.Wizard
                     .AddChoices("SqlServer", "Postgres"));
 
             ShowScaffoldSummary(table, outputDir, provider);
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
 
             var command = new DbScaffoldDotnetCommand(table, outputDir, connectionString, provider);
             return _dbScaffoldService.RunProcess(ProcessToRun, command);
