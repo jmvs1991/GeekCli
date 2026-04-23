@@ -11,11 +11,10 @@ namespace GeekCli.Commands.Db.Scaffold
 
         protected override DbScaffoldDotnetCommand MapToCommand(DbScaffoldSettings settings)
         {
-            return new DbScaffoldDotnetCommand(
-                settings.Table!,
-                settings.OutputDir!,
-                settings.ConnectionString!,
-                settings.Provider!);
+            return new DbScaffoldDotnetCommand(settings.Table!,
+                                               settings.OutputDir!,
+                                               settings.ConnectionString!,
+                                               settings.Provider!);
         }
     }
 }

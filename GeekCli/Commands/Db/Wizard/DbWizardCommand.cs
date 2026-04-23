@@ -6,6 +6,8 @@ using GeekCliServices.Services.Db.Migrations.Rollback;
 using GeekCliServices.Services.Db.Migrations.Rollback.Models;
 using GeekCliServices.Services.Db.Scaffold;
 using GeekCliServices.Services.Db.Scaffold.Models;
+using GeekCliServices.Services.Db.Scripts;
+using GeekCliServices.Services.Db.Scripts.Models;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -19,21 +21,25 @@ namespace GeekCli.Commands.Db.Wizard
         private const string RemoveMigrationAction = "Remove the last migration";
         private const string RollbackMigrationAction = "Rollback to a specific migration";
         private const string ScaffoldTableAction = "Scaffold a table";
+        private const string GenerateSqlScriptsAction = "Generate SQL migration scripts";
 
         private readonly IAddMigrationService _addMigrationService;
         private readonly IRemoveMigrationService _removeMigrationService;
         private readonly IRollbackMigrationService _rollbackMigrationService;
         private readonly IDbScaffoldService _dbScaffoldService;
+        private readonly IDbScriptService _dbScriptService;
 
         public DbWizardCommand(IAddMigrationService addMigrationService,
                                IRemoveMigrationService removeMigrationService,
                                IRollbackMigrationService rollbackMigrationService,
-                               IDbScaffoldService dbScaffoldService)
+                               IDbScaffoldService dbScaffoldService,
+                               IDbScriptService dbScriptService)
         {
             _addMigrationService = addMigrationService;
             _removeMigrationService = removeMigrationService;
             _rollbackMigrationService = rollbackMigrationService;
             _dbScaffoldService = dbScaffoldService;
+            _dbScriptService = dbScriptService;
         }
 
         protected override int Execute(CommandContext context, CancellationToken cancellationToken)
@@ -58,6 +64,7 @@ namespace GeekCli.Commands.Db.Wizard
                 RemoveMigrationAction => RunRemoveMigration(),
                 RollbackMigrationAction => RunRollbackMigration(),
                 ScaffoldTableAction => RunScaffoldTable(),
+                GenerateSqlScriptsAction => RunGenerateSqlScripts(),
                 _ => 1
             };
         }
@@ -86,7 +93,8 @@ namespace GeekCli.Commands.Db.Wizard
                 CreateMigrationAction,
                 RemoveMigrationAction,
                 RollbackMigrationAction,
-                ScaffoldTableAction
+                ScaffoldTableAction,
+                GenerateSqlScriptsAction
             };
 
             if (showBackOption)
@@ -136,6 +144,26 @@ namespace GeekCli.Commands.Db.Wizard
             ShowSummary(summary);
         }
 
+        private static void ShowScriptSummary(string projectName, bool init, string schema, DbScriptType type, string issue, string? objectName)
+        {
+            var summary = new List<string>
+            {
+                $"[grey]Action:[/] [green]{GenerateSqlScriptsAction}[/]",
+                $"[grey]Project:[/] [green]{projectName}[/]",
+                $"[grey]Schema project:[/] [green]{(init ? "Initialization" : "Updates")}[/]",
+                $"[grey]Schema:[/] [green]{schema}[/]",
+                $"[grey]Type:[/] [green]{DbScriptTypeParser.ToDisplayName(type)}[/]",
+                $"[grey]Issue:[/] [green]{issue}[/]"
+            };
+
+            if (!string.IsNullOrWhiteSpace(objectName))
+            {
+                summary.Add($"[grey]Object:[/] [green]{objectName}[/]");
+            }
+
+            ShowSummary(summary);
+        }
+
         private static void ShowSummary(List<string> summaryLines)
         {
             AnsiConsole.Write(new Panel(string.Join(Environment.NewLine, summaryLines))
@@ -147,6 +175,47 @@ namespace GeekCli.Commands.Db.Wizard
         private static bool ConfirmExecution()
         {
             return AnsiConsole.Confirm("Run this [green]command[/] now?", true);
+        }
+
+        private static string AskSchema()
+        {
+            return AnsiConsole.Ask<string>("Database [green]schema[/] ([grey]example: Sales[/])?");
+        }
+
+        private static string AskIssue()
+        {
+            return AnsiConsole.Ask<string>("Issue or ticket ([grey]example: ABC-123[/])?");
+        }
+
+        private static DbScriptType AskScriptType()
+        {
+            var selected = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Choose the SQL migration [green]type[/]")
+                    .PageSize(10)
+                    .AddChoices("Query",
+                                "Modify SP",
+                                "Create SP",
+                                "Modify Table",
+                                "Create Table",
+                                "Create View",
+                                "Modify View"));
+
+            DbScriptTypeParser.TryParse(selected, out var type);
+            return type;
+        }
+
+        private static string AskObjectName(DbScriptType type)
+        {
+            string example = type switch
+            {
+                DbScriptType.ModifyStoredProcedure or DbScriptType.CreateStoredProcedure => "usp_GetCustomer",
+                DbScriptType.ModifyTable or DbScriptType.CreateTable => "TR_CUSTOMER",
+                DbScriptType.CreateView or DbScriptType.ModifyView => "VW_CUSTOMER",
+                _ => "ObjectName"
+            };
+
+            return AnsiConsole.Ask<string>($"Database [green]object name[/] ([grey]example: {example}[/])?");
         }
 
         private int RunCreateMigration()
@@ -222,6 +291,26 @@ namespace GeekCli.Commands.Db.Wizard
 
             var command = new DbScaffoldDotnetCommand(table, outputDir, connectionString, provider);
             return _dbScaffoldService.RunProcess(ProcessToRun, command);
+        }
+
+        private int RunGenerateSqlScripts()
+        {
+            var projectName = AskProjectName();
+            var init = AskInitFlag();
+            var schema = AskSchema();
+            var type = AskScriptType();
+            var issue = AskIssue();
+            var objectName = DbScriptRules.RequiresObjectName(type) ? AskObjectName(type) : null;
+
+            ShowScriptSummary(projectName, init, schema, type, issue, objectName);
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
+
+            var command = new DbScriptCommand(projectName, init, schema, type, issue, objectName);
+            return _dbScriptService.RunProcess(string.Empty, command);
         }
     }
 }

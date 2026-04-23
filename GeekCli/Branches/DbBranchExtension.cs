@@ -2,6 +2,7 @@ using GeekCli.Commands.Db.Migrations.Add;
 using GeekCli.Commands.Db.Migrations.Remove;
 using GeekCli.Commands.Db.Migrations.Rollback;
 using GeekCli.Commands.Db.Scaffold;
+using GeekCli.Commands.Db.Scripts;
 using GeekCli.Commands.Db.Wizard;
 using Spectre.Console.Cli;
 
@@ -18,6 +19,9 @@ namespace GeekCli.Branches
 
                 db.AddCommand<DbScaffoldCommand>("scaffold")
                   .WithDescription("Scaffolds EF Core entities for a specific table.");
+
+                db.AddCommand<DbGenerateScriptCommand>("script")
+                  .WithDescription("Generates SQL Up/Down migration scripts and synonyms for a schema project.");
 
                 db.AddBranch("migration", migration =>
                 {

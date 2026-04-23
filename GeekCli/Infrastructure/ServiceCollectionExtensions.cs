@@ -10,6 +10,7 @@ using GeekCliServices.Services.Db.Migrations.Add;
 using GeekCliServices.Services.Db.Migrations.Remove;
 using GeekCliServices.Services.Db.Migrations.Rollback;
 using GeekCliServices.Services.Db.Scaffold;
+using GeekCliServices.Services.Db.Scripts;
 using GeekCliServices.Services.Dotnet.Cache;
 using GeekCliServices.Services.Dotnet.Controller;
 using GeekCliServices.Services.Dotnet.Dto;
@@ -48,6 +49,7 @@ namespace GeekCli.Infrastructure
             services.AddSingleton<IRemoveMigrationService, RemoveMigrationService>();
             services.AddSingleton<IRollbackMigrationService, RollbackMigrationService>();
             services.AddSingleton<IDbScaffoldService, DbScaffoldService>();
+            services.AddSingleton<IDbScriptService, DbScriptService>();
             services.AddSingleton<INgxComponentService, NgxComponentService>();
             services.AddSingleton<INgxPageService, NgxPageService>();
             services.AddSingleton<IRxContextService, RxContextService>();

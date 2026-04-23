@@ -8,7 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekCliServices", "GeekCliS
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".infra", ".infra", "{1B4E9C52-6432-464A-A6A6-ACBD58BBBB35}"
 	ProjectSection(SolutionItems) = preProject
-		Task.yml = Task.yml
 		Taskfile.yml = Taskfile.yml
 	EndProjectSection
 EndProject

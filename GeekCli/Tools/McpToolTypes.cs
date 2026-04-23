@@ -17,6 +17,7 @@ namespace GeekCli.Tools
             typeof(DbMigrationRemoveTool),
             typeof(DbMigrationRollbackTool),
             typeof(DbScaffoldTool),
+            typeof(DbScriptTool),
             typeof(NgxComponentTool),
             typeof(NgxPageTool),
             typeof(RxContextTool),

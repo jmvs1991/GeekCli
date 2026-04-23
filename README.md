@@ -11,6 +11,7 @@ A developer CLI built with [Spectre.Console](https://spectreconsole.net/cli) for
 - Generate Angular pages and components
 - Run Geek .NET template pack commands
 - Create, remove, and rollback EF Core migrations
+- Generate Up/Down SQL migration scripts with schema-specific folders and dbo synonyms
 - Scaffold EF Core entities from an existing database table
 - Use branch-specific wizards or a general root wizard
 
@@ -22,6 +23,7 @@ A developer CLI built with [Spectre.Console](https://spectreconsole.net/cli) for
 geek-cli
 ├── db
 │   ├── scaffold
+│   ├── script
 │   └── migration
 │       ├── add
 │       ├── remove
@@ -208,6 +210,12 @@ geek-cli db migration add InitSchema --project Booking --issue ABC-123 --init
 geek-cli db scaffold --table TR_TAG_INVOICE --output-dir Parking/Entities --connection-string "Data Source=localhost;Initial Catalog=ParkingDevelop;User ID=SA;Password=YourStrong!Passw0rd;TrustServerCertificate=True" --provider SqlServer
 ```
 
+### Generate SQL scripts directly
+
+```bash
+geek-cli db script --project Booking --schema Sales --type "Create SP" --issue ABC-123 --object-name usp_GetCustomer
+```
+
 ### Roll back to a migration directly
 
 ```bash
@@ -293,6 +301,127 @@ geek-cli mcp
 ```
 
 This starts `geek-cli` as a stdio MCP server and exposes the existing CLI generators as MCP tools. Use this command in your MCP client configuration.
+
+---
+
+## 🗃️ SQL Script Generator
+
+`geek-cli db script` creates SQL migration scaffolding for schema projects. The command generates `Up` and `Down` `.sql` files using the same rules from the wizard, direct CLI command, and MCP tool.
+
+### Supported execution methods
+
+- Wizard: `geek-cli` then `Database` then `Generate SQL migration scripts`
+- Direct CLI: `geek-cli db script ...`
+- MCP: `DbScript`
+
+### Required parameters
+
+- `--project`: base migration project name
+- `--schema`: affected database schema
+- `--type`: migration type
+- `--issue`: issue or ticket name used for folder grouping
+- `--object-name`: required for `Modify SP`, `Create SP`, `Modify Table`, `Create Table`, `Create View`, and `Modify View`
+- `--init`: optional flag for initialization projects
+
+### Supported migration types
+
+- `Query`
+- `Modify SP`
+- `Create SP`
+- `Modify Table`
+- `Create Table`
+- `Create View`
+- `Modify View`
+
+### Project naming rule
+
+- `--init` present: `{{PROJECT_NAME}}.SchemaInitialization`
+- `--init` omitted: `{{PROJECT_NAME}}.SchemaUpdates`
+
+### Generated structure
+
+```text
+{{FINAL_PROJECT_NAME}}
+└── Scripts
+    ├── {{SCHEMA}}
+    │   ├── Down
+    │   │   ├── Queries
+    │   │   │   └── {{ISSUE_NAME}}
+    │   │   ├── Sp
+    │   │   │   └── {{ISSUE_NAME}}
+    │   │   ├── Tables
+    │   │   │   └── {{ISSUE_NAME}}
+    │   │   └── Views
+    │   │       └── {{ISSUE_NAME}}
+    │   └── Up
+    │       ├── Queries
+    │       │   └── {{ISSUE_NAME}}
+    │       ├── Sp
+    │       │   └── {{ISSUE_NAME}}
+    │       ├── Tables
+    │       │   └── {{ISSUE_NAME}}
+    │       └── Views
+    │           └── {{ISSUE_NAME}}
+    └── dbo
+        ├── Down
+        │   └── Synonyms
+        │       └── {{ISSUE_NAME}}
+        └── Up
+            └── Synonyms
+                └── {{ISSUE_NAME}}
+```
+
+### Naming rules
+
+- Up file: `{{ALTER_OR_CREATE}}_{{OBJECT_NAME}}.sql`
+- Down file: `ROLLBACK_{{ALTER_OR_CREATE}}_{{OBJECT_NAME}}.sql`
+- Query migrations use `QUERY_{{ISSUE_NAME}}.sql` and `ROLLBACK_QUERY_{{ISSUE_NAME}}.sql` when no object name is provided
+
+### Up and Down behavior
+
+- Every execution creates one `Up` script and one `Down` script
+- `Create SP`, `Create Table`, and `Create View` generate `DROP` statements in the `Down` file
+- `Query`, `Modify SP`, `Modify Table`, and `Modify View` generate an empty `Down` file
+- The `Up` file always includes starter SQL content for the selected migration type
+
+### Synonym behavior
+
+- `Create SP`, `Create Table`, and `Create View` also generate synonym scripts under `Scripts/dbo`
+- Synonym `Up` creates a synonym from `dbo` to `{{SCHEMA}}`
+- Synonym `Down` drops the synonym from `dbo`
+
+### Examples
+
+Wizard:
+
+```bash
+geek-cli
+```
+
+Direct CLI:
+
+```bash
+geek-cli db script --project Booking --schema Sales --type "Create Table" --issue ABC-123 --object-name TR_CUSTOMER
+```
+
+Direct CLI for a query migration:
+
+```bash
+geek-cli db script --project Booking --schema Sales --type Query --issue ABC-124
+```
+
+MCP:
+
+```text
+Tool: DbScript
+Arguments:
+  projectName: Booking
+  schema: Sales
+  type: Create View
+  issue: ABC-125
+  init: false
+  objectName: VW_CUSTOMER
+```
 
 ---
 
