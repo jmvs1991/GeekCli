@@ -5,6 +5,7 @@ using ModelContextProtocol.Server;
 
 namespace GeekCli.Tools
 {
+    [McpServerToolType]
     public sealed class RxNativeComponentTool : McpToolBase
     {
         private readonly IRxNativeComponentService _service;

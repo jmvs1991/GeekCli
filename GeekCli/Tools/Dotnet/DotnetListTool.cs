@@ -5,6 +5,7 @@ using ModelContextProtocol.Server;
 
 namespace GeekCli.Tools
 {
+    [McpServerToolType]
     public sealed class DotnetListTool : McpToolBase
     {
         private readonly IDotnetListService _service;

@@ -5,6 +5,7 @@ using ModelContextProtocol.Server;
 
 namespace GeekCli.Tools
 {
+    [McpServerToolType]
     public sealed class DotnetControllerTool : McpToolBase
     {
         private readonly IDotnetControllerService _service;

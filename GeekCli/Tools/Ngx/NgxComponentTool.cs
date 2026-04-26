@@ -5,6 +5,7 @@ using ModelContextProtocol.Server;
 
 namespace GeekCli.Tools
 {
+    [McpServerToolType]
     public sealed class NgxComponentTool : McpToolBase
     {
         private readonly INgxComponentService _service;

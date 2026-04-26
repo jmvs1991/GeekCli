@@ -28,6 +28,7 @@ using GeekCliServices.Services.Rx.Native.Module;
 using GeekCliServices.Services.Rx.Native.Screen;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Spectre.Console.Cli;
 
 namespace GeekCli.Infrastructure
@@ -85,10 +86,17 @@ namespace GeekCli.Infrastructure
 
         public static async Task<int> RunGeekCliMcpServerAsync(this HostApplicationBuilder builder)
         {
-            builder.Services.AddGeekCliServices();
-            builder.Services.AddMcpServer()
+            builder.Logging.AddConsole(consoleLogOptions =>
+            {
+                // Configure all logs to go to stderr
+                consoleLogOptions.LogToStandardErrorThreshold = LogLevel.Trace;
+            });
+
+            builder.Services
+                .AddGeekCliServices()
+                .AddMcpServer()
                 .WithStdioServerTransport()
-                .WithTools(McpToolTypes.All);
+                .WithToolsFromAssembly();
 
             await builder.Build().RunAsync();
             return 0;

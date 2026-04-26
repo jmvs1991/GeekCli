@@ -1,7 +1,11 @@
 {
   "profiles": {
-    "GeekCli": {
+    "Geek:cli": {
+      "commandName": "Project"
+    },
+    "Geek:mcp": {
       "commandName": "Project",
+      "commandLineArgs": "mcp"
     },
     "Container (Dockerfile)": {
       "commandName": "Docker"

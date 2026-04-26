@@ -5,6 +5,7 @@ using ModelContextProtocol.Server;
 
 namespace GeekCli.Tools
 {
+    [McpServerToolType]
     public sealed class RxNativeModuleTool : McpToolBase
     {
         private readonly IRxNativeModuleService _service;

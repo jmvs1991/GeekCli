@@ -5,6 +5,7 @@ using ModelContextProtocol.Server;
 
 namespace GeekCli.Tools
 {
+    [McpServerToolType]
     public sealed class DbScaffoldTool : McpToolBase
     {
         private readonly IDbScaffoldService _service;

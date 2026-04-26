@@ -5,6 +5,7 @@ using ModelContextProtocol.Server;
 
 namespace GeekCli.Tools
 {
+    [McpServerToolType]
     public sealed class DbMigrationRemoveTool : McpToolBase
     {
         private readonly IRemoveMigrationService _service;

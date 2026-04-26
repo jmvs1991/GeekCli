@@ -5,6 +5,7 @@ using ModelContextProtocol.Server;
 
 namespace GeekCli.Tools
 {
+    [McpServerToolType]
     public sealed class DbMigrationRollbackTool : McpToolBase
     {
         private readonly IRollbackMigrationService _service;

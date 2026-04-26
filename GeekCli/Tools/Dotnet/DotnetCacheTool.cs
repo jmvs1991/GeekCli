@@ -5,6 +5,7 @@ using ModelContextProtocol.Server;
 
 namespace GeekCli.Tools
 {
+    [McpServerToolType]
     public sealed class DotnetCacheTool : McpToolBase
     {
         private readonly IDotnetCacheService _service;

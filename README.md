@@ -166,6 +166,28 @@ After registration, start or reload your MCP client and it will discover the `ge
 
 ---
 
+## 🐞 Debug The MCP Server
+
+When testing the MCP server locally, run the [Model Context Protocol Inspector](https://github.com/modelcontextprotocol/inspector) against the `mcp` entrypoint.
+
+From the `.\GeekCli\` folder:
+
+```bash
+npx @modelcontextprotocol/inspector dotnet run -- mcp
+```
+
+This starts the inspector and launches the local server through `dotnet run`, which matches the `mcp` mode handled in `Program.cs`.
+
+If you prefer Visual Studio or Rider, the project also includes a `Geek:mcp` launch profile in `GeekCli/Properties/launchSettings.json` with:
+
+```text
+commandLineArgs: mcp
+```
+
+That profile is useful when you want to attach a debugger to the `GeekCli` process while the MCP server is running.
+
+---
+
 ## 🔁 Update The Tool
 
 After packing a new version:

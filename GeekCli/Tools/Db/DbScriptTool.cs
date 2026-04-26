@@ -5,6 +5,7 @@ using ModelContextProtocol.Server;
 
 namespace GeekCli.Tools
 {
+    [McpServerToolType]
     public sealed class DbScriptTool : McpToolBase
     {
         private readonly IDbScriptService _service;

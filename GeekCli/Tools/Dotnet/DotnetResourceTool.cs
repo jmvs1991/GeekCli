@@ -5,6 +5,7 @@ using ModelContextProtocol.Server;
 
 namespace GeekCli.Tools
 {
+    [McpServerToolType]
     public sealed class DotnetResourceTool : McpToolBase
     {
         private readonly IDotnetResourceService _service;
