@@ -6,6 +6,7 @@ using GeekCli.Commands.Dotnet.Read;
 using GeekCli.Commands.Dotnet.Resource;
 using GeekCli.Commands.Dotnet.Service;
 using GeekCli.Commands.Dotnet.Sp;
+using GeekCli.Commands.Dotnet.ApiUnitTest;
 using GeekCli.Commands.Dotnet.Wizard;
 using GeekCli.Commands.Dotnet.Write;
 using Spectre.Console.Cli;
@@ -47,6 +48,9 @@ namespace GeekCli.Branches
 
                 dotnet.AddCommand<DotnetServiceCommand>("service")
                       .WithDescription("Generates an entity or view service template.");
+
+                dotnet.AddCommand<DotnetApiUnitTestCommand>("unittest-api")
+                      .WithDescription("Generates an API unit test template.");
             });
         }
     }

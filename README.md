@@ -37,7 +37,8 @@ geek-cli
 │   ├── read
 │   ├── write
 │   ├── controller
-│   └── service
+│   ├── service
+│   └── unittest-api
 ├── ngx
 │   ├── page
 │   └── component
@@ -284,6 +285,12 @@ geek-cli dotnet controller Customer --projectName Billing --codeField CustomerCo
 
 ```bash
 geek-cli dotnet service Customer --projectName Billing --view --scope corp-co-code
+```
+
+### Generate an API unit test directly
+
+```bash
+geek-cli dotnet unittest-api Customer --projectName Billing --codeField CustomerCode --serviceInterface ICustomerService --dtoName CustomerDTO --responseName CustomerResponse --endpoint Customer --scope corp-co
 ```
 
 ### Open the Angular wizard

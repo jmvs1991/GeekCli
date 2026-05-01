@@ -15,6 +15,8 @@ using GeekCliServices.Services.Dotnet.Service;
 using GeekCliServices.Services.Dotnet.Service.Models;
 using GeekCliServices.Services.Dotnet.Sp;
 using GeekCliServices.Services.Dotnet.Sp.Models;
+using GeekCliServices.Services.Dotnet.ApiUnitTest;
+using GeekCliServices.Services.Dotnet.ApiUnitTest.Models;
 using GeekCliServices.Services.Dotnet.Write;
 using GeekCliServices.Services.Dotnet.Write.Models;
 using Spectre.Console;
@@ -35,6 +37,7 @@ namespace GeekCli.Commands.Dotnet.Wizard
         private const string CreateWriteAction = "Create a write repository";
         private const string CreateControllerAction = "Create an API controller";
         private const string CreateServiceAction = "Create a service";
+        private const string CreateUnitTestAction = "Create an API unit test";
 
         private readonly IDotnetListService _dotnetListService;
         private readonly IDotnetDtoService _dotnetDtoService;
@@ -45,6 +48,7 @@ namespace GeekCli.Commands.Dotnet.Wizard
         private readonly IDotnetWriteService _dotnetWriteService;
         private readonly IDotnetControllerService _dotnetControllerService;
         private readonly IDotnetServiceService _dotnetServiceService;
+        private readonly IDotnetApiUnitTestService _dotnetApiUnitTestService;
 
         public DotnetWizardCommand(IDotnetListService dotnetListService,
                                    IDotnetDtoService dotnetDtoService,
@@ -54,7 +58,8 @@ namespace GeekCli.Commands.Dotnet.Wizard
                                    IDotnetReadService dotnetReadService,
                                    IDotnetWriteService dotnetWriteService,
                                    IDotnetControllerService dotnetControllerService,
-                                   IDotnetServiceService dotnetServiceService)
+                                   IDotnetServiceService dotnetServiceService,
+                                   IDotnetApiUnitTestService dotnetApiUnitTestService)
         {
             _dotnetListService = dotnetListService;
             _dotnetDtoService = dotnetDtoService;
@@ -65,6 +70,7 @@ namespace GeekCli.Commands.Dotnet.Wizard
             _dotnetWriteService = dotnetWriteService;
             _dotnetControllerService = dotnetControllerService;
             _dotnetServiceService = dotnetServiceService;
+            _dotnetApiUnitTestService = dotnetApiUnitTestService;
         }
 
         protected override int Execute(CommandContext context, CancellationToken cancellationToken)
@@ -94,6 +100,7 @@ namespace GeekCli.Commands.Dotnet.Wizard
                 CreateWriteAction => RunCreateWrite(),
                 CreateControllerAction => RunCreateController(),
                 CreateServiceAction => RunCreateService(),
+                CreateUnitTestAction => RunCreateUnitTest(),
                 _ => 1
             };
         }
@@ -117,7 +124,8 @@ namespace GeekCli.Commands.Dotnet.Wizard
                 CreateReadAction,
                 CreateWriteAction,
                 CreateControllerAction,
-                CreateServiceAction
+                CreateServiceAction,
+                CreateUnitTestAction
             };
 
             if (showBackOption)
@@ -155,6 +163,26 @@ namespace GeekCli.Commands.Dotnet.Wizard
         private static string AskCodeField(string example = "CustomerCode")
         {
             return AnsiConsole.Ask<string>($"[green]Code field[/] ([grey]example: {example}[/])?");
+        }
+
+        private static string AskServiceInterface(string example = "ICustomerService")
+        {
+            return AnsiConsole.Ask<string>($"[green]Service interface[/] ([grey]example: {example}[/])?");
+        }
+
+        private static string AskDtoName(string example = "CustomerDTO")
+        {
+            return AnsiConsole.Ask<string>($"[green]DTO name[/] ([grey]example: {example}[/])?");
+        }
+
+        private static string AskResponseName(string example = "CustomerResponse")
+        {
+            return AnsiConsole.Ask<string>($"[green]Response name[/] ([grey]example: {example}[/])?");
+        }
+
+        private static string AskEndpoint(string example = "Customer")
+        {
+            return AnsiConsole.Ask<string>($"[green]Endpoint[/] ([grey]example: {example}[/])?");
         }
 
         private static DotnetScope AskScope(bool allowCorpCoCode)
@@ -364,6 +392,43 @@ namespace GeekCli.Commands.Dotnet.Wizard
             }
 
             return _dotnetServiceService.RunProcess(ProcessToRun, new DotnetServiceCommand(name, projectName, scope, view));
+        }
+
+        private int RunCreateUnitTest()
+        {
+            var name = AskName("Customer");
+            var projectName = AskProjectName();
+            var codeField = AskCodeField();
+            var serviceInterface = AskServiceInterface();
+            var dtoName = AskDtoName();
+            var responseName = AskResponseName();
+            var endpoint = AskEndpoint();
+            var scope = AskScope(allowCorpCoCode: false);
+
+            ShowSummary($"[grey]Action:[/] [green]{CreateUnitTestAction}[/]",
+                        $"[grey]Name:[/] [green]{name}[/]",
+                        $"[grey]Project:[/] [green]{projectName}[/]",
+                        $"[grey]Code field:[/] [green]{codeField}[/]",
+                        $"[grey]Service interface:[/] [green]{serviceInterface}[/]",
+                        $"[grey]DTO name:[/] [green]{dtoName}[/]",
+                        $"[grey]Response name:[/] [green]{responseName}[/]",
+                        $"[grey]Endpoint:[/] [green]{endpoint}[/]",
+                        $"[grey]Scope:[/] [green]{scope}[/]");
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
+
+            return _dotnetApiUnitTestService.RunProcess(ProcessToRun,
+                new DotnetApiUnitTestCommand(name,
+                                             projectName,
+                                             codeField,
+                                             serviceInterface,
+                                             dtoName,
+                                             responseName,
+                                             endpoint,
+                                             scope));
         }
     }
 }
