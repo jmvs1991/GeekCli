@@ -16,6 +16,8 @@ namespace GeekCliServices.Services.Dotnet.Models
 
         public static DotnetTemplateOption ResponseName(string value) => new("--responseName", value);
 
+        public static DotnetTemplateOption ContextTestBase(string value) => new("--contextTestBase", value);
+
         public static DotnetTemplateOption Endpoint(string value) => new("--endpoint", value);
     }
 }

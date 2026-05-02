@@ -16,6 +16,7 @@ namespace GeekCliServices.Services.Dotnet.ApiUnitTest
                                                DotnetTemplateOption.ServiceInterface(command.ServiceInterface),
                                                DotnetTemplateOption.DtoName(command.DtoName),
                                                DotnetTemplateOption.ResponseName(command.ResponseName),
+                                               DotnetTemplateOption.ContextTestBase(command.ContextTestBase),
                                                DotnetTemplateOption.Endpoint(command.Endpoint)));
         }
     }

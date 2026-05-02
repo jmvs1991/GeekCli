@@ -20,6 +20,7 @@ using GeekCliServices.Services.Dotnet.Resource;
 using GeekCliServices.Services.Dotnet.Service;
 using GeekCliServices.Services.Dotnet.Sp;
 using GeekCliServices.Services.Dotnet.ApiUnitTest;
+using GeekCliServices.Services.Dotnet.UnitTestService;
 using GeekCliServices.Services.Dotnet.Write;
 using GeekCliServices.Services.Ngx.Component;
 using GeekCliServices.Services.Ngx.Page;
@@ -47,6 +48,7 @@ namespace GeekCli.Infrastructure
             services.AddSingleton<IDotnetWriteService, DotnetWriteService>();
             services.AddSingleton<IDotnetControllerService, DotnetControllerService>();
             services.AddSingleton<IDotnetServiceService, DotnetServiceService>();
+            services.AddSingleton<IDotnetUnitTestServiceService, DotnetUnitTestServiceService>();
             services.AddSingleton<IDotnetApiUnitTestService, DotnetApiUnitTestService>();
             services.AddSingleton<IAddMigrationService, AddMigrationService>();
             services.AddSingleton<IRemoveMigrationService, RemoveMigrationService>();

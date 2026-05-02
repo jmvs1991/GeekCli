@@ -17,6 +17,8 @@ using GeekCliServices.Services.Dotnet.Sp;
 using GeekCliServices.Services.Dotnet.Sp.Models;
 using GeekCliServices.Services.Dotnet.ApiUnitTest;
 using GeekCliServices.Services.Dotnet.ApiUnitTest.Models;
+using GeekCliServices.Services.Dotnet.UnitTestService;
+using GeekCliServices.Services.Dotnet.UnitTestService.Models;
 using GeekCliServices.Services.Dotnet.Write;
 using GeekCliServices.Services.Dotnet.Write.Models;
 using Spectre.Console;
@@ -37,7 +39,8 @@ namespace GeekCli.Commands.Dotnet.Wizard
         private const string CreateWriteAction = "Create a write repository";
         private const string CreateControllerAction = "Create an API controller";
         private const string CreateServiceAction = "Create a service";
-        private const string CreateUnitTestAction = "Create an API unit test";
+        private const string CreateServiceUnitTestAction = "Create a service unit test";
+        private const string CreateApiUnitTestAction = "Create an API unit test";
 
         private readonly IDotnetListService _dotnetListService;
         private readonly IDotnetDtoService _dotnetDtoService;
@@ -48,6 +51,7 @@ namespace GeekCli.Commands.Dotnet.Wizard
         private readonly IDotnetWriteService _dotnetWriteService;
         private readonly IDotnetControllerService _dotnetControllerService;
         private readonly IDotnetServiceService _dotnetServiceService;
+        private readonly IDotnetUnitTestServiceService _dotnetUnitTestServiceService;
         private readonly IDotnetApiUnitTestService _dotnetApiUnitTestService;
 
         public DotnetWizardCommand(IDotnetListService dotnetListService,
@@ -59,6 +63,7 @@ namespace GeekCli.Commands.Dotnet.Wizard
                                    IDotnetWriteService dotnetWriteService,
                                    IDotnetControllerService dotnetControllerService,
                                    IDotnetServiceService dotnetServiceService,
+                                   IDotnetUnitTestServiceService dotnetUnitTestServiceService,
                                    IDotnetApiUnitTestService dotnetApiUnitTestService)
         {
             _dotnetListService = dotnetListService;
@@ -70,6 +75,7 @@ namespace GeekCli.Commands.Dotnet.Wizard
             _dotnetWriteService = dotnetWriteService;
             _dotnetControllerService = dotnetControllerService;
             _dotnetServiceService = dotnetServiceService;
+            _dotnetUnitTestServiceService = dotnetUnitTestServiceService;
             _dotnetApiUnitTestService = dotnetApiUnitTestService;
         }
 
@@ -100,7 +106,8 @@ namespace GeekCli.Commands.Dotnet.Wizard
                 CreateWriteAction => RunCreateWrite(),
                 CreateControllerAction => RunCreateController(),
                 CreateServiceAction => RunCreateService(),
-                CreateUnitTestAction => RunCreateUnitTest(),
+                CreateServiceUnitTestAction => RunCreateServiceUnitTest(),
+                CreateApiUnitTestAction => RunCreateApiUnitTest(),
                 _ => 1
             };
         }
@@ -125,7 +132,8 @@ namespace GeekCli.Commands.Dotnet.Wizard
                 CreateWriteAction,
                 CreateControllerAction,
                 CreateServiceAction,
-                CreateUnitTestAction
+                CreateServiceUnitTestAction,
+                CreateApiUnitTestAction
             };
 
             if (showBackOption)
@@ -178,6 +186,11 @@ namespace GeekCli.Commands.Dotnet.Wizard
         private static string AskResponseName(string example = "CustomerResponse")
         {
             return AnsiConsole.Ask<string>($"[green]Response name[/] ([grey]example: {example}[/])?");
+        }
+
+        private static string AskContextTestBase(string example = "CondominiumContextTest")
+        {
+            return AnsiConsole.Ask<string>($"[green]Context test base[/] ([grey]example: {example}[/])?");
         }
 
         private static string AskEndpoint(string example = "Customer")
@@ -394,7 +407,27 @@ namespace GeekCli.Commands.Dotnet.Wizard
             return _dotnetServiceService.RunProcess(ProcessToRun, new DotnetServiceCommand(name, projectName, scope, view));
         }
 
-        private int RunCreateUnitTest()
+        private int RunCreateServiceUnitTest()
+        {
+            var name = AskName("Customer");
+            var projectName = AskProjectName();
+            var scope = AskScope(allowCorpCoCode: false);
+
+            ShowSummary($"[grey]Action:[/] [green]{CreateServiceUnitTestAction}[/]",
+                        $"[grey]Name:[/] [green]{name}[/]",
+                        $"[grey]Project:[/] [green]{projectName}[/]",
+                        $"[grey]Scope:[/] [green]{scope}[/]");
+
+            if (!ConfirmExecution())
+            {
+                return 0;
+            }
+
+            return _dotnetUnitTestServiceService.RunProcess(ProcessToRun,
+                new DotnetUnitTestServiceCommand(name, projectName, scope));
+        }
+
+        private int RunCreateApiUnitTest()
         {
             var name = AskName("Customer");
             var projectName = AskProjectName();
@@ -402,16 +435,18 @@ namespace GeekCli.Commands.Dotnet.Wizard
             var serviceInterface = AskServiceInterface();
             var dtoName = AskDtoName();
             var responseName = AskResponseName();
+            var contextTestBase = AskContextTestBase();
             var endpoint = AskEndpoint();
             var scope = AskScope(allowCorpCoCode: false);
 
-            ShowSummary($"[grey]Action:[/] [green]{CreateUnitTestAction}[/]",
+            ShowSummary($"[grey]Action:[/] [green]{CreateApiUnitTestAction}[/]",
                         $"[grey]Name:[/] [green]{name}[/]",
                         $"[grey]Project:[/] [green]{projectName}[/]",
                         $"[grey]Code field:[/] [green]{codeField}[/]",
                         $"[grey]Service interface:[/] [green]{serviceInterface}[/]",
                         $"[grey]DTO name:[/] [green]{dtoName}[/]",
                         $"[grey]Response name:[/] [green]{responseName}[/]",
+                        $"[grey]Context test base:[/] [green]{contextTestBase}[/]",
                         $"[grey]Endpoint:[/] [green]{endpoint}[/]",
                         $"[grey]Scope:[/] [green]{scope}[/]");
 
@@ -427,6 +462,7 @@ namespace GeekCli.Commands.Dotnet.Wizard
                                              serviceInterface,
                                              dtoName,
                                              responseName,
+                                             contextTestBase,
                                              endpoint,
                                              scope));
         }

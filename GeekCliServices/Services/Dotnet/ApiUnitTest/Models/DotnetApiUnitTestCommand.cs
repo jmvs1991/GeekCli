@@ -8,6 +8,7 @@ namespace GeekCliServices.Services.Dotnet.ApiUnitTest.Models
                                                   string ServiceInterface,
                                                   string DtoName,
                                                   string ResponseName,
+                                                  string ContextTestBase,
                                                   string Endpoint,
                                                   DotnetScope Scope)
         : DotnetProjectTemplateCommandBase(Name, ProjectName, Scope);

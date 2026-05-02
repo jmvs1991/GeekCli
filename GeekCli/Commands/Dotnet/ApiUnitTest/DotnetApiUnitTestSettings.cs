@@ -30,6 +30,10 @@ namespace GeekCli.Commands.Dotnet.ApiUnitTest
         [Description("The response type name used by the generated unit test.")]
         public string? ResponseName { get; set; }
 
+        [CommandOption("--contextTestBase <CONTEXT_TEST_BASE>")]
+        [Description("The base test class used by the generated unit test.")]
+        public string? ContextTestBase { get; set; }
+
         [CommandOption("--endpoint <ENDPOINT>")]
         [Description("The API endpoint segment used by the generated unit test.")]
         public string? Endpoint { get; set; }
@@ -66,6 +70,11 @@ namespace GeekCli.Commands.Dotnet.ApiUnitTest
             if (string.IsNullOrWhiteSpace(ResponseName))
             {
                 return ValidationResult.Error("The --responseName option is required.");
+            }
+
+            if (string.IsNullOrWhiteSpace(ContextTestBase))
+            {
+                return ValidationResult.Error("The --contextTestBase option is required.");
             }
 
             if (string.IsNullOrWhiteSpace(Endpoint))

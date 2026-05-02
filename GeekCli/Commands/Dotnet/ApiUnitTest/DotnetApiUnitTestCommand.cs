@@ -17,6 +17,7 @@ namespace GeekCli.Commands.Dotnet.ApiUnitTest
                                              settings.ServiceInterface!,
                                              settings.DtoName!,
                                              settings.ResponseName!,
+                                             settings.ContextTestBase!,
                                              settings.Endpoint!,
                                              DotnetScopeHelper.Parse(settings.Scope));
         }

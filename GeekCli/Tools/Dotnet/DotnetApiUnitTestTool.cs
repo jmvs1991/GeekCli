@@ -23,6 +23,7 @@ namespace GeekCli.Tools
                                                string serviceInterface,
                                                string dtoName,
                                                string responseName,
+                                               string contextTestBase,
                                                string endpoint,
                                                string scope = "basic")
             => Capture(() => _service.RunProcess("dotnet",
@@ -32,6 +33,7 @@ namespace GeekCli.Tools
                                              serviceInterface,
                                              dtoName,
                                              responseName,
+                                             contextTestBase,
                                              endpoint,
                                              ParseScope(scope))));
     }
