@@ -26,3 +26,8 @@ tasks:
       - geek-cli:pack
     cmds:
       - dotnet tool update --global GeekCli --verbosity detailed
+
+  geek-cli:uninstall-tool:
+    desc: Uninstall the Geek CLI tool globally
+    cmds:
+      - dotnet tool uninstall --global GeekCli

@@ -81,6 +81,7 @@ dotnet build .\GeekCli\GeekCli.csproj -c Release
 - `task geek-cli:pack`
 - `task geek-cli:install-tool`
 - `task geek-cli:update-tool`
+- `task geek-cli:uninstall-tool`
 
 ---
 
