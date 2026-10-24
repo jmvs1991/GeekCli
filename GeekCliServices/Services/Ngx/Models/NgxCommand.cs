@@ -7,6 +7,7 @@
         public string? Project { get; init; }
         public string? Folder { get; init; }
         public string? Module { get; init; }
+        public string? DestinationRoot { get; init; }
 
         public NgxCommand(string name, bool nx = false, string? project = null, string? folder = null, string? module = null)
         {

@@ -23,6 +23,7 @@ Use these area names consistently across commands, branches, wizards, MCP tools,
 - Use camelCase parameters and local variables, and follow the surrounding private-field convention, commonly `_camelCase`.
 - Keep feature files grouped by area and operation. Use `I...Service` interfaces, service implementations, and command records under `Models` following the existing feature structure.
 - Reuse existing command, settings, model, and service base classes when appropriate. Keep nullable annotations accurate and dependencies explicit through constructor injection.
+- Put reusable extension methods in the project's `ExtensionMethods` folder. String extension methods belong in a static `StringExtension` class and use the `this string` receiver.
 - Preserve existing public command names, options, defaults, generated output, and exit behavior unless the requested change explicitly alters them.
 
 ## Required execution paths

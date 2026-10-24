@@ -60,9 +60,12 @@ namespace GeekCli.Commands.Ngx.Wizard
             }
 
             var name = AnsiConsole.Ask<string>("Angular [green]name[/] ([grey]example: user-profile[/])?");
-            var command = action == CreateComponentAction
-                ? BuildComponentCommand(name)
-                : new NgxCommand(name);
+            var command = action switch
+            {
+                CreateComponentAction => BuildNxCommand(name, "component", false),
+                CreatePageAction => BuildNxCommand(name, "page", true),
+                _ => null
+            };
 
             if (command is null)
             {
@@ -72,32 +75,38 @@ namespace GeekCli.Commands.Ngx.Wizard
             return RunSelectedAction(action, command);
         }
 
-        private static NgxCommand? BuildComponentCommand(string name)
+        private static NgxCommand? BuildNxCommand(string name, string itemName, bool applicationsOnly)
         {
             if (!AnsiConsole.Confirm("Is this an [green]Nx workspace[/]?", false))
             {
                 return new NgxCommand(name);
             }
 
-            var projects = GetAngularProjects();
+            var projects = GetAngularProjects(applicationsOnly);
             if (projects.Count == 0)
             {
-                AnsiConsole.MarkupLine("[red]No Angular projects were found in the Nx workspace, or Nx could not read the project list.[/]");
+                AnsiConsole.MarkupLine("[red]No matching Angular projects were found in the Nx workspace, or Nx could not read the project list.[/]");
                 return null;
             }
 
             var project = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("Choose the Angular [green]project[/] for the component")
+                    .Title($"Choose the Angular [green]{(applicationsOnly ? "application" : "project")}[/] for the {itemName}")
                     .PageSize(10)
                     .AddChoices(projects));
-            var folder = AnsiConsole.Ask<string>("Destination [green]folder[/] ([grey]relative to src/app, or apps/<project>/src/app/...[/])?");
-            var module = AnsiConsole.Ask<string>("Declaring Angular [green]module[/] path?");
+            var folderPrompt = itemName == "component"
+                ? "Workspace-relative destination [green]folder[/] beneath the project root (for example apps/<project>/src/app/Features or packages/<project>/src/lib/Features)?"
+                : "Destination [green]folder[/] (relative to src/app, or apps/<project>/src/app/...)?";
+            var modulePrompt = itemName == "component"
+                ? "Workspace-relative declaring Angular [green]NgModule[/] file path, including .ts?"
+                : "Declaring Angular [green]module[/] path?";
+            var folder = AnsiConsole.Ask<string>(folderPrompt);
+            var module = AnsiConsole.Ask<string>(modulePrompt);
 
             return new NgxCommand(name, true, project, folder, module);
         }
 
-        private static List<string> GetAngularProjects()
+        private static List<string> GetAngularProjects(bool applicationsOnly = false)
         {
             var projectsResult = RunNxCommand("show projects --json");
             if (projectsResult.ExitCode != 0)
@@ -113,7 +122,7 @@ namespace GeekCli.Commands.Ngx.Wizard
                     ?? Array.Empty<NxProjectListEntry>();
                 return projects
                     .Select(project => project.Name)
-                    .Where(IsAngularProject)
+                    .Where(project => IsAngularProject(project, applicationsOnly))
                     .OrderBy(project => project, StringComparer.OrdinalIgnoreCase)
                     .ToList();
             }
@@ -123,7 +132,7 @@ namespace GeekCli.Commands.Ngx.Wizard
             }
         }
 
-        private static bool IsAngularProject(string project)
+        private static bool IsAngularProject(string project, bool applicationsOnly)
         {
             if (!Regex.IsMatch(project, "^[A-Za-z0-9_./-]+$"))
             {
@@ -139,10 +148,9 @@ namespace GeekCli.Commands.Ngx.Wizard
             try
             {
                 var projectConfiguration = JsonSerializer.Deserialize<NxProjectConfiguration>(result.Output);
-                var executor = projectConfiguration?.Targets?.GetValueOrDefault("build")?.Executor;
-                return executor?.Contains("angular", StringComparison.OrdinalIgnoreCase) == true
-                    || executor?.Contains("@angular-devkit/build", StringComparison.OrdinalIgnoreCase) == true
-                    || executor?.Contains("@angular/build", StringComparison.OrdinalIgnoreCase) == true;
+                var hasAngularTag = projectConfiguration?.Tags?.Contains("tech:angular", StringComparer.OrdinalIgnoreCase) == true;
+                return hasAngularTag
+                    && (!applicationsOnly || string.Equals(projectConfiguration?.ProjectType, "application", StringComparison.OrdinalIgnoreCase));
             }
             catch (JsonException)
             {

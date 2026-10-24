@@ -81,7 +81,7 @@ dotnet build .\GeekCli\GeekCli.csproj -c Release
 - `task geek-cli:pack`
 - `task geek-cli:install-tool`
 - `task geek-cli:update-tool`
-- `task geek-cli:uninstall-tool`
+- `task geek-cli:uninstall-tool` (on Windows, stops active `geek-cli.exe mcp` servers before uninstalling)
 
 ---
 
@@ -203,6 +203,14 @@ dotnet tool update --global GeekCli
 
 ## 🗑️ Uninstall
 
+The task below stops active `geek-cli.exe mcp` server processes on Windows before uninstalling the global tool. Other Geek CLI invocations are left running. On macOS and Linux, it runs the uninstall command directly.
+
+```bash
+task geek-cli:uninstall-tool
+```
+
+To uninstall directly without using Task, run:
+
 ```bash
 dotnet tool uninstall --global GeekCli
 ```
@@ -307,7 +315,7 @@ geek-cli dotnet unittest-api Customer --projectName Billing --codeField Customer
 geek-cli ngx
 ```
 
-When creating a component, the wizard asks whether the current directory is an Nx workspace. If it is, it lists the Angular projects detected by Nx and prompts for the destination folder and declaring module before showing the generation summary. Run the wizard from the Nx workspace root.
+When creating a component, the wizard asks whether the current directory is an Nx workspace. If it is, it lists projects tagged `tech:angular` (applications and libraries), then asks for a workspace-relative destination folder and declaring NgModule path. For pages, the Nx project list includes only projects tagged `tech:angular` with `projectType` set to `application`. Run the wizard from the Nx workspace root.
 
 ### Generate an Angular component directly
 
@@ -318,10 +326,30 @@ geek-cli ngx component user-profile
 For an Nx workspace, run the command from the workspace root and provide the project, folder, component name, and declaring module:
 
 ```bash
-geek-cli ngx component test --nx --project ing-sel-crm --folder apps/ing-sel-crm/src/app/Modules/Catalog/Pages/FwProducts/Components/Test --module apps/ing-sel-crm/src/app/Modules/Catalog/catalog.module.ts
+geek-cli ngx component test --nx --project ing-sel-crm --folder apps/ing-sel-crm/src/app/Modules/Catalog/Pages/FwProducts/Components --module apps/ing-sel-crm/src/app/Modules/Catalog/catalog.module.ts
 ```
 
-The folder may be relative to `src/app` or include the full `apps/<project>/src/app` path. Its folder segments are converted to PascalCase, and the component name is converted to kebab-case. Nx generation uses the `ngx` prefix and selector `ngx-<component-name>-component`.
+Use a workspace-relative destination folder beneath the application's `apps/<project>/src/app` or the library's `sourceRoot`. The folder path is used as provided, so include the desired casing and do not append the component name; the generator adds the kebab-case component name as the final path segment. Provide the declaring NgModule as a workspace-relative path including `.ts`. Nx generation uses the `ngx` prefix and selector `ngx-<component-name>-component`.
+
+For an Angular library, the command can target its `sourceRoot`:
+
+```bash
+geek-cli ngx component test-component --nx --project core --folder packages/ngx/core/src/lib --module packages/ngx/core/src/lib/ngx-core.module.ts
+```
+
+### Generate an Angular page directly
+
+```bash
+geek-cli ngx page user-profile
+```
+
+For an Nx workspace, run the command from the workspace root and provide the Angular application, destination folder, page name, and declaring module:
+
+```bash
+geek-cli ngx page user-profile --nx --project ing-sel-crm --folder apps/ing-sel-crm/src/app/Modules/Catalog/Pages --module apps/ing-sel-crm/src/app/Modules/Catalog/catalog.module.ts
+```
+
+Nx page generation converts folder segments to PascalCase and the page name to kebab-case. It uses the `ngx` prefix and selector `ngx-<page-name>-page`.
 
 ### Open the React wizard
 
@@ -355,9 +383,19 @@ The `NgxComponent` MCP tool accepts these parameters:
 | --- | --- | --- |
 | `name` | Always | Component name. In Nx mode, it is converted to kebab-case and used as the final path segment. |
 | `nx` | No | Set to `true` for Nx generation. Defaults to `false`, which preserves standalone Angular CLI generation. |
-| `project` | In Nx mode | Nx Angular project name, such as `ing-sel-crm`. The generated path uses `apps/<project>/src/app`. |
-| `folder` | In Nx mode | Folder beneath `src/app`, either relative (such as `Modules/Catalog/Pages`) or a full workspace path beginning `apps/<project>/src/app/`. Each folder segment is converted to PascalCase. |
-| `module` | In Nx mode | Workspace-relative path to the NgModule file that declares the component, such as `apps/ing-sel-crm/src/app/Modules/Catalog/catalog.module.ts`. |
+| `project` | In Nx mode | Nx project tagged `tech:angular`, such as an application `ing-sel-crm` or a library `core`. |
+| `folder` | In Nx mode | Workspace-relative destination under `apps/<project>/src/app` for applications or under the library's `sourceRoot`. The path is used as provided; the component name is appended as the final segment. |
+| `module` | In Nx mode | Workspace-relative path to the declaring NgModule file, including `.ts`. |
+
+The `NgxPage` MCP tool accepts the same parameters and defaults, with page-specific naming:
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `name` | Always | Page name. In Nx mode, it is converted to kebab-case and used as the final path segment. |
+| `nx` | No | Set to `true` for Nx generation. Defaults to `false`, preserving standalone Angular CLI generation. |
+| `project` | In Nx mode | Nx Angular application name, such as `ing-sel-crm`. |
+| `folder` | In Nx mode | Folder beneath `src/app`, either relative or a full workspace path beginning `apps/<project>/src/app/`; segments are converted to PascalCase. |
+| `module` | In Nx mode | Workspace-relative path to the NgModule file that declares the page. |
 
 For Nx MCP calls, configure the MCP server to run with the Nx workspace root as its working directory. Nx resolves the project and module paths from that directory.
 

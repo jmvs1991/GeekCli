@@ -28,6 +28,8 @@ tasks:
       - dotnet tool update --global GeekCli --verbosity detailed
 
   geek-cli:uninstall-tool:
-    desc: Uninstall the Geek CLI tool globally
+    desc: Stop active Windows MCP servers and uninstall the Geek CLI tool globally
     cmds:
+      - cmd: powershell -NoProfile -ExecutionPolicy Bypass -File scripts/stop-geek-cli-mcp.ps1
+        platforms: [windows]
       - dotnet tool uninstall --global GeekCli

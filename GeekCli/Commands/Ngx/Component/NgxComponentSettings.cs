@@ -11,11 +11,11 @@
         public string? Project { get; set; }
 
         [Spectre.Console.Cli.CommandOption("--folder <FOLDER>")]
-        [System.ComponentModel.Description("The folder under src/app where the component will be generated.")]
+        [System.ComponentModel.Description("Workspace-relative destination folder under the selected application's src/app or library sourceRoot. The path is used as provided.")]
         public string? Folder { get; set; }
 
         [Spectre.Console.Cli.CommandOption("--module <MODULE>")]
-        [System.ComponentModel.Description("The Angular module file that declares the component.")]
+        [System.ComponentModel.Description("Workspace-relative path to the Angular NgModule file that declares the component, including .ts.")]
         public string? Module { get; set; }
     }
 }
