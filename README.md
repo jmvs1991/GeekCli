@@ -307,6 +307,8 @@ geek-cli dotnet unittest-api Customer --projectName Billing --codeField Customer
 geek-cli ngx
 ```
 
+When creating a component, the wizard asks whether the current directory is an Nx workspace. If it is, it lists the Angular projects detected by Nx and prompts for the destination folder and declaring module before showing the generation summary. Run the wizard from the Nx workspace root.
+
 ### Generate an Angular component directly
 
 ```bash
