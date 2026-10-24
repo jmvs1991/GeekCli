@@ -115,7 +115,7 @@ GeekCli
 ## 📥 Install Globally
 
 ```bash
-dotnet tool install --global --add-source .\GeekCli\bin\Release GeekCli --verbosity detailed
+dotnet tool install --global GeekCli --verbosity detailed
 ```
 
 After installation, run:
@@ -133,7 +133,7 @@ geek-cli
 1. Install the tool globally:
 
 ```bash
-dotnet tool install --global --add-source .\GeekCli\bin\Release GeekCli --verbosity detailed
+dotnet tool install --global GeekCli --verbosity detailed
 ```
 
 2. Register it in your MCP client using `geek-cli mcp` as the server command.
@@ -195,7 +195,7 @@ That profile is useful when you want to attach a debugger to the `GeekCli` proce
 After packing a new version:
 
 ```bash
-dotnet tool update --global --add-source .\GeekCli\bin\Release GeekCli
+dotnet tool update --global GeekCli
 ```
 
 ---
