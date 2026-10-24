@@ -1,0 +1,63 @@
+# Repository instructions
+
+## Solution and responsibilities
+
+- `GeekCliSolution.sln` contains two .NET 8 projects with nullable reference types and implicit usings enabled.
+- `GeekCli` is the executable, packaged as the `geek-cli` .NET tool. It owns Spectre.Console.Cli commands, interactive wizards, MCP tools, and dependency injection.
+- `GeekCliServices` is the shared service library. It owns command models, validation rules, file generation, and external-process execution for database, .NET, Angular, React, and React Native workflows.
+- Keep the dependency direction from `GeekCli` to `GeekCliServices`. The service library must not reference the executable project.
+- Follow the additional instructions in each project's `AGENTS.md` when editing that project.
+
+## Command areas
+
+Use these area names consistently across commands, branches, wizards, MCP tools, and services:
+
+- `Db` refers to database commands (CLI branch: `db`).
+- `Dotnet` refers to .NET commands (CLI branch: `dotnet`).
+- `Ngx` refers to Angular commands (CLI branch: `ngx`).
+- `Rx` refers to React commands, including React Native (CLI branch: `rx`).
+
+## C# conventions
+
+- Follow nearby code: four-space indentation, braces on separate lines, block-scoped namespaces matching the folder hierarchy, and PascalCase type and public member names.
+- Use camelCase parameters and local variables, and follow the surrounding private-field convention, commonly `_camelCase`.
+- Keep feature files grouped by area and operation. Use `I...Service` interfaces, service implementations, and command records under `Models` following the existing feature structure.
+- Reuse existing command, settings, model, and service base classes when appropriate. Keep nullable annotations accurate and dependencies explicit through constructor injection.
+- Preserve existing public command names, options, defaults, generated output, and exit behavior unless the requested change explicitly alters them.
+
+## Required execution paths
+
+Every new command must ship with all three execution paths:
+
+1. Direct CLI invocation with registered command and settings classes.
+2. Interactive execution through the appropriate wizard, reachable from the general wizard.
+3. An MCP tool discoverable through `geek-cli mcp`.
+
+All three paths must invoke the same shared service using the same command model. Maintain consistent parameter meanings, required inputs, defaults, validation, generated artifacts, and execution behavior across them. CLI option spelling and MCP parameter naming may follow their respective existing conventions.
+
+Keep execution and common validation in `GeekCliServices`; adapters collect or parse inputs and present results. Interactive prompts belong in wizards and must not be required by direct CLI or MCP execution. Preserve stdout for the MCP protocol; use the shared output abstraction for service messages.
+
+These requirements govern new commands and changes to command behavior. Do not retrofit unrelated existing commands solely to satisfy this document.
+
+## Build and validation
+
+Run these commands from the repository root when relevant to an implementation change:
+
+```powershell
+dotnet build .\GeekCliSolution.sln
+dotnet build .\GeekCli\GeekCli.csproj -c Release
+```
+
+`Taskfile.yml` also provides `task geek-cli:build`. To create a tool package when needed:
+
+```powershell
+dotnet pack .\GeekCli\GeekCli.csproj -c Release
+```
+
+For future command additions or behavior changes:
+
+- Verify direct CLI invocation, interactive execution, and MCP invocation with equivalent inputs. Check required and optional parameters, defaults, invalid inputs, output, generated artifacts or process arguments, and exit results.
+- Exercise generators in a disposable workspace with the necessary external tools and templates available. Report any execution path that could not be verified and why.
+- Update `README.md` command structure and usage examples to reflect the affected CLI, wizard, and MCP behavior.
+
+For documentation-only changes, check instructions against the implementation and review the diff. No build or generator execution is required.
