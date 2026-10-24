@@ -18,7 +18,7 @@ As a GeekCli user, I want to generate components in a standalone Angular project
 ## Plan
 
 - [x] Add the boolean `nx` flag, defaulting to false, and Nx project, folder, component, and module inputs to the shared command model.
-- [ ] Centralize validation, naming transformations, selector construction, and component generation in the shared service.
+- [x] Centralize validation, naming transformations, selector construction, and component generation in the shared service.
 - [ ] Expose equivalent inputs through CLI and MCP, without interactive prompts in either path.
 - [ ] Extend the wizard to ask whether the environment is an Nx workspace and, if so, list its Angular projects for destination selection.
 - [ ] Verify all three execution paths in disposable projects, including invalid inputs, generator failures, and existing standalone behavior; run the required solution and Release builds and update usage documentation.
