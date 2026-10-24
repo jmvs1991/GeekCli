@@ -313,6 +313,14 @@ geek-cli ngx
 geek-cli ngx component user-profile
 ```
 
+For an Nx workspace, run the command from the workspace root and provide the project, folder, component name, and declaring module:
+
+```bash
+geek-cli ngx component test --nx --project ing-sel-crm --folder apps/ing-sel-crm/src/app/Modules/Catalog/Pages/FwProducts/Components/Test --module apps/ing-sel-crm/src/app/Modules/Catalog/catalog.module.ts
+```
+
+The folder may be relative to `src/app` or include the full `apps/<project>/src/app` path. Its folder segments are converted to PascalCase, and the component name is converted to kebab-case. Nx generation uses the `ngx` prefix and selector `ngx-<component-name>-component`.
+
 ### Open the React wizard
 
 ```bash
@@ -338,6 +346,30 @@ geek-cli mcp
 ```
 
 This starts `geek-cli` as a stdio MCP server and exposes the existing CLI generators as MCP tools. Use this command in your MCP client configuration.
+
+The `NgxComponent` MCP tool accepts these parameters:
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `name` | Always | Component name. In Nx mode, it is converted to kebab-case and used as the final path segment. |
+| `nx` | No | Set to `true` for Nx generation. Defaults to `false`, which preserves standalone Angular CLI generation. |
+| `project` | In Nx mode | Nx Angular project name, such as `ing-sel-crm`. The generated path uses `apps/<project>/src/app`. |
+| `folder` | In Nx mode | Folder beneath `src/app`, either relative (such as `Modules/Catalog/Pages`) or a full workspace path beginning `apps/<project>/src/app/`. Each folder segment is converted to PascalCase. |
+| `module` | In Nx mode | Workspace-relative path to the NgModule file that declares the component, such as `apps/ing-sel-crm/src/app/Modules/Catalog/catalog.module.ts`. |
+
+For Nx MCP calls, configure the MCP server to run with the Nx workspace root as its working directory. Nx resolves the project and module paths from that directory.
+
+Example Nx tool call:
+
+```json
+{
+  "name": "Test",
+  "nx": true,
+  "project": "ing-sel-crm",
+  "folder": "apps/ing-sel-crm/src/app/Modules/Catalog/Pages/FwProducts/Components/Test",
+  "module": "apps/ing-sel-crm/src/app/Modules/Catalog/catalog.module.ts"
+}
+```
 
 ---
 

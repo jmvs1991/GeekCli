@@ -16,8 +16,13 @@ namespace GeekCli.Tools
         }
 
         [McpServerTool]
-        [Description("Generates an Angular component using the project Angular CLI setup.")]
-        public McpToolResult NgxComponent(string name)
-            => Capture(() => _service.RunProcess("cmd", new NgxCommand(name)));
+        [Description("Generates an Angular component in a standalone Angular project or an Nx workspace. In Nx mode, provide the project, folder, and declaring module.")]
+        public McpToolResult NgxComponent(
+            [Description("Component name. In Nx mode it is converted to kebab-case and used as the final path segment.")] string name,
+            [Description("Set true to generate in an Nx workspace; defaults to false for standalone Angular CLI generation.")] bool nx = false,
+            [Description("Nx Angular project name, such as ing-sel-crm. Required when nx is true.")] string? project = null,
+            [Description("Folder beneath src/app, either relative to src/app or a workspace path beginning apps/<project>/src/app/. Required when nx is true; path segments are converted to PascalCase.")] string? folder = null,
+            [Description("Workspace-relative path to the NgModule file that declares the component, such as apps/ing-sel-crm/src/app/Modules/Catalog/catalog.module.ts. Required when nx is true.")] string? module = null)
+            => Capture(() => _service.RunProcess("cmd", new NgxCommand(name, nx, project, folder, module)));
     }
 }

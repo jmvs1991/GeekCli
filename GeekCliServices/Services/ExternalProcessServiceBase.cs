@@ -12,6 +12,7 @@ namespace GeekCliServices.Services
                 {
                     FileName = processToRun,
                     Arguments = BuildArgs(command),
+                    RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
@@ -20,22 +21,24 @@ namespace GeekCliServices.Services
             };
 
             process.Start();
+            process.StandardInput.Close();
 
-            while (!process.StandardOutput.EndOfStream)
-            {
-                var line = process.StandardOutput.ReadLine();
-                CommandOutput.Info(line);
-            }
-
-            while (!process.StandardError.EndOfStream)
-            {
-                var error = process.StandardError.ReadLine();
-                CommandOutput.Error(error);
-            }
+            var standardOutputTask = Task.Run(() => ReadLines(process.StandardOutput, CommandOutput.Info));
+            var standardErrorTask = Task.Run(() => ReadLines(process.StandardError, CommandOutput.Error));
 
             process.WaitForExit();
+            Task.WaitAll(standardOutputTask, standardErrorTask);
 
             return process.ExitCode;
+        }
+
+        private static void ReadLines(StreamReader reader, Action<string?> write)
+        {
+            string? line;
+            while ((line = reader.ReadLine()) is not null)
+            {
+                write(line);
+            }
         }
 
         protected abstract string BuildArgs(TCommand command);

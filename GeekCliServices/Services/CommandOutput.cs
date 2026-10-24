@@ -53,15 +53,22 @@ namespace GeekCliServices.Services
     public sealed class BufferingCommandOutputSink : ICommandOutputSink
     {
         private readonly StringBuilder _builder = new();
+        private readonly object _sync = new();
 
         public void Write(string message)
         {
-            _builder.AppendLine(message);
+            lock (_sync)
+            {
+                _builder.AppendLine(message);
+            }
         }
 
         public override string ToString()
         {
-            return _builder.ToString().TrimEnd();
+            lock (_sync)
+            {
+                return _builder.ToString().TrimEnd();
+            }
         }
     }
 
