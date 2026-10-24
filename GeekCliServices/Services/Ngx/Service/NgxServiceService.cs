@@ -6,9 +6,10 @@ namespace GeekCliServices.Services.Ngx.Service
     {
         public new int RunProcess(string processToRun, NgxCommand command)
         {
-            if (string.IsNullOrWhiteSpace(command.Name))
+            var validationError = NgxNxCommandValidator.GetServiceValidationError(command);
+            if (validationError is not null)
             {
-                CommandOutput.Error("A service name is required.");
+                CommandOutput.Error(validationError);
                 return 1;
             }
 
@@ -17,6 +18,14 @@ namespace GeekCliServices.Services.Ngx.Service
 
         protected override string BuildArgs(NgxCommand command)
         {
+            if (command.Nx)
+            {
+                var folder = command.Folder!.Replace('\\', '/').Trim('/');
+                var target = string.Join('/', new[] { folder, command.Name }
+                    .Where(segment => !string.IsNullOrWhiteSpace(segment)));
+                return $"/c npx nx generate @nx/angular:service \"{target}\" --project=\"{command.Project}\" --type=service";
+            }
+
             return BuildArgs($"g s {command.Name}");
         }
     }

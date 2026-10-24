@@ -4,6 +4,24 @@ namespace GeekCliServices.Services.Ngx
 {
     internal static class NgxNxCommandValidator
     {
+        public static string? GetServiceValidationError(NgxCommand command)
+        {
+            if (!command.Nx)
+            {
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(command.Name)
+                || string.IsNullOrWhiteSpace(command.Project)
+                || string.IsNullOrWhiteSpace(command.Folder)
+                || ContainsParentDirectorySegment(command.Folder))
+            {
+                return "Nx mode requires a service name, project, and project-relative folder without '..' segments.";
+            }
+
+            return GetWorkspaceRootValidationError();
+        }
+
         public static string? GetValidationError(NgxCommand command, string itemName, string? destinationRoot = null)
         {
             if (!command.Nx)
@@ -20,12 +38,7 @@ namespace GeekCliServices.Services.Ngx
                 return $"Nx mode requires a project, a folder inside that project, a {itemName} name, and a module.";
             }
 
-            if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "nx.json")))
-            {
-                return "Nx generation must run from the workspace root; nx.json was not found in the current directory.";
-            }
-
-            return null;
+            return GetWorkspaceRootValidationError();
         }
 
         public static string GetFolderWithinProject(string project, string folder, string? destinationRoot = null)
@@ -63,7 +76,7 @@ namespace GeekCliServices.Services.Ngx
         {
             var normalizedFolder = folder.Replace('\\', '/').Trim('/');
             var projectAppRoot = $"apps/{project}/src/app";
-            if (normalizedFolder.Split('/').Contains("..", StringComparer.Ordinal))
+            if (ContainsParentDirectorySegment(normalizedFolder))
             {
                 return false;
             }
@@ -91,6 +104,18 @@ namespace GeekCliServices.Services.Ngx
                 || path.StartsWith("libs/", StringComparison.OrdinalIgnoreCase)
                 || path.StartsWith("packages/", StringComparison.OrdinalIgnoreCase)
                 || path.StartsWith("projects/", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool ContainsParentDirectorySegment(string path)
+        {
+            return path.Replace('\\', '/').Split('/').Contains("..", StringComparer.Ordinal);
+        }
+
+        private static string? GetWorkspaceRootValidationError()
+        {
+            return File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "nx.json"))
+                ? null
+                : "Nx generation must run from the workspace root; nx.json was not found in the current directory.";
         }
     }
 }

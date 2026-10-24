@@ -16,9 +16,12 @@ namespace GeekCli.Tools
         }
 
         [McpServerTool]
-        [Description("Generates an Angular service in the current Angular project using Angular CLI defaults.")]
+        [Description("Generates an Angular service in the current Angular project or a selected Nx project.")]
         public McpToolResult NgxService(
-            [Description("Angular service name.")] string name)
-            => Capture(() => _service.RunProcess("cmd", new NgxCommand(name)));
+            [Description("Angular service name.")] string name,
+            [Description("Generate the service in an Nx workspace.")] bool nx = false,
+            [Description("The Nx Angular project name.")] string? project = null,
+            [Description("The project-relative destination folder.")] string? folder = null)
+            => Capture(() => _service.RunProcess("cmd", new NgxCommand(name, nx, project, folder)));
     }
 }

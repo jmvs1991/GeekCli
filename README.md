@@ -8,7 +8,7 @@ A developer CLI built with [Spectre.Console](https://spectreconsole.net/cli) for
 
 - Generate React contexts
 - Scaffold React Native modules, screens, and components
-- Generate Angular pages and components
+- Generate Angular pages, components, and services, including Nx workspaces
 - Run Geek .NET template pack commands
 - Create, remove, and rollback EF Core migrations
 - Generate Up/Down SQL migration scripts with schema-specific folders and dbo synonyms
@@ -42,7 +42,8 @@ geek-cli
 │   └── unittest-api
 ├── ngx
 │   ├── page
-│   └── component
+│   ├── component
+│   └── service
 ├── mcp
 └── rx
     ├── context
@@ -54,7 +55,7 @@ geek-cli
 
 Running `geek-cli` with no arguments opens the general wizard.
 
-Running `geek-cli db`, `geek-cli ngx`, or `geek-cli rx` opens the wizard for that branch. The Angular wizard can generate pages, components, and services; service generation asks for a name, shows a summary, and requests confirmation before running Angular CLI.
+Running `geek-cli db`, `geek-cli ngx`, or `geek-cli rx` opens the wizard for that branch. The Angular wizard can generate pages, components, and services. For services, it can select an Nx application or library tagged `tech:angular`, asks for a project-relative folder, and shows a summary for confirmation before generation.
 
 Running `geek-cli dotnet` lists the installed Geek .NET templates.
 
@@ -341,7 +342,6 @@ geek-cli ngx component test-component --nx --project core --folder packages/ngx/
 
 ```bash
 geek-cli ngx page user-profile
-geek-cli ngx service user-profile
 ```
 
 For an Nx workspace, run the command from the workspace root and provide the Angular application, destination folder, page name, and declaring module:
@@ -351,6 +351,20 @@ geek-cli ngx page user-profile --nx --project ing-sel-crm --folder apps/ing-sel-
 ```
 
 Nx page generation converts folder segments to PascalCase and the page name to kebab-case. It uses the `ngx` prefix and selector `ngx-<page-name>-page`.
+
+### Generate an Angular service directly
+
+```bash
+geek-cli ngx service user-profile
+```
+
+For an Nx workspace, run the command from the workspace root and provide the project, project-relative folder, and service name:
+
+```bash
+geek-cli ngx service test --nx --project core --folder Services
+```
+
+The Nx generator receives the provided folder and name and creates the service with the `.service` suffix. The project can be an application or library tagged `tech:angular`.
 
 ### Open the React wizard
 
@@ -378,7 +392,14 @@ geek-cli mcp
 
 This starts `geek-cli` as a stdio MCP server and exposes the existing CLI generators as MCP tools. Use this command in your MCP client configuration.
 
-The `NgxService` MCP tool accepts a `name` parameter and generates the service in the current Angular project using Angular CLI configuration and defaults.
+The `NgxService` MCP tool accepts a `name` parameter and generates the service using Angular CLI defaults. Set `nx` to `true` to generate in an Nx project; Nx calls must run from the workspace root.
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `name` | Always | Angular service name. |
+| `nx` | No | Set to `true` for Nx generation. Defaults to `false`. |
+| `project` | In Nx mode | Nx Angular application or library tagged `tech:angular`. |
+| `folder` | In Nx mode | Destination folder relative to the selected project. |
 
 The `NgxComponent` MCP tool accepts these parameters:
 

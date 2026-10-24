@@ -69,7 +69,7 @@ namespace GeekCli.Commands.Ngx.Wizard
             {
                 CreateComponentAction => BuildNxCommand(name, "component", false),
                 CreatePageAction => BuildNxCommand(name, "page", true),
-                CreateServiceAction => new NgxCommand(name),
+                CreateServiceAction => BuildNxCommand(name, "service", false),
                 _ => null
             };
 
@@ -102,11 +102,19 @@ namespace GeekCli.Commands.Ngx.Wizard
                     .AddChoices(projects));
             var folderPrompt = itemName == "component"
                 ? "Workspace-relative destination [green]folder[/] beneath the project root (for example apps/<project>/src/app/Features or packages/<project>/src/lib/Features)?"
-                : "Destination [green]folder[/] (relative to src/app, or apps/<project>/src/app/...)?";
+                : itemName == "service"
+                    ? "Project-relative destination [green]folder[/] (for example Services or Features/Auth)?"
+                    : "Destination [green]folder[/] (relative to src/app, or apps/<project>/src/app/...)?";
+            var folder = AnsiConsole.Ask<string>(folderPrompt);
+
+            if (itemName == "service")
+            {
+                return new NgxCommand(name, true, project, folder);
+            }
+
             var modulePrompt = itemName == "component"
                 ? "Workspace-relative declaring Angular [green]NgModule[/] file path, including .ts?"
                 : "Declaring Angular [green]module[/] path?";
-            var folder = AnsiConsole.Ask<string>(folderPrompt);
             var module = AnsiConsole.Ask<string>(modulePrompt);
 
             return new NgxCommand(name, true, project, folder, module);
@@ -211,7 +219,10 @@ namespace GeekCli.Commands.Ngx.Wizard
             {
                 details.Add($"[grey]Nx project:[/] [green]{command.Project}[/]");
                 details.Add($"[grey]Folder:[/] [green]{command.Folder}[/]");
-                details.Add($"[grey]Module:[/] [green]{command.Module}[/]");
+                if (action != CreateServiceAction)
+                {
+                    details.Add($"[grey]Module:[/] [green]{command.Module}[/]");
+                }
             }
 
             var summary = string.Join(Environment.NewLine, details);
