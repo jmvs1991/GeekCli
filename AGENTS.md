@@ -39,6 +39,13 @@ Keep execution and common validation in `GeekCliServices`; adapters collect or p
 
 These requirements govern new commands and changes to command behavior. Do not retrofit unrelated existing commands solely to satisfy this document.
 
+## Backlog workflow
+
+- Save backlogs as Markdown files in `docs/backlog/` at the repository root.
+- Use the filename format `yyyyMMdd-name.md`, where `yyyyMMdd` is the creation date and `name` describes the backlog.
+- Present backlogs to the user in Spanish, and save their contents in English.
+- Include a `Status` field in each backlog with one of these values: `Pending`, `In progress`, or `Completed` (presented in Spanish as `Pendiente`, `En progreso`, or `Terminado`). Set new backlogs to `Pending` and keep the status updated as work progresses.
+
 ## Build and validation
 
 Run these commands from the repository root when relevant to an implementation change:
