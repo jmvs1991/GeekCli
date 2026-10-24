@@ -45,6 +45,14 @@ These requirements govern new commands and changes to command behavior. Do not r
 - Use the filename format `yyyyMMdd-name.md`, where `yyyyMMdd` is the creation date and `name` describes the backlog.
 - Present backlogs to the user in Spanish, and save their contents in English.
 - Include a `Status` field in each backlog with one of these values: `Pending`, `In progress`, or `Completed` (presented in Spanish as `Pendiente`, `En progreso`, or `Terminado`). Set new backlogs to `Pending` and keep the status updated as work progresses.
+- Include a separate `Status` field for each story within a backlog, using `Pending`, `In progress` (WIP), or `Completed`. Present these statuses in Spanish as `Pendiente`, `En progreso`, or `Terminado`. Set new stories to `Pending` and update each story's status as work progresses.
+- Mark a backlog as `Completed` only when all of its stories and tasks are `Completed`.
+
+## Implementation plans
+
+- Save plans under `docs/plans/<related-backlog-name>/` at the repository root, where `<related-backlog-name>` is the related backlog's filename without the `.md` extension. For example, plans for `docs/backlog/20261023-angular-nx-support.md` belong in `docs/plans/20261023-angular-nx-support/`.
+- Use the filename format `yyyyMMdd-name.md`, where `yyyyMMdd` is the plan's creation date and `name` describes the plan.
+- Present plans to the user in Spanish, and save their contents in English.
 
 ## Build and validation
 
