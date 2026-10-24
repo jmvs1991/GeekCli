@@ -2,7 +2,7 @@
 
 namespace GeekCli.Commands.Ngx.Page
 {
-    class NgxPageCommand : NgxCommandBase<INgxPageService>
+    class NgxPageCommand : NgxCommandBase<NgxPageSettings, INgxPageService>
     {
         public NgxPageCommand(INgxPageService service) : base(service)
         {

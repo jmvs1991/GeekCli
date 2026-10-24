@@ -3,6 +3,7 @@
 Related backlog: [Angular Nx support](../../backlog/20261023-angular-nx-support.md)
 
 Story: 1
+Status: In progress
 
 ## Story
 
@@ -10,17 +11,17 @@ As a GeekCli user, I want to generate components in a standalone Angular project
 
 ## Acceptance criteria
 
-- [ ] Given a CLI or MCP invocation, when the boolean `nx` flag is false or omitted, then component generation preserves the existing behavior, including the `ngx` prefix, and the destination project may be omitted, null, or empty.
-- [ ] Given an invocation with `nx` enabled, when a valid Angular project in the workspace is specified, then the component is generated in that project. If the destination is null, empty, or does not exist, an error is returned and no files are generated.
-- [ ] Given an interactive wizard invocation, when the user indicates that the environment is an Nx workspace, then its Angular projects are listed for destination selection, and generation produces equivalent results to CLI and MCP invocations with the same inputs.
+- [ ] Given a CLI or MCP invocation, when the boolean `nx` flag is false or omitted, component generation preserves the existing behavior, including the `ngx` prefix, and the destination project may be omitted, null, or empty.
+- [ ] Given an invocation with `nx` enabled, the user provides a project, folder, component name, and required module. The generator targets `apps/<project>/src/app/<PascalCase folder>/<kebab-case component>`, sets `--standalone=false`, `--module`, `--prefix=ngx`, and `--type=component`, and uses the selector `ngx-<kebab-case component>-component`. A missing or unknown project or a missing module returns an error without generating files.
+- [ ] Given an interactive wizard invocation, when the user indicates that the environment is an Nx workspace, its Angular projects are listed for destination selection, and generation produces equivalent results to CLI and MCP invocations with the same inputs.
 
 ## Plan
 
-- Add the boolean `nx` flag, defaulting to false, and an optional destination project to the shared command model.
-- Centralize validation and adapt component generation to the explicitly selected environment in the shared service.
-- Expose equivalent inputs through CLI and MCP, without interactive prompts in either path.
-- Extend the wizard to ask whether the environment is an Nx workspace and, if so, list its Angular projects for destination selection.
-- Verify all three execution paths in disposable projects, including invalid inputs, generator failures, and existing standalone behavior; run the required solution and Release builds and update usage documentation.
+- [x] Add the boolean `nx` flag, defaulting to false, and Nx project, folder, component, and module inputs to the shared command model.
+- [ ] Centralize validation, naming transformations, selector construction, and component generation in the shared service.
+- [ ] Expose equivalent inputs through CLI and MCP, without interactive prompts in either path.
+- [ ] Extend the wizard to ask whether the environment is an Nx workspace and, if so, list its Angular projects for destination selection.
+- [ ] Verify all three execution paths in disposable projects, including invalid inputs, generator failures, and existing standalone behavior; run the required solution and Release builds and update usage documentation.
 
 ## Out of scope
 

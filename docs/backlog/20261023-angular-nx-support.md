@@ -1,6 +1,6 @@
 # Angular Nx support
 
-Status: Pending
+Status: In progress
 
 ## Context
 
@@ -12,5 +12,5 @@ Expensive decisions: none.
 
 ## Backlog
 
-1. As a GeekCli user, I want to generate components in a standalone Angular project or an Angular project within an Nx workspace, so that I can use the same command in both environments.
-2. As a GeekCli user, I want to generate pages in a standalone Angular project or an Angular project within an Nx workspace, so that I can use the same command in both environments.
+1. Status: In progress — As a GeekCli user, I want to generate components in a standalone Angular project or an Angular project within an Nx workspace, so that I can use the same command in both environments.
+2. Status: Pending — As a GeekCli user, I want to generate pages in a standalone Angular project or an Angular project within an Nx workspace, so that I can use the same command in both environments.

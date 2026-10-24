@@ -53,6 +53,7 @@ These requirements govern new commands and changes to command behavior. Do not r
 - Save plans under `docs/plans/<related-backlog-name>/` at the repository root, where `<related-backlog-name>` is the related backlog's filename without the `.md` extension. For example, plans for `docs/backlog/20261023-angular-nx-support.md` belong in `docs/plans/20261023-angular-nx-support/`.
 - Use the filename format `yyyyMMdd-name.md`, where `yyyyMMdd` is the plan's creation date and `name` describes the plan.
 - Present plans to the user in Spanish, and save their contents in English.
+- Represent plan acceptance criteria and implementation tasks as Markdown checkboxes. Mark a plan as `Completed` only when every acceptance criterion and plan task is checked (`[x]`); keep unchecked items (`[ ]`) for work that remains.
 
 ## Build and validation
 
