@@ -54,7 +54,7 @@ geek-cli
 
 Running `geek-cli` with no arguments opens the general wizard.
 
-Running `geek-cli db`, `geek-cli ngx`, or `geek-cli rx` opens the wizard for that branch.
+Running `geek-cli db`, `geek-cli ngx`, or `geek-cli rx` opens the wizard for that branch. The Angular wizard can generate pages, components, and services; service generation asks for a name, shows a summary, and requests confirmation before running Angular CLI.
 
 Running `geek-cli dotnet` lists the installed Geek .NET templates.
 
@@ -341,6 +341,7 @@ geek-cli ngx component test-component --nx --project core --folder packages/ngx/
 
 ```bash
 geek-cli ngx page user-profile
+geek-cli ngx service user-profile
 ```
 
 For an Nx workspace, run the command from the workspace root and provide the Angular application, destination folder, page name, and declaring module:
@@ -376,6 +377,8 @@ geek-cli mcp
 ```
 
 This starts `geek-cli` as a stdio MCP server and exposes the existing CLI generators as MCP tools. Use this command in your MCP client configuration.
+
+The `NgxService` MCP tool accepts a `name` parameter and generates the service in the current Angular project using Angular CLI configuration and defaults.
 
 The `NgxComponent` MCP tool accepts these parameters:
 

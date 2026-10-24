@@ -1,6 +1,6 @@
 # Angular service generation
 
-Status: Pending
+Status: In progress
 
 ## Context
 
@@ -14,5 +14,5 @@ Current Nx command provided as a reference: `npx nx generate @nx/angular:service
 
 ## Backlog
 
-1. Status: Pending — As a GeekCli user, I want to generate Angular services in projects without Nx through the CLI, interactive wizard, or MCP, so that I can create services using the same workflow as pages and components.
+1. Status: Completed — As a GeekCli user, I want to generate Angular services in projects without Nx through the CLI, interactive wizard, or MCP, so that I can create services using the same workflow as pages and components.
 2. Status: Pending — As a GeekCli user, I want to generate Angular services in a selected application or library within an Nx workspace through the CLI, interactive wizard, or MCP, so that I can create services in the project and destination folder I need.

@@ -1,5 +1,6 @@
 using GeekCli.Commands.Ngx.Component;
 using GeekCli.Commands.Ngx.Page;
+using GeekCli.Commands.Ngx.Service;
 using GeekCli.Commands.Ngx.Wizard;
 using Spectre.Console.Cli;
 
@@ -19,6 +20,9 @@ namespace GeekCli.Branches
 
                 ngx.AddCommand<NgxComponentCommand>("component")
                    .WithDescription("Generates a new Angular component with related files.");
+
+                ngx.AddCommand<NgxServiceCommand>("service")
+                   .WithDescription("Generates a new Angular service.");
             });
         }
     }

@@ -24,6 +24,7 @@ using GeekCliServices.Services.Dotnet.UnitTestService;
 using GeekCliServices.Services.Dotnet.Write;
 using GeekCliServices.Services.Ngx.Component;
 using GeekCliServices.Services.Ngx.Page;
+using GeekCliServices.Services.Ngx.Service;
 using GeekCliServices.Services.Rx.Common.Context;
 using GeekCliServices.Services.Rx.Native.Component;
 using GeekCliServices.Services.Rx.Native.Module;
@@ -57,6 +58,7 @@ namespace GeekCli.Infrastructure
             services.AddSingleton<IDbScriptService, DbScriptService>();
             services.AddSingleton<INgxComponentService, NgxComponentService>();
             services.AddSingleton<INgxPageService, NgxPageService>();
+            services.AddSingleton<INgxServiceService, NgxServiceService>();
             services.AddSingleton<IRxContextService, RxContextService>();
             services.AddSingleton<IRxNativeComponentService, RxNativeComponentService>();
             services.AddSingleton<IRxNativeModuleService, RxNativeModuleService>();

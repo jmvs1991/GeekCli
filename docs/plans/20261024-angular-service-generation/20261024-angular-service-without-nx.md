@@ -3,7 +3,7 @@
 Related backlog: [Angular service generation](../../backlog/20261024-angular-service-generation.md)
 
 Story: 1
-Status: Pending
+Status: Completed
 
 ## Story
 
@@ -11,19 +11,19 @@ As a GeekCli user, I want to generate Angular services in projects without Nx th
 
 ## Acceptance criteria
 
-- [ ] Given an Angular project without Nx, requesting service generation with a name creates the corresponding files according to Angular CLI configuration and defaults.
-- [ ] Equivalent inputs through the CLI, wizard, and MCP produce equivalent results; the wizard shows a summary and requests confirmation before execution.
-- [ ] When the name is missing or generation fails, each execution path reports an error and an unsuccessful execution result.
+- [x] Given an Angular project without Nx, requesting service generation with a name creates the corresponding files according to Angular CLI configuration and defaults.
+- [x] Equivalent inputs through the CLI, wizard, and MCP produce equivalent results; the wizard shows a summary and requests confirmation before execution.
+- [x] When the name is missing or generation fails, each execution path reports an error and an unsuccessful execution result.
 
 ## Implementation tasks
 
-- [ ] Add a shared service that validates the name, executes `ng generate service <name>`, and propagates process output and the exit code through the existing shared execution and output abstractions.
-- [ ] Expose `geek-cli ngx service <name>` with command/settings classes and branch registration, and expose the discoverable MCP tool `NgxService(name)`, both using the same command model and shared service.
-- [ ] Register the shared service in dependency injection for CLI and MCP execution.
-- [ ] Add service generation to the Angular wizard, reachable from the general wizard, following existing summary, confirmation, and Back navigation patterns.
-- [ ] Manually verify equivalent inputs through all three paths in a disposable Angular project, including missing names, wizard cancellation, generator failure, output, generated files, and execution results.
-- [ ] Update README command structure and examples for direct CLI, interactive, and MCP service generation.
-- [ ] Build the solution with `dotnet build .\GeekCliSolution.sln` and the executable with `dotnet build .\GeekCli\GeekCli.csproj -c Release`.
+- [x] Add a shared service that validates the name, executes `ng generate service <name>`, and propagates process output and the exit code through the existing shared execution and output abstractions.
+- [x] Expose `geek-cli ngx service <name>` with command/settings classes and branch registration, and expose the discoverable MCP tool `NgxService(name)`, both using the same command model and shared service.
+- [x] Register the shared service in dependency injection for CLI and MCP execution.
+- [x] Add service generation to the Angular wizard, reachable from the general wizard, following existing summary, confirmation, and Back navigation patterns.
+- [x] Manually verify equivalent inputs through all three paths in a disposable Angular project, including missing names, wizard cancellation, generator failure, output, generated files, and execution results.
+- [x] Update README command structure and examples for direct CLI, interactive, and MCP service generation.
+- [x] Build the solution with `dotnet build .\GeekCliSolution.sln` and the executable with `dotnet build .\GeekCli\GeekCli.csproj -c Release`.
 
 ## Scope and defaults
 

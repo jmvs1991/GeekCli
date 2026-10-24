@@ -1,6 +1,7 @@
 using GeekCliServices.Services.Ngx.Component;
 using GeekCliServices.Services.Ngx.Models;
 using GeekCliServices.Services.Ngx.Page;
+using GeekCliServices.Services.Ngx.Service;
 using GeekCli.Commands.Ngx.Wizard.Models;
 using GeekCli.Commands.Ngx.Wizard.Serialization;
 using System.Diagnostics;
@@ -18,14 +19,17 @@ namespace GeekCli.Commands.Ngx.Wizard
         private const string BackAction = "Back";
         private const string CreatePageAction = "Create an Angular page";
         private const string CreateComponentAction = "Create an Angular component";
+        private const string CreateServiceAction = "Create an Angular service";
 
         private readonly INgxPageService _ngxPageService;
         private readonly INgxComponentService _ngxComponentService;
+        private readonly INgxServiceService _ngxServiceService;
 
-        public NgxWizardCommand(INgxPageService ngxPageService, INgxComponentService ngxComponentService)
+        public NgxWizardCommand(INgxPageService ngxPageService, INgxComponentService ngxComponentService, INgxServiceService ngxServiceService)
         {
             _ngxPageService = ngxPageService;
             _ngxComponentService = ngxComponentService;
+            _ngxServiceService = ngxServiceService;
         }
 
         protected override int Execute(CommandContext context, CancellationToken cancellationToken)
@@ -40,7 +44,8 @@ namespace GeekCli.Commands.Ngx.Wizard
             var choices = new List<string>
             {
                 CreatePageAction,
-                CreateComponentAction
+                CreateComponentAction,
+                CreateServiceAction
             };
 
             if (showBackOption)
@@ -64,6 +69,7 @@ namespace GeekCli.Commands.Ngx.Wizard
             {
                 CreateComponentAction => BuildNxCommand(name, "component", false),
                 CreatePageAction => BuildNxCommand(name, "page", true),
+                CreateServiceAction => new NgxCommand(name),
                 _ => null
             };
 
@@ -189,7 +195,7 @@ namespace GeekCli.Commands.Ngx.Wizard
         private static void ShowHeader()
         {
             AnsiConsole.Write(new Rule("[green]Angular Wizard[/]").RuleStyle("grey"));
-            AnsiConsole.MarkupLine("[grey]Use this wizard to scaffold Angular pages and components with the existing project conventions.[/]");
+            AnsiConsole.MarkupLine("[grey]Use this wizard to scaffold Angular pages, components, and services with the existing project conventions.[/]");
             AnsiConsole.WriteLine();
         }
 
@@ -234,6 +240,7 @@ namespace GeekCli.Commands.Ngx.Wizard
             {
                 CreatePageAction => _ngxPageService.RunProcess(ProcessToRun, command),
                 CreateComponentAction => _ngxComponentService.RunProcess(ProcessToRun, command),
+                CreateServiceAction => _ngxServiceService.RunProcess(ProcessToRun, command),
                 _ => 1
             };
         }
