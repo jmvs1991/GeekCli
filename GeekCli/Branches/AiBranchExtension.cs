@@ -1,4 +1,5 @@
 using GeekCli.Commands.Ai.Skills;
+using GeekCli.Commands.Ai.Agents;
 using GeekCli.Commands.Ai.Wizard;
 using Spectre.Console.Cli;
 
@@ -16,6 +17,11 @@ namespace GeekCli.Branches
                 {
                     skill.AddCommand<SkillInstallCliCommand>("install")
                          .WithDescription("Installs a bundled AI skill.");
+                });
+                ai.AddBranch("agent", agent =>
+                {
+                    agent.AddCommand<AgentInstallCliCommand>("install")
+                         .WithDescription("Installs a bundled AI subagent.");
                 });
             });
         }

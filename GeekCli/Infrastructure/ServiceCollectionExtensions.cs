@@ -7,6 +7,7 @@ using GeekCli.Commands.Rx.Wizard;
 using GeekCli.Commands.Wizard;
 using GeekCli.Infrastructure.DependencyInjection;
 using GeekCliServices.Services.Ai.Skills;
+using GeekCliServices.Services.Ai.Agents;
 using GeekCliServices.Services.Db.Migrations.Add;
 using GeekCliServices.Services.Db.Migrations.Remove;
 using GeekCliServices.Services.Db.Migrations.Rollback;
@@ -43,6 +44,7 @@ namespace GeekCli.Infrastructure
         {
             services.AddSingleton<IDotnetListService, DotnetListService>();
             services.AddSingleton<ISkillInstallService, SkillInstallService>();
+            services.AddSingleton<IAgentInstallService, AgentInstallService>();
             services.AddSingleton<IDotnetDtoService, DotnetDtoService>();
             services.AddSingleton<IDotnetResourceService, DotnetResourceService>();
             services.AddSingleton<IDotnetCacheService, DotnetCacheService>();

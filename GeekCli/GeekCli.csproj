@@ -8,7 +8,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <PackAsTool>true</PackAsTool>
 	  <ToolCommandName>geek-cli</ToolCommandName>
-	  <Version>2.4.0</Version>
+	  <Version>2.5.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +28,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackagePath>tools/net8.0/any/Skills/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </Content>
+    <Content Include="Agents\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>tools/net8.0/any/Agents/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
     </Content>
   </ItemGroup>
 

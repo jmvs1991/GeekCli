@@ -14,6 +14,7 @@ A developer CLI built with [Spectre.Console](https://spectreconsole.net/cli) for
 - Generate Up/Down SQL migration scripts with schema-specific folders and dbo synonyms
 - Scaffold EF Core entities from an existing database table
 - Install bundled AI skills into a project or user profile
+- Install bundled AI subagents into a project or user profile
 - Use branch-specific wizards or a general root wizard
 
 ---
@@ -48,6 +49,8 @@ geek-cli
 ├── ai
 │   └── skill
 │       └── install
+│   └── agent
+│       └── install
 ├── mcp
 └── rx
     ├── context
@@ -59,13 +62,17 @@ geek-cli
 
 Running `geek-cli` with no arguments opens the general wizard.
 
-Running `geek-cli db`, `geek-cli ngx`, `geek-cli rx`, or `geek-cli ai` opens the wizard for that branch. The AI wizard can also be opened from the general wizard and guides skill installation by scope, with confirmation before replacing an existing installation. The Angular wizard can generate pages, components, and services. For services, it can select an Nx application or library tagged `tech:angular`, asks for a project-relative folder, and shows a summary for confirmation before generation.
+Running `geek-cli db`, `geek-cli ngx`, `geek-cli rx`, or `geek-cli ai` opens the wizard for that branch. The AI wizard can also be opened from the general wizard and offers skill or subagent installation by scope, with confirmation before replacing an existing installation. The Angular wizard can generate pages, components, and services. For services, it can select an Nx application or library tagged `tech:angular`, asks for a project-relative folder, and shows a summary for confirmation before generation.
 
 Running `geek-cli dotnet` lists the installed Geek .NET templates.
 
 ### Install an AI skill
 
 Install a bundled skill with `geek-cli ai skill install <name> --scope <project|user>`. Project scope requires an existing `--project-path`; user scope installs under `~/.agents/skills`. The current bundled catalog is empty. Skill folders added under `GeekCli/Skills` are included with the tool package.
+
+### Install an AI subagent
+
+Install a bundled subagent with `geek-cli ai agent install <name> --scope <project|user>`. Project scope requires an existing `--project-path`; user scope installs under `~/.codex/agents`. Subagents are standalone TOML files named after the catalog entry. The bundled catalog is initially empty; TOML files added under `GeekCli/Agents` are included with the tool package. Subagent installation is available through the direct CLI and AI wizard, not MCP.
 
 ---
 
