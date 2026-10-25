@@ -1,16 +1,18 @@
 using GeekCli.Branches;
+using GeekCli.Commands.Ai.Wizard;
 using GeekCli.Commands.Db.Wizard;
 using GeekCli.Commands.Dotnet.Wizard;
 using GeekCli.Commands.Ngx.Wizard;
 using GeekCli.Commands.Rx.Wizard;
 using GeekCli.Commands.Wizard;
 using GeekCli.Infrastructure.DependencyInjection;
-using GeekCli.Tools;
+using GeekCliServices.Services.Ai.Skills;
 using GeekCliServices.Services.Db.Migrations.Add;
 using GeekCliServices.Services.Db.Migrations.Remove;
 using GeekCliServices.Services.Db.Migrations.Rollback;
 using GeekCliServices.Services.Db.Scaffold;
 using GeekCliServices.Services.Db.Scripts;
+using GeekCliServices.Services.Dotnet.ApiUnitTest;
 using GeekCliServices.Services.Dotnet.Cache;
 using GeekCliServices.Services.Dotnet.Controller;
 using GeekCliServices.Services.Dotnet.Dto;
@@ -19,7 +21,6 @@ using GeekCliServices.Services.Dotnet.Read;
 using GeekCliServices.Services.Dotnet.Resource;
 using GeekCliServices.Services.Dotnet.Service;
 using GeekCliServices.Services.Dotnet.Sp;
-using GeekCliServices.Services.Dotnet.ApiUnitTest;
 using GeekCliServices.Services.Dotnet.UnitTestService;
 using GeekCliServices.Services.Dotnet.Write;
 using GeekCliServices.Services.Ngx.Component;
@@ -41,6 +42,7 @@ namespace GeekCli.Infrastructure
         public static IServiceCollection AddGeekCliServices(this IServiceCollection services)
         {
             services.AddSingleton<IDotnetListService, DotnetListService>();
+            services.AddSingleton<ISkillInstallService, SkillInstallService>();
             services.AddSingleton<IDotnetDtoService, DotnetDtoService>();
             services.AddSingleton<IDotnetResourceService, DotnetResourceService>();
             services.AddSingleton<IDotnetCacheService, DotnetCacheService>();
@@ -67,6 +69,7 @@ namespace GeekCli.Infrastructure
             services.AddSingleton<IDotnetWizard>(provider => provider.GetRequiredService<DotnetWizardCommand>());
             services.AddSingleton<INgxWizard>(provider => provider.GetRequiredService<NgxWizardCommand>());
             services.AddSingleton<IRxWizard>(provider => provider.GetRequiredService<RxWizardCommand>());
+            services.AddSingleton<IAiWizard>(provider => provider.GetRequiredService<AiWizardCommand>());
 
             return services;
         }
@@ -82,6 +85,7 @@ namespace GeekCli.Infrastructure
             app.Configure(config =>
             {
                 config.AddRx();
+                config.AddAI();
                 config.AddDB();
                 config.AddNgx();
                 config.AddDotnet();

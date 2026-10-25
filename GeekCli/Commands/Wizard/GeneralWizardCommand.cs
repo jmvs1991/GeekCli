@@ -1,4 +1,5 @@
 using GeekCli.Commands.Db.Wizard;
+using GeekCli.Commands.Ai.Wizard;
 using GeekCli.Commands.Dotnet.Wizard;
 using GeekCli.Commands.Ngx.Wizard;
 using GeekCli.Commands.Rx.Wizard;
@@ -13,22 +14,26 @@ namespace GeekCli.Commands.Wizard
         private const string DotnetOption = ".NET Templates";
         private const string AngularOption = "Angular";
         private const string ReactOption = "React / React Native";
+        private const string AiOption = "AI skills and agents";
         private const string ExitOption = "Exit";
 
         private readonly IDbWizard _dbWizardCommand;
         private readonly IDotnetWizard _dotnetWizardCommand;
         private readonly INgxWizard _ngxWizardCommand;
         private readonly IRxWizard _rxWizardCommand;
+        private readonly IAiWizard _aiWizardCommand;
 
         public GeneralWizardCommand(IDbWizard dbWizardCommand,
                                     IDotnetWizard dotnetWizardCommand,
                                     INgxWizard ngxWizardCommand,
-                                    IRxWizard rxWizardCommand)
+                                    IRxWizard rxWizardCommand,
+                                    IAiWizard aiWizardCommand)
         {
             _dbWizardCommand = dbWizardCommand;
             _dotnetWizardCommand = dotnetWizardCommand;
             _ngxWizardCommand = ngxWizardCommand;
             _rxWizardCommand = rxWizardCommand;
+            _aiWizardCommand = aiWizardCommand;
         }
 
         protected override int Execute(CommandContext context, CancellationToken cancellationToken)
@@ -44,7 +49,7 @@ namespace GeekCli.Commands.Wizard
                     new SelectionPrompt<string>()
                         .Title("What do you want to work on?")
                         .PageSize(10)
-                        .AddChoices(DatabaseOption, DotnetOption, AngularOption, ReactOption, ExitOption));
+                        .AddChoices(DatabaseOption, DotnetOption, AngularOption, ReactOption, AiOption, ExitOption));
 
                 switch (area)
                 {
@@ -59,6 +64,9 @@ namespace GeekCli.Commands.Wizard
                         break;
                     case ReactOption:
                         _rxWizardCommand.RunWizard(showBackOption: true);
+                        break;
+                    case AiOption:
+                        _aiWizardCommand.RunWizard(showBackOption: true);
                         break;
                     case ExitOption:
                         return 0;

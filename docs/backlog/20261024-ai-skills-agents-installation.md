@@ -1,6 +1,6 @@
 # AI skills and subagents installation
 
-Status: Pending
+Status: In progress
 
 ## Context
 
@@ -12,5 +12,7 @@ Expensive decisions: None.
 
 ## Backlog
 
-1. As a Geek CLI user, I want to install a skill from the included catalog, choosing project-level or user-level scope, so that I can use its instructions in Codex. Status: Pending.
+1. As a Geek CLI user, I want to install a skill from the included catalog, choosing project-level or user-level scope, so that I can use its instructions in Codex. Status: Completed.
 2. As a Geek CLI user, I want to install a subagent from the included catalog, choosing project-level or user-level scope, so that I can use specialized agents in Codex. Status: Pending.
+
+Decision: Skill installation is intentionally unavailable through MCP; this exception applies only to story 1 and does not define MCP availability for subagent installation.

@@ -8,7 +8,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <PackAsTool>true</PackAsTool>
 	  <ToolCommandName>geek-cli</ToolCommandName>
-	  <Version>2.3.0</Version>
+	  <Version>2.4.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +21,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GeekCliServices\GeekCliServices.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Skills\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>tools/net8.0/any/Skills/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </Content>
   </ItemGroup>
 
 </Project>
