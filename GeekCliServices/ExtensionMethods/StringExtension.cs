@@ -4,6 +4,11 @@ namespace GeekCliServices.ExtensionMethods
 {
     public static class StringExtension
     {
+        public static string GetSkillDestinationRoot(this string scopeRoot)
+        {
+            return Path.Combine(scopeRoot, ".agents", "skills");
+        }
+
         public static string ToPascalCase(this string value)
         {
             return string.Join('/', value.Split(new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries)

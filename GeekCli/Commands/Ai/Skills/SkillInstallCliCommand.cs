@@ -16,7 +16,7 @@ namespace GeekCli.Commands.Ai.Skills
         protected override int Execute(CommandContext context, SkillInstallSettings settings, CancellationToken cancellationToken)
         {
             return _service.RunProcess(string.Empty,
-                new SkillInstallCommand(settings.Name, settings.Scope, settings.ProjectPath, settings.Overwrite));
+                new SkillInstallCommand(settings.Name, settings.Scope, settings.ProjectPath, settings.Overwrite, settings.All, settings.UpdateAll));
         }
     }
 }

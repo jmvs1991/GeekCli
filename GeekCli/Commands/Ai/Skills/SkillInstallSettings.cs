@@ -5,9 +5,17 @@ namespace GeekCli.Commands.Ai.Skills
 {
     internal sealed class SkillInstallSettings : CommandSettings
     {
-        [CommandArgument(0, "<NAME>")]
+        [CommandArgument(0, "[NAME]")]
         [Description("Name of the bundled skill to install.")]
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
+
+        [CommandOption("--all")]
+        [Description("Install all bundled skills that are not already installed.")]
+        public bool All { get; set; }
+
+        [CommandOption("--update-all")]
+        [Description("Update all installed bundled skills in the selected scope.")]
+        public bool UpdateAll { get; set; }
 
         [CommandOption("--scope <SCOPE>")]
         [Description("Installation scope: project or user.")]
