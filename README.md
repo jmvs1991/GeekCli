@@ -62,7 +62,7 @@ geek-cli
 
 Running `geek-cli` with no arguments opens the general wizard.
 
-Running `geek-cli db`, `geek-cli ngx`, `geek-cli rx`, or `geek-cli ai` opens the wizard for that branch. The AI wizard can also be opened from the general wizard and offers individual, bulk, and update operations for skills, plus subagent installation. Bulk skill operations summarize the scope and destination before confirmation. Updating warns that complete skill folders will be replaced, including local changes. The Angular wizard can generate pages, components, and services. For services, it can select an Nx application or library tagged `tech:angular`, asks for a project-relative folder, and shows a summary for confirmation before generation.
+Running `geek-cli db`, `geek-cli ngx`, `geek-cli rx`, or `geek-cli ai` opens the wizard for that branch. The AI wizard can also be opened from the general wizard and offers individual, bulk, and update operations for skills, plus subagent installation. The bundled `geek-db-migration-specialist` agent coordinates reviewed migration work one approved plan part at a time and depends on the `geek-db-migration-add`, `geek-db-migration-remove`, `geek-db-migration-rollback`, and `geek-db-script` skills and their MCP tools. The agent installer does not install these skills; install them separately in the target Codex environment. Bulk skill operations summarize the scope and destination before confirmation. Updating warns that complete skill folders will be replaced, including local changes. The Angular wizard can generate pages, components, and services. For services, it can select an Nx application or library tagged `tech:angular`, asks for a project-relative folder, and shows a summary for confirmation before generation.
 
 Running `geek-cli dotnet` lists the installed Geek .NET templates.
 
@@ -76,7 +76,16 @@ Update installed bundled skills in a scope with `geek-cli ai skill install --upd
 
 ### Install an AI subagent
 
-Install a bundled subagent with `geek-cli ai agent install <name> --scope <project|user>`. Project scope requires an existing `--project-path`; user scope installs under `~/.codex/agents`. Subagents are standalone TOML files named after the catalog entry. The bundled catalog is initially empty; TOML files added under `GeekCli/Agents` are included with the tool package. Subagent installation is available through the direct CLI and AI wizard, not MCP.
+Install a bundled agent with `geek-cli ai agent install <name> --scope <project|user>`. Project scope requires an existing `--project-path`; user scope installs under `~/.codex/agents`. Agent definitions are standalone TOML files named after the catalog entry. `geek-db-migration-specialist` is bundled at `GeekCli/Agents/geek-db-migration-specialist.toml`; TOML files added under `GeekCli/Agents` are included with the tool package. Subagent installation is available through the direct CLI and AI wizard, not MCP.
+
+Direct CLI installation:
+
+```bash
+geek-cli ai agent install geek-db-migration-specialist --scope project --project-path .
+geek-cli ai agent install geek-db-migration-specialist --scope user
+```
+
+The AI wizard also offers agent installation: run `geek-cli ai` or select AI from the general wizard, choose **Install subagents**, then select `geek-db-migration-specialist` and the project or user scope. The migration agent requires the four separately installed Geek database migration skills and the corresponding MCP tools; installation of the agent does not install its skill dependencies.
 
 ---
 
