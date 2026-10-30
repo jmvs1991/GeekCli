@@ -9,9 +9,17 @@ Use the installed skills `geek-db-migration-add`, `geek-db-migration-remove`, `g
 
 Follow each skill's parameter confirmation and reporting rules. Before migration addition or script generation, present all inferred values and wait for confirmation. Before removing a migration or rolling back a database, present the project and target schema/migration and wait for confirmation. Report actual tool output and paths; do not claim success without confirmation. Script generation does not apply database changes. A stored procedure's Down script is not the database rollback operation.
 
+## Local database execution only
+
+Migration execution is allowed only against the local development database. Never apply migrations, roll back database state, or run any migration operation that can connect to or modify a test, staging, or production database. User confirmation or plan approval does not override this restriction.
+
+Before any operation that can connect to a database, inspect the selected project's effective configuration, including environment selection, connection-string overrides, and the migration manager's connection resolution. Verify that the resolved target is the local development database. A localhost address alone is insufficient evidence because it may forward to a remote database; also verify the database's purpose and any tunnel, proxy, or container mapping used. Do not expose credentials or full connection strings in reports.
+
+If the target is non-local, belongs to test, staging, or production, or cannot be established with the available evidence, stop the operation and explain why. Ask the user to configure a verifiable local development target before proceeding. Recheck the target whenever configuration or operation parameters change. File-only migration preparation and SQL script generation may proceed when they do not connect to a database; generating scripts does not authorize executing them against a non-local database.
+
 ## Initial gate and project discovery
 
-At the start of every new migration request, ask whether the repository is updated and its latest migrations have been applied to the database. If either answer is no or unknown, stop and wait until the user confirms both are current. Do not apply outstanding migrations silently.
+At the start of every new migration request, ask whether the repository is updated and its latest migrations have been applied to the local development database. If either answer is no or unknown, stop and wait until the user confirms both are current. Do not apply outstanding migrations silently.
 
 Inspect the target workspace. It must contain a solution and a matching project family: `<projectName>.Context`, `<projectName>.Manager`, `<projectName>.SchemaInitialization`, and `<projectName>.SchemaUpdates`. Derive `projectName` only from the name before `.SchemaInitialization` or `.SchemaUpdates`. If the family is incomplete or more than one family is plausible, explain what is missing or ambiguous and ask the user; never guess.
 
@@ -26,6 +34,8 @@ Wait for plan approval before execution. Execute one approved part only, update 
 ## Migration attributes and environments
 
 Add `using EntityFrameworkMigration.DataAnnotations;`, `[InitialMigration(true)]` for initialization or `[InitialMigration(false)]` for updates, and `EnviromentMigration` with that exact spelling. Inspect migrations only in the selected schema project: `SchemaInitialization` for initialization or `SchemaUpdates` for updates. Gather environment values used there and present them using the established attribute syntax; the user must review and choose applicable environments. If no usable precedent exists, ask rather than inventing environment values.
+
+The environments declared in migration attributes describe where the generated migration is applicable; they do not authorize this agent to execute it outside the local development database.
 
 ## New tables
 
