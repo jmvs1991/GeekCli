@@ -76,7 +76,7 @@ Update installed bundled skills in a scope with `geek-cli ai skill install --upd
 
 ### Install an AI subagent
 
-Install a bundled agent with `geek-cli ai agent install <name> --scope <project|user>`. Project scope requires an existing `--project-path`; user scope installs under `~/.codex/agents`. Agent definitions are standalone TOML files named after the catalog entry. `geek-db-migration-specialist` is bundled at `GeekCli/Agents/geek-db-migration-specialist.toml`; TOML files added under `GeekCli/Agents` are included with the tool package. Subagent installation is available through the direct CLI and AI wizard, not MCP.
+Install a bundled agent with `geek-cli ai agent install <name> --scope <project|user>`. Project scope requires an existing `--project-path`; user scope installs under `~/.codex/agents`. Agent definitions are standalone TOML files named after the catalog entry. `geek-db-migration-specialist` and `geek-api-specialist` are bundled under `GeekCli/Agents`; TOML files added there are included with the tool package. `geek-api-specialist` has its own `MAJOR.MINOR.PATCH` version, currently `0.1.0`, and welcomes users with an English ASCII banner showing its installed version. Invoke it in Codex after installation. Subagent installation is available through the direct CLI and AI wizard, not MCP.
 
 Direct CLI installation:
 
