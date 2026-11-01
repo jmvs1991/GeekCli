@@ -4,11 +4,24 @@ namespace GeekCliServices.Services.Ai.Agents
 {
     public sealed class AgentInstallService : IAgentInstallService
     {
-        public IReadOnlyList<string> GetAvailableAgents()
+        public IReadOnlyList<string> GetAvailableCategories()
         {
             string catalogRoot = GetCatalogRoot();
             return Directory.Exists(catalogRoot)
-                ? Directory.GetFiles(catalogRoot, "*.toml")
+                ? Directory.GetDirectories(catalogRoot)
+                    .Select(Path.GetFileName)
+                    .Where(name => name is not null)
+                    .Cast<string>()
+                    .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
+                    .ToArray()
+                : Array.Empty<string>();
+        }
+
+        public IReadOnlyList<string> GetAvailableAgents(string category)
+        {
+            string categoryPath = Path.Combine(GetCatalogRoot(), category);
+            return Directory.Exists(categoryPath)
+                ? Directory.GetFiles(categoryPath, "*.toml", SearchOption.AllDirectories)
                     .Select(Path.GetFileNameWithoutExtension)
                     .Where(name => name is not null)
                     .Cast<string>()
@@ -40,16 +53,25 @@ namespace GeekCliServices.Services.Ai.Agents
                 return 1;
             }
 
-            string catalogPath = Path.Combine(GetCatalogRoot(), $"{command.Name}.toml");
-            if (!File.Exists(catalogPath))
+            if (string.IsNullOrWhiteSpace(command.Category) || command.Category is "." or ".." ||
+                command.Category.Contains('/') || command.Category.Contains('\\') ||
+                command.Category != Path.GetFileName(command.Category) ||
+                command.Category.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
             {
-                if (GetAvailableAgents().Count == 0)
+                CommandOutput.Error("The subagent category is invalid.");
+                return 1;
+            }
+
+            string? catalogPath = FindCatalogAgent(command.Category, command.Name);
+            if (catalogPath is null)
+            {
+                if (GetAvailableCategories().Count == 0)
                 {
                     CommandOutput.Error("No subagents are currently available in the bundled catalog.");
                 }
                 else
                 {
-                    CommandOutput.Error($"Subagent '{command.Name}' is not available in the bundled catalog.");
+                    CommandOutput.Error($"Subagent '{command.Name}' is not available in category '{command.Category}'.");
                 }
 
                 return 1;
@@ -96,6 +118,15 @@ namespace GeekCliServices.Services.Ai.Agents
         private static string GetCatalogRoot()
         {
             return Path.Combine(AppContext.BaseDirectory, "Agents");
+        }
+
+        private static string? FindCatalogAgent(string category, string name)
+        {
+            string categoryPath = Path.Combine(GetCatalogRoot(), category);
+            return Directory.Exists(categoryPath)
+                ? Directory.GetFiles(categoryPath, "*.toml", SearchOption.AllDirectories)
+                    .FirstOrDefault(path => string.Equals(Path.GetFileNameWithoutExtension(path), name, StringComparison.OrdinalIgnoreCase))
+                : null;
         }
     }
 }

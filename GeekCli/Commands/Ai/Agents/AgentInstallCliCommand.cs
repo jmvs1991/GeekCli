@@ -16,7 +16,7 @@ namespace GeekCli.Commands.Ai.Agents
         protected override int Execute(CommandContext context, AgentInstallSettings settings, CancellationToken cancellationToken)
         {
             return _service.RunProcess(string.Empty,
-                new AgentInstallCommand(settings.Name, settings.Scope, settings.ProjectPath, settings.Overwrite));
+                new AgentInstallCommand(settings.Category, settings.Name, settings.Scope, settings.ProjectPath, settings.Overwrite));
         }
     }
 }

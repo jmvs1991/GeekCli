@@ -5,7 +5,11 @@ namespace GeekCli.Commands.Ai.Agents
 {
     internal sealed class AgentInstallSettings : CommandSettings
     {
-        [CommandArgument(0, "<NAME>")]
+        [CommandArgument(0, "<CATEGORY>")]
+        [Description("Category containing the bundled subagent.")]
+        public string Category { get; set; } = string.Empty;
+
+        [CommandArgument(1, "<NAME>")]
         [Description("Name of the bundled subagent to install.")]
         public string Name { get; set; } = string.Empty;
 

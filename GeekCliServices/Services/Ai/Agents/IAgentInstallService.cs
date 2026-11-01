@@ -4,7 +4,8 @@ namespace GeekCliServices.Services.Ai.Agents
 {
     public interface IAgentInstallService : ICommandService<AgentInstallCommand>
     {
-        IReadOnlyList<string> GetAvailableAgents();
+        IReadOnlyList<string> GetAvailableCategories();
+        IReadOnlyList<string> GetAvailableAgents(string category);
         string? GetInstallationPath(AgentInstallCommand command);
     }
 }

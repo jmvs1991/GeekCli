@@ -239,8 +239,8 @@ namespace GeekCli.Commands.Ai.Wizard
 
         private int RunAgentWizard(bool showBackOption)
         {
-            IReadOnlyList<string> agents = _agentInstallService.GetAvailableAgents();
-            if (agents.Count == 0)
+            IReadOnlyList<string> categories = _agentInstallService.GetAvailableCategories();
+            if (categories.Count == 0)
             {
                 AnsiConsole.MarkupLine("[yellow]No subagents are currently available in the bundled catalog.[/]");
                 if (showBackOption)
@@ -253,19 +253,35 @@ namespace GeekCli.Commands.Ai.Wizard
                 return 0;
             }
 
-            var choices = agents.ToList();
+            var categoryChoices = categories.ToList();
             if (showBackOption)
             {
-                choices.Add(BackAction);
+                categoryChoices.Add(BackAction);
+            }
+
+            string selectedCategory = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                .Title("Choose a subagent category")
+                .PageSize(10)
+                .AddChoices(categoryChoices));
+            if (selectedCategory == BackAction)
+            {
+                return 0;
+            }
+
+            IReadOnlyList<string> agents = _agentInstallService.GetAvailableAgents(selectedCategory);
+            var agentChoices = agents.ToList();
+            if (showBackOption)
+            {
+                agentChoices.Add(BackAction);
             }
 
             string selectedAgent = AnsiConsole.Prompt(new SelectionPrompt<string>()
                 .Title("Choose a subagent to install")
                 .PageSize(10)
-                .AddChoices(choices));
+                .AddChoices(agentChoices));
             if (selectedAgent == BackAction)
             {
-                return 0;
+                return RunAgentWizard(showBackOption);
             }
 
             var scopes = new List<string> { ProjectScope, UserScope };
@@ -285,7 +301,7 @@ namespace GeekCli.Commands.Ai.Wizard
             string? projectPath = selectedScope == ProjectScope
                 ? AnsiConsole.Ask<string>("Existing project [green]path[/]?")
                 : null;
-            var command = new AgentInstallCommand(selectedAgent, selectedScope.ToLowerInvariant(), projectPath, Overwrite: false);
+            var command = new AgentInstallCommand(selectedCategory, selectedAgent, selectedScope.ToLowerInvariant(), projectPath, Overwrite: false);
             string? destination = _agentInstallService.GetInstallationPath(command);
             if (destination is null)
             {
@@ -301,7 +317,7 @@ namespace GeekCli.Commands.Ai.Wizard
             command = command with { Overwrite = overwrite };
             var summary = new List<string>
             {
-                $"[grey]Subagent:[/] [green]{command.Name}[/]",
+                $"[grey]Subagent:[/] [green]{command.Category}/{command.Name}[/]",
                 $"[grey]Scope:[/] [green]{command.Scope}[/]",
                 $"[grey]Destination:[/] [green]{destination}[/]",
                 $"[grey]Replace existing:[/] [green]{(command.Overwrite ? "Yes" : "No")}[/]"
