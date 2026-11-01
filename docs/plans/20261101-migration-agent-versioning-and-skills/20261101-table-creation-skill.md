@@ -4,7 +4,7 @@ Related backlog: [Migration agent versioning and skills](../../backlog/20261101-
 
 Story: 5
 
-Status: Pending
+Status: Completed
 
 ## Story
 
@@ -12,23 +12,30 @@ As a database maintainer, I want to create tables from a complete definition or 
 
 ## Acceptance criteria
 
-- [ ] Given a table creation request with missing information, when preparation begins, then I am asked for the table name, schema, actual code-column name, and scope, and I can choose to provide the complete definition or generate only the base structure.
-- [ ] Given the required information, when the table is prepared, then columns appear in this order: `ID`, `CORPORATION` and `COMPANY` where applicable, code, additional columns, `CREATION_DATE`, `CREATION_DATEL`, `UPDATE_DATE`, `UPDATE_DATEL`, `CREATE_USER`, and `UPDATE_USER`; the primary key combines scope columns and code, and the table has a unique index on `ID` and its synonym.
-- [ ] Given a prepared table, when I review its reversal, then it drops the synonym before dropping the table; the base structure is available as a template bundled with the skill.
+- [x] Given a table creation request with missing information, when preparation begins, then I am asked for the table name, schema, actual code-column name, and scope, and I can choose to provide the complete definition or generate only the base structure.
+- [x] Given the required information, when the table is prepared, then columns appear in this order: `ID`, `CORPORATION` and `COMPANY` where applicable, code, additional columns, `CREATION_DATE`, `CREATION_DATEL`, `UPDATE_DATE`, `UPDATE_DATEL`, `CREATE_USER`, and `UPDATE_USER`; the primary key combines scope columns and code, and the table has a unique index on `ID` and its synonym.
+- [x] Given a prepared table, when I review its reversal, then it drops the synonym before dropping the table; the base structure is available as a template bundled with the skill.
 
 ## Plan
 
-- [ ] Add `geek-db-table-create` with a reusable template and two modes: base structure or complete definition; ask only for missing information.
-- [ ] Adapt the template using private constants `__TABLE_NAME__` and `__SCHEMA__`, actual values, and the project's column extensions; never use the illustrative `CODTEST` as a default code-column name.
-- [ ] Prepare the table using `MigrationBuilder`, preserving the required column order, selected scope, and requested additional fields; do not invent business fields in base-structure mode.
-- [ ] Prepare primary key `PK_<table>`, unique index `IX_<table>_ID` without a filter, and `CreateSynom`, `DropSynom`, and `DropTable` operations, preserving existing migration content.
-- [ ] Review both modes, all three scopes, column order, and reversal; verify that the template is included in the package and correct the documented SQL-template dependency for this story.
+- [x] Add `geek-db-table-create` with a reusable template and two modes: base structure or complete definition; ask only for missing information.
+- [x] Adapt the template using private constants `__TABLE_NAME__` and `__SCHEMA__`, actual values, and the project's column extensions; never use the illustrative `CODTEST` as a default code-column name.
+- [x] Prepare the table using `MigrationBuilder`, preserving the required column order, selected scope, and requested additional fields; do not invent business fields in base-structure mode.
+- [x] Prepare primary key `PK_<table>`, unique index `IX_<table>_ID` without a filter, and `CreateSynom`, `DropSynom`, and `DropTable` operations, preserving existing migration content.
+- [x] Review both modes, all three scopes, column order, and reversal; verify that the template is included in the package and correct the documented SQL-template dependency for this story.
 
 ## Validation
 
 TDD is not required because the repository has no test project. Do not introduce a test project or a TDD workflow as a prerequisite for this story.
 
 Validate instructions, template, references, scenarios, and the diff through direct review. This instruction-only change does not require builds or generator execution. Check that unresolved information or ambiguous project conventions are raised with the user and remain pending rather than being invented.
+
+Validation results (instruction and template review):
+
+- Reviewed missing-input prompts, complete-definition and base-structure modes, and all three scopes. The template starts with code-only scope and documents the scope columns and matching primary-key forms for the other scopes.
+- Reviewed column order, placement of requested business columns, matching Schema Builder extensions, the actual code-column name, primary key, and unfiltered unique index on `ID`.
+- Confirmed `Down` drops the synonym before the table, the bundled template uses private `__TABLE_NAME__` and `__SCHEMA__` constants, and the skill directs table creation through `MigrationBuilder` without a redundant SQL-template dependency.
+- Confirmed `GeekCli.csproj` packages all files under `Skills/**`, including the new nested template. `git diff --check` passed; no build or generator execution was required.
 
 ## Out of scope
 

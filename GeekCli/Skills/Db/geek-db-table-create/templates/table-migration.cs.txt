@@ -1,0 +1,52 @@
+using EntityFrameworkMigration.ExtensionMethods.SQL.DDL;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+private const string __TABLE_NAME__ = "__TABLE_NAME_VALUE__";
+private const string __SCHEMA__ = "__SCHEMA_VALUE__";
+
+protected override void Up(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.CreateTable(
+        name: __TABLE_NAME__,
+        schema: __SCHEMA__,
+        columns: table => new
+        {
+            ID = table.IdColumn(),
+            // For corporation + code, add before CODE_COLUMN:
+            // CORPORATION = table.CorporationColumn(),
+            // For corporation + company + code, add both before CODE_COLUMN:
+            // CORPORATION = table.CorporationColumn(),
+            // COMPANY = table.CompanyColumn(),
+            // Replace CODE_COLUMN with the confirmed name and pass it to CodeColumn.
+            CODE_COLUMN = table.CodeColumn("CODE_COLUMN"),
+            // In complete mode, add requested business columns here, before audit columns.
+            CREATION_DATE = table.CreationDateColumn(),
+            CREATION_DATEL = table.CreationDatelColumn(),
+            UPDATE_DATE = table.UpdateDateColumn(),
+            UPDATE_DATEL = table.UpdateDatelColumn(),
+            CREATE_USER = table.CreateUserColumn(),
+            UPDATE_USER = table.UpdateUserColumn()
+        },
+        constraints: table =>
+        {
+            // Code-only scope:
+            table.PrimaryKey($"PK_{__TABLE_NAME__}", x => new { x.CODE_COLUMN });
+            // For corporation + code, use: x => new { x.CORPORATION, x.CODE_COLUMN }
+            // For corporation + company + code, use: x => new { x.CORPORATION, x.COMPANY, x.CODE_COLUMN }
+        });
+
+    migrationBuilder.CreateIndex(
+        name: $"IX_{__TABLE_NAME__}_ID",
+        schema: __SCHEMA__,
+        table: __TABLE_NAME__,
+        column: "ID",
+        unique: true);
+
+    migrationBuilder.CreateSynom(__TABLE_NAME__, __SCHEMA__);
+}
+
+protected override void Down(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.DropSynom(__TABLE_NAME__);
+    migrationBuilder.DropTable(name: __TABLE_NAME__, schema: __SCHEMA__);
+}
