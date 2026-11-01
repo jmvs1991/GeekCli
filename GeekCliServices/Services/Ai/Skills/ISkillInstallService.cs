@@ -6,6 +6,10 @@ namespace GeekCliServices.Services.Ai.Skills
     {
         IReadOnlyList<string> GetAvailableSkills();
 
+        IReadOnlyList<string> GetAvailableCategories();
+
+        IReadOnlyList<string> GetAvailableSkills(string category);
+
         string? GetInstallationPath(SkillInstallCommand command);
     }
 }

@@ -80,7 +80,7 @@ namespace GeekCli.Commands.Ai.Wizard
             string? projectPath = selectedScope == ProjectScope
                 ? AnsiConsole.Ask<string>("Existing project [green]path[/]?")
                 : null;
-            var command = new SkillInstallCommand(null, selectedScope.ToLowerInvariant(), projectPath, Overwrite: false, UpdateAll: true);
+            var command = new SkillInstallCommand(null, null, selectedScope.ToLowerInvariant(), projectPath, Overwrite: false, UpdateAll: true);
             string? destination = _skillInstallService.GetInstallationPath(command with { Name = "_" });
             if (destination is null)
             {
@@ -120,7 +120,7 @@ namespace GeekCli.Commands.Ai.Wizard
             string? projectPath = selectedScope == ProjectScope
                 ? AnsiConsole.Ask<string>("Existing project [green]path[/]?")
                 : null;
-            var command = new SkillInstallCommand(null, selectedScope.ToLowerInvariant(), projectPath, Overwrite: false, All: true);
+            var command = new SkillInstallCommand(null, null, selectedScope.ToLowerInvariant(), projectPath, Overwrite: false, All: true);
             if (selectedScope == ProjectScope && !Directory.Exists(projectPath))
             {
                 return _skillInstallService.RunProcess(string.Empty, command);
@@ -145,8 +145,8 @@ namespace GeekCli.Commands.Ai.Wizard
 
         private int RunSkillWizard(bool showBackOption)
         {
-            IReadOnlyList<string> skills = _skillInstallService.GetAvailableSkills();
-            if (skills.Count == 0)
+            IReadOnlyList<string> categories = _skillInstallService.GetAvailableCategories();
+            if (categories.Count == 0)
             {
                 AnsiConsole.MarkupLine("[yellow]No skills are currently available in the bundled catalog.[/]");
                 if (showBackOption)
@@ -159,20 +159,36 @@ namespace GeekCli.Commands.Ai.Wizard
                 return 0;
             }
 
-            var choices = skills.ToList();
+            var categoryChoices = categories.ToList();
             if (showBackOption)
             {
-                choices.Add(BackAction);
+                categoryChoices.Add(BackAction);
+            }
+
+            string selectedCategory = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                .Title("Choose a skill category")
+                .PageSize(10)
+                .AddChoices(categoryChoices));
+
+            if (selectedCategory == BackAction)
+            {
+                return 0;
+            }
+
+            IReadOnlyList<string> skills = _skillInstallService.GetAvailableSkills(selectedCategory);
+            var skillChoices = skills.ToList();
+            if (showBackOption)
+            {
+                skillChoices.Add(BackAction);
             }
 
             string selectedSkill = AnsiConsole.Prompt(new SelectionPrompt<string>()
                 .Title("Choose a skill to install")
                 .PageSize(10)
-                .AddChoices(choices));
-
+                .AddChoices(skillChoices));
             if (selectedSkill == BackAction)
             {
-                return 0;
+                return RunSkillWizard(showBackOption);
             }
 
             var scopeChoices = new List<string> { ProjectScope, UserScope };
@@ -194,6 +210,7 @@ namespace GeekCli.Commands.Ai.Wizard
                 ? AnsiConsole.Ask<string>("Existing project [green]path[/]?")
                 : null;
             var command = new SkillInstallCommand(
+                selectedCategory,
                 selectedSkill,
                 selectedScope.ToLowerInvariant(),
                 projectPath,

@@ -9,8 +9,21 @@ namespace GeekCliServices.Services.Ai.Skills
 
         public IReadOnlyList<string> GetAvailableSkills()
         {
+            return GetAvailableCategories().SelectMany(GetAvailableSkills).Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(name => name, StringComparer.OrdinalIgnoreCase).ToArray();
+        }
+
+        public IReadOnlyList<string> GetAvailableCategories()
+        {
             return Directory.Exists(CatalogRoot)
                 ? Directory.GetDirectories(CatalogRoot).Select(Path.GetFileName).Where(name => name is not null).Cast<string>().OrderBy(name => name, StringComparer.OrdinalIgnoreCase).ToArray()
+                : Array.Empty<string>();
+        }
+
+        public IReadOnlyList<string> GetAvailableSkills(string category)
+        {
+            string categoryPath = Path.Combine(CatalogRoot, category);
+            return Directory.Exists(categoryPath)
+                ? Directory.GetDirectories(categoryPath).Select(Path.GetFileName).Where(name => name is not null).Cast<string>().OrderBy(name => name, StringComparer.OrdinalIgnoreCase).ToArray()
                 : Array.Empty<string>();
         }
 
@@ -50,6 +63,14 @@ namespace GeekCliServices.Services.Ai.Skills
                 return UpdateInstalledSkills(command);
             }
 
+            if (!IsValidSegment(command.Category) || !IsValidSegment(command.Name) ||
+                string.IsNullOrWhiteSpace(command.Category) || string.IsNullOrWhiteSpace(command.Name) ||
+                !GetAvailableCategories().Contains(command.Category, StringComparer.OrdinalIgnoreCase))
+            {
+                CommandOutput.Error("A valid skill category and skill name are required.");
+                return 1;
+            }
+
             if (string.IsNullOrWhiteSpace(command.Name) || command.Name is "." or ".." ||
                 command.Name.Contains('/') || command.Name.Contains('\\') ||
                 command.Name != Path.GetFileName(command.Name) ||
@@ -65,10 +86,10 @@ namespace GeekCliServices.Services.Ai.Skills
                 return 1;
             }
 
-            string catalogPath = Path.Combine(CatalogRoot, command.Name);
+            string catalogPath = Path.Combine(CatalogRoot, command.Category, command.Name);
             if (!Directory.Exists(catalogPath))
             {
-                CommandOutput.Error($"Skill '{command.Name}' is not available in the bundled catalog.");
+                CommandOutput.Error($"Skill '{command.Name}' is not available in category '{command.Category}'.");
                 return 1;
             }
 
@@ -116,9 +137,7 @@ namespace GeekCliServices.Services.Ai.Skills
                 return 1;
             }
 
-            string[] skills = Directory.Exists(CatalogRoot)
-                ? Directory.GetDirectories(CatalogRoot).OrderBy(path => path, StringComparer.OrdinalIgnoreCase).ToArray()
-                : Array.Empty<string>();
+            string[] skills = GetAvailableCategories().SelectMany(category => GetAvailableSkills(category).Select(name => Path.Combine(CatalogRoot, category, name))).OrderBy(path => path, StringComparer.OrdinalIgnoreCase).ToArray();
             string destinationRoot = root.GetSkillDestinationRoot();
             int installed = 0;
             int skipped = 0;
@@ -194,8 +213,8 @@ namespace GeekCliServices.Services.Ai.Skills
             foreach (string destination in installed)
             {
                 string name = Path.GetFileName(destination);
-                string catalogPath = Path.Combine(CatalogRoot, name);
-                if (!Directory.Exists(catalogPath))
+                string? catalogPath = FindCatalogSkill(name);
+                if (catalogPath is null)
                 {
                     skipped++;
                     continue;
@@ -254,6 +273,12 @@ namespace GeekCliServices.Services.Ai.Skills
                 CopyDirectory(directory, Path.Combine(destination, Path.GetFileName(directory)));
             }
         }
+
+        private static bool IsValidSegment(string? value) => !string.IsNullOrWhiteSpace(value) && value is not "." and not ".." && value == Path.GetFileName(value) && !value.Contains('/') && !value.Contains('\\') && value.IndexOfAny(Path.GetInvalidFileNameChars()) < 0;
+
+        private static string? FindCatalogSkill(string name) => Directory.Exists(CatalogRoot)
+            ? Directory.GetDirectories(CatalogRoot).Select(category => Path.Combine(category, name)).FirstOrDefault(Directory.Exists)
+            : null;
 
         private static string? ResolveScopeRoot(SkillInstallCommand command)
         {

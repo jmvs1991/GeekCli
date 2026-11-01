@@ -5,7 +5,11 @@ namespace GeekCli.Commands.Ai.Skills
 {
     internal sealed class SkillInstallSettings : CommandSettings
     {
-        [CommandArgument(0, "[NAME]")]
+        [CommandArgument(0, "[CATEGORY]")]
+        [Description("Category of the bundled skill.")]
+        public string? Category { get; set; }
+
+        [CommandArgument(1, "[NAME]")]
         [Description("Name of the bundled skill to install.")]
         public string? Name { get; set; }
 
