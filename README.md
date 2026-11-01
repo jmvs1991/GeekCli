@@ -85,7 +85,7 @@ geek-cli ai agent install Db geek-db-migration-specialist --scope project --proj
 geek-cli ai agent install Db geek-db-migration-specialist --scope user
 ```
 
-The AI wizard also offers agent installation: run `geek-cli ai` or select AI from the general wizard, choose **Install subagents**, then select the `Db` category, `geek-db-migration-specialist`, and the project or user scope. The migration agent requires the four separately installed Geek database migration skills and the corresponding MCP tools; installation of the agent does not install its skill dependencies.
+The AI wizard also offers agent installation: run `geek-cli ai` or select AI from the general wizard, choose **Install subagents**, then select the `Db` category, `geek-db-migration-specialist`, and the project or user scope. The migration agent requires the four separately installed Geek database migration skills and the corresponding MCP tools; installation of the agent does not install its skill dependencies. Its initial version is `0.1.0`; inspect the installed agent definition's `version` field or invoke the agent to see its version in the first-response ASCII banner.
 
 ---
 
