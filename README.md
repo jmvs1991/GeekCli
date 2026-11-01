@@ -272,6 +272,12 @@ geek-cli db migration add InitSchema --project Booking --issue ABC-123 --init
 geek-cli db scaffold --table TR_TAG_INVOICE --output-dir Parking/Entities --connection-string "Data Source=localhost;Initial Catalog=ParkingDevelop;User ID=SA;Password=YourStrong!Passw0rd;TrustServerCertificate=True" --provider SqlServer
 ```
 
+Optionally specify the EF Core startup and target projects with `--startup-project` and `--project` when they cannot be inferred from the current directory:
+
+```powershell
+geek-cli db scaffold --table TR_TAG_INVOICE --output-dir Parking/Entities --connection-string "Data Source=localhost;Initial Catalog=ParkingDevelop;User ID=SA;Password=YourStrong!Passw0rd;TrustServerCertificate=True" --provider SqlServer --startup-project Parking.Api --project Parking.Data
+```
+
 ### Generate SQL scripts directly
 
 ```bash

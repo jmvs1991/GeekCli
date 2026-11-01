@@ -4,5 +4,7 @@ namespace GeekCliServices.Services.Db.Scaffold.Models
         string Table,
         string OutputDir,
         string ConnectionString,
-        string Provider);
+        string Provider,
+        string? StartupProject = null,
+        string? Project = null);
 }

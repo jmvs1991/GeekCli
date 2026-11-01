@@ -14,7 +14,9 @@ namespace GeekCli.Commands.Db.Scaffold
             return new DbScaffoldDotnetCommand(settings.Table!,
                                                settings.OutputDir!,
                                                settings.ConnectionString!,
-                                               settings.Provider!);
+                                               settings.Provider!,
+                                               settings.StartupProject,
+                                               settings.Project);
         }
     }
 }

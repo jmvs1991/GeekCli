@@ -17,7 +17,17 @@ namespace GeekCli.Tools
 
         [McpServerTool]
         [Description("Scaffolds an Entity Framework model from an existing database table.")]
-        public McpToolResult DbScaffold(string table, string outputDir, string connectionString, string provider)
-            => Capture(() => _service.RunProcess("dotnet", new DbScaffoldDotnetCommand(table, outputDir, connectionString, provider)));
+        public McpToolResult DbScaffold(string table,
+                                        string outputDir,
+                                        string connectionString,
+                                        string provider,
+                                        string? startupProject = null,
+                                        string? project = null)
+            => Capture(() => _service.RunProcess("dotnet", new DbScaffoldDotnetCommand(table,
+                                                                                         outputDir,
+                                                                                         connectionString,
+                                                                                         provider,
+                                                                                         startupProject,
+                                                                                         project)));
     }
 }

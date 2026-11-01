@@ -8,12 +8,24 @@ namespace GeekCliServices.Services.Db.Scaffold
         {
             string provider = ResolveProvider(command.Provider);
 
-            return $"ef dbcontext scaffold " +
-                   $"\"{EscapeArgument(command.ConnectionString)}\" " +
-                   $"{provider} " +
-                   $"--table \"{EscapeArgument(command.Table)}\" " +
-                   $"--data-annotations " +
-                   $"--output-dir \"{EscapeArgument(command.OutputDir)}\"";
+            var args = $"ef dbcontext scaffold " +
+                       $"\"{EscapeArgument(command.ConnectionString)}\" " +
+                       $"{provider} " +
+                       $"--table \"{EscapeArgument(command.Table)}\" " +
+                       $"--data-annotations " +
+                       $"--output-dir \"{EscapeArgument(command.OutputDir)}\"";
+
+            if (!string.IsNullOrWhiteSpace(command.StartupProject))
+            {
+                args += $" --startup-project \"{EscapeArgument(command.StartupProject)}\"";
+            }
+
+            if (!string.IsNullOrWhiteSpace(command.Project))
+            {
+                args += $" --project \"{EscapeArgument(command.Project)}\"";
+            }
+
+            return args;
         }
 
         private static string ResolveProvider(string provider)

@@ -22,6 +22,14 @@ namespace GeekCli.Commands.Db.Scaffold
         [Description("The EF Core provider to use. Supported values: SqlServer, Postgres.")]
         public string? Provider { get; set; }
 
+        [CommandOption("--startup-project <PROJECT>")]
+        [Description("The startup project used by dotnet ef.")]
+        public string? StartupProject { get; set; }
+
+        [CommandOption("--project <PROJECT>")]
+        [Description("The target project where EF Core files will be generated.")]
+        public string? Project { get; set; }
+
         public override ValidationResult Validate()
         {
             if (string.IsNullOrWhiteSpace(Table))

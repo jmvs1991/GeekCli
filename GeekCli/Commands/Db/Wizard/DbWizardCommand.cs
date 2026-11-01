@@ -131,7 +131,7 @@ namespace GeekCli.Commands.Db.Wizard
             ShowSummary(summary);
         }
 
-        private static void ShowScaffoldSummary(string table, string outputDir, string provider)
+        private static void ShowScaffoldSummary(string table, string outputDir, string provider, string? startupProject, string? project)
         {
             var summary = new List<string>
             {
@@ -140,6 +140,16 @@ namespace GeekCli.Commands.Db.Wizard
                 $"[grey]Output:[/] [green]{outputDir}[/]",
                 $"[grey]Provider:[/] [green]{provider}[/]"
             };
+
+            if (!string.IsNullOrWhiteSpace(startupProject))
+            {
+                summary.Add($"[grey]Startup project:[/] [green]{startupProject}[/]");
+            }
+
+            if (!string.IsNullOrWhiteSpace(project))
+            {
+                summary.Add($"[grey]Target project:[/] [green]{project}[/]");
+            }
 
             ShowSummary(summary);
         }
@@ -282,14 +292,22 @@ namespace GeekCli.Commands.Db.Wizard
                     .Title("Choose the EF Core provider")
                     .AddChoices("SqlServer", "Postgres"));
 
-            ShowScaffoldSummary(table, outputDir, provider);
+            var startupProject = AnsiConsole.Ask<string>("EF Core [green]startup project[/] ([grey]optional[/])?", string.Empty);
+            var project = AnsiConsole.Ask<string>("EF Core [green]target project[/] ([grey]optional[/])?", string.Empty);
+
+            ShowScaffoldSummary(table, outputDir, provider, startupProject, project);
 
             if (!ConfirmExecution())
             {
                 return 0;
             }
 
-            var command = new DbScaffoldDotnetCommand(table, outputDir, connectionString, provider);
+            var command = new DbScaffoldDotnetCommand(table,
+                                                      outputDir,
+                                                      connectionString,
+                                                      provider,
+                                                      string.IsNullOrWhiteSpace(startupProject) ? null : startupProject,
+                                                      string.IsNullOrWhiteSpace(project) ? null : project);
             return _dbScaffoldService.RunProcess(ProcessToRun, command);
         }
 
