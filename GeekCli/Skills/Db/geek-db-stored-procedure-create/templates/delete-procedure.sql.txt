@@ -1,0 +1,27 @@
+-- Replace every <...> placeholder using the confirmed table definition and project precedent.
+CREATE PROCEDURE [<schema>].[SP_<EXACT_TABLE_NAME>_DELETE]
+    <scope and complete primary-key parameters>
+AS
+BEGIN
+    BEGIN TRY
+        DELETE FROM [<schema>].[<EXACT_TABLE_NAME>]
+        WHERE <complete primary-key predicate, one condition per line with leading AND after the first, including scope>;
+    END TRY
+    BEGIN CATCH
+        DECLARE @RC INT, @error_message NVARCHAR(500), @line INT, @number INT,
+                @severity INT, @statusCatch INT, @procedure NVARCHAR(500);
+
+        SELECT @error_message = ISNULL(ERROR_MESSAGE(), ''),
+               @line = ISNULL(ERROR_LINE(), 0),
+               @number = ISNULL(ERROR_NUMBER(), 0),
+               @severity = ISNULL(ERROR_SEVERITY(), 0),
+               @statusCatch = ISNULL(ERROR_STATE(), 0),
+               @procedure = ISNULL(ERROR_PROCEDURE(), '');
+
+        IF @severity <> 12
+            EXECUTE @RC = [SP_PR_ERRORS_INSERT]
+                 <scope arguments>, @error_message, @line, @number, @severity, @statusCatch, @procedure;
+
+        RAISERROR(@error_message, @severity, @statusCatch);
+    END CATCH
+END

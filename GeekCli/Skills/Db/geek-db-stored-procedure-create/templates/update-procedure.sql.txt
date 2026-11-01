@@ -1,0 +1,45 @@
+-- Replace every <...> placeholder using the confirmed table definition and project precedent.
+        -- Remove the final business-assignment placeholder, including its comma, if none are approved.
+CREATE PROCEDURE [<schema>].[SP_<EXACT_TABLE_NAME>_UPDATE]
+    <scope and complete primary-key parameters>,
+    <confirmed business parameters>,
+    @user NVARCHAR(100) = ''
+AS
+BEGIN
+    BEGIN TRY
+        DECLARE @date DATETIME2(7) = SYSUTCDATETIME(),
+                @datel NUMERIC(18,0);
+
+        SET @datel = CONVERT(NUMERIC(18,0), CONVERT(VARCHAR(8), @date, 112));
+
+        -- Do not add an existence check unless the user confirms it.
+        UPDATE [<schema>].[<EXACT_TABLE_NAME>]
+        SET [UPDATE_DATE] = @date
+           ,[UPDATE_DATEL] = @datel
+           ,[UPDATE_USER] = @user
+           ,<confirmed business assignments, one per line>
+        WHERE <complete primary-key predicate, one condition per line with leading AND after the first, including scope>;
+
+        SELECT
+            <explicit list of every table column, one per line with leading commas after the first>
+        FROM [<schema>].[<EXACT_TABLE_NAME>]
+        WHERE <same complete primary-key predicate, one condition per line with leading AND after the first>;
+    END TRY
+    BEGIN CATCH
+        DECLARE @RC INT, @error_message NVARCHAR(500), @line INT, @number INT,
+                @severity INT, @statusCatch INT, @procedure NVARCHAR(500);
+
+        SELECT @error_message = ISNULL(ERROR_MESSAGE(), ''),
+               @line = ISNULL(ERROR_LINE(), 0),
+               @number = ISNULL(ERROR_NUMBER(), 0),
+               @severity = ISNULL(ERROR_SEVERITY(), 0),
+               @statusCatch = ISNULL(ERROR_STATE(), 0),
+               @procedure = ISNULL(ERROR_PROCEDURE(), '');
+
+        IF @severity <> 12
+            EXECUTE @RC = [SP_PR_ERRORS_INSERT]
+                 <scope arguments>, @error_message, @line, @number, @severity, @statusCatch, @procedure;
+
+        RAISERROR(@error_message, @severity, @statusCatch);
+    END CATCH
+END

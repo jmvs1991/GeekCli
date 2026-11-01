@@ -1,0 +1,70 @@
+-- Replace every <...> placeholder using the confirmed table definition and project precedent.
+-- Keep only confirmed business validations; do not copy quotation-specific checks from the example.
+-- Omit empty optional scope or business-column groups and their adjacent separators.
+CREATE PROCEDURE [<schema>].[SP_<EXACT_TABLE_NAME>_INSERT]
+    <scope parameters>,
+    <confirmed business parameters, excluding the code column>,
+    @user NVARCHAR(100) = ''
+AS
+BEGIN
+    BEGIN TRY
+        DECLARE @date DATETIME2(7) = SYSUTCDATETIME(),
+                @datel NUMERIC(18,0),
+                @<code_variable> <code_column_type>;
+
+        SET @datel = CONVERT(NUMERIC(18,0), CONVERT(VARCHAR(8), @date, 112));
+
+        -- Put confirmed business validations here, before allocating a sequence.
+        EXECUTE [SP_PR_SEQUENCE_INSERT] <scope arguments>,
+             @table = '<EXACT_TABLE_NAME>',
+             @field = '<CODE_COLUMN>',
+             @sequence = @<code_variable> OUTPUT;
+
+        INSERT INTO [<schema>].[<EXACT_TABLE_NAME>]
+        (
+            <scope columns, one per line>
+            ,<code column>
+            ,<confirmed business columns, one per line>
+            ,[CREATION_DATE]
+            ,[CREATION_DATEL]
+            ,[UPDATE_DATE]
+            ,[UPDATE_DATEL]
+            ,[CREATE_USER]
+            ,[UPDATE_USER]
+        )
+        VALUES
+        (
+            <scope values, one per line>
+            ,@<code_variable>
+            ,<confirmed business values, one per line>
+            ,@date
+            ,@datel
+            ,@date
+            ,@datel
+            ,@user
+            ,''
+        );
+
+        SELECT
+            <explicit list of every table column, one per line with leading commas after the first>
+        FROM [<schema>].[<EXACT_TABLE_NAME>]
+        WHERE <complete primary-key predicate, one condition per line with leading AND after the first, including scope and generated code>;
+    END TRY
+    BEGIN CATCH
+        DECLARE @RC INT, @error_message NVARCHAR(500), @line INT, @number INT,
+                @severity INT, @statusCatch INT, @procedure NVARCHAR(500);
+
+        SELECT @error_message = ISNULL(ERROR_MESSAGE(), ''),
+               @line = ISNULL(ERROR_LINE(), 0),
+               @number = ISNULL(ERROR_NUMBER(), 0),
+               @severity = ISNULL(ERROR_SEVERITY(), 0),
+               @statusCatch = ISNULL(ERROR_STATE(), 0),
+               @procedure = ISNULL(ERROR_PROCEDURE(), '');
+
+        IF @severity <> 12
+            EXECUTE @RC = [SP_PR_ERRORS_INSERT]
+                 <scope arguments>, @error_message, @line, @number, @severity, @statusCatch, @procedure;
+
+        RAISERROR(@error_message, @severity, @statusCatch);
+    END CATCH
+END
