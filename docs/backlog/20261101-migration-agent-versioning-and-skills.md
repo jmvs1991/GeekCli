@@ -19,7 +19,7 @@ Every implementation plan generated for any story in this backlog must explicitl
 ## Backlog
 
 1. As a database maintainer, I want to identify the migration agent's version, so that I know which revision I am using. Status: Completed.
-2. As a database maintainer, I want the agent to reference the correct skill sources and recognize skills available at user or project scope, so that it can use its installed dependencies without confusing source paths with installation paths. Status: Pending.
+2. As a database maintainer, I want the agent to reference the correct skill sources and recognize skills available at user or project scope, so that it can use its installed dependencies without confusing source paths with installation paths. Status: Completed.
 3. As a database maintainer, I want a review of which migration responsibilities belong in the agent and which belong in skills, so that I can approve their separation while preserving the current workflow. Status: Pending.
 4. As a database maintainer, I want to create tables and their Insert, Update, and Delete procedures through reusable skills coordinated by the agent, so that I receive the established database structure through the reviewed migration workflow. Requires: #3. Status: Pending.
 5. As a database maintainer, I want to change stored procedures through a reusable skill coordinated by the agent, so that I can review both the change and the previous definition restored by Down. Requires: #3. Status: Pending.
