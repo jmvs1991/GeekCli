@@ -1,6 +1,6 @@
 # Migration agent versioning and skills
 
-Status: Pending
+Status: In progress
 
 ## Context
 
@@ -16,12 +16,14 @@ Scope: Version only the agent, independently of skills and generated migrations.
 
 Every implementation plan generated for any story in this backlog must explicitly state that TDD is not required because the repository has no test project. Do not introduce a test project or a TDD workflow as a prerequisite for these stories. Validate each change using the applicable repository checks and direct review of agent instructions, skill definitions, references, and version consistency.
 
+Story #4 extends the existing `geek-db-migration-add` skill; its completed plan is `docs/plans/20261101-migration-agent-versioning-and-skills/20261101-migration-file-attributes.md`. Agent redefinition remains reserved for story #9.
+
 ## Backlog
 
 1. As a database maintainer, I want to identify the migration agent's version, so that I know which revision I am using. Status: Completed.
 2. As a database maintainer, I want the agent to reference the correct skill sources and recognize skills available at user or project scope, so that it can use its installed dependencies without confusing source paths with installation paths. Status: Completed.
 3. As a database maintainer, I want the migration agent's instructions assigned to functional responsibility blocks, so that reusable skill boundaries and the final agent responsibilities are explicit. Status: Completed.
-4. As a database maintainer, I want to create migration files through a reusable skill, so that generated migrations include the correct initial/update and environment attributes based on the selected schema project and its precedents. The skill must use `EntityFrameworkMigration.DataAnnotations`, `[InitialMigration(true)]` for initialization or `[InitialMigration(false)]` for updates, and `EnviromentMigration` with that exact spelling; it must present existing environment values for user selection and ask rather than inventing values when no usable precedent exists. Requires: #3. Status: Pending.
+4. As a database maintainer, I want to create migration files through a reusable skill, so that generated migrations include the correct initial/update and environment attributes based on the selected schema project and its precedents. The skill must use `EntityFrameworkMigration.DataAnnotations`, `[InitialMigration(true)]` for initialization or `[InitialMigration(false)]` for updates, and `EnviromentMigration` with that exact spelling; it must present existing environment values for user selection and ask rather than inventing values when no usable precedent exists. Requires: #3. Status: Completed.
 5. As a database maintainer, I want to create tables through a reusable skill, so that new tables follow the established Geek schema conventions in the reviewed migration workflow. Requires: #3 and #4. Status: Pending.
 6. As a database maintainer, I want to create an individual stored procedure through a reusable skill, so that procedures follow the established Geek SQL conventions. The agent will invoke this skill at least for Insert, Update, and Delete for each new table. Requires: #3 and #4. Status: Pending.
 7. As a database maintainer, I want to modify existing stored procedures through a reusable skill, so that I can review the change and the previous definition restored by Down. Requires: #3 and #4. Status: Pending.
