@@ -2,9 +2,11 @@
 
 Related backlog: [Geek API specialist](../../backlog/20261030-geek-api-specialist.md)
 
-Story: 1
+Story: 1 of the original backlog (installation and welcome, before the responsibility-block redefinition).
 Status: Completed
 Approval: Approved
+
+Historical plan: This completed work is retained as implementation history. It does not correspond to story #1 of the redefined backlog, which covers the responsibility-block review. Its completed status and recorded validation remain unchanged.
 
 ## Story
 
