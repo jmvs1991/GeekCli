@@ -1,0 +1,49 @@
+using EntityFrameworkExtension.Abstraction.Models.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SolutionDomain.Domains.EntityFramework.Interfaces.Entities;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Connection.Catalog.Entities;
+
+[PrimaryKey("Corporation", "Company", "Codbrand")]
+[Table("MR_BRANDS", Schema = "Catalog")]
+public partial class BrandEntity : EntityWithCorporationAndCompany, IEntityWithCorporationAndCompany
+{
+    [Key]
+    [Column("CODBRAND")]
+    [StringLength(20)]
+    public string Codbrand { get; set; } = null!;
+
+    [Column("NAME")]
+    [StringLength(150)]
+    public string Name { get; set; } = null!;
+
+    [Column("DESCRIPTION")]
+    [StringLength(500)]
+    public string Description { get; set; } = null!;
+
+    [Column("IS_ACTIVE")]
+    public bool IsActive { get; set; }
+
+    public static Action<EntityTypeBuilder<BrandEntity>> Builder = entity =>
+    {
+        entity.HasIndex(e => e.Id, "IX_MR_BRANDS_ID")
+                .IsUnique()
+                .HasFilter("([ID] IS NOT NULL)");
+
+        entity.Property(e => e.Corporation).HasDefaultValue("");
+        entity.Property(e => e.Company).HasDefaultValue("");
+        entity.Property(e => e.Codbrand).HasDefaultValue("");
+        entity.Property(e => e.CreateUser).HasDefaultValue("");
+        entity.Property(e => e.CreationDate).HasDefaultValueSql("(sysdatetime())");
+        entity.Property(e => e.CreationDatel).HasDefaultValueSql("(CONVERT([nvarchar](10),getdate(),(112)))");
+        entity.Property(e => e.Description).HasDefaultValue("");
+        entity.Property(e => e.Id).ValueGeneratedOnAdd();
+        entity.Property(e => e.IsActive).HasDefaultValue(true);
+        entity.Property(e => e.Name).HasDefaultValue("");
+        entity.Property(e => e.UpdateDatel).HasDefaultValueSql("(CONVERT([nvarchar](10),getdate(),(112)))");
+        entity.Property(e => e.UpdateUser).HasDefaultValue("");
+    };
+}

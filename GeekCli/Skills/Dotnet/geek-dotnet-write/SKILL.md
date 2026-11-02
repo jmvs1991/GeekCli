@@ -7,6 +7,10 @@ description: Use the Geek CLI dotnet_write MCP tool to generate a .NET write rep
 
 Use this skill when the user asks to generate a Geek .NET write repository from an installed template.
 
+## Connection conventions
+
+When generating a repository for Connection in an existing API solution, inspect the target schema and follow its established naming and namespace conventions. Place entity write repositories under `Repositories/<Entity>/Write`, with interface and implementation in their respective folders. Verify generated file paths, filenames, namespaces, and interface-to-implementation mapping against the target project. Register each generated repository in the consuming API project's `ExtensionMethods/IServiceCollectionExtension.cs`, inside `AddRepositories`, following its existing service lifetime. If the registration location, mapping, or lifetime is missing or ambiguous, ask before adding registrations. Report any correction and ask the user to review Connection before advancing to another section.
+
 ## Prerequisites and inputs
 
 - The `dotnet_write` MCP tool and .NET SDK must be available. The Geek write repository template must already be installed and usable in the MCP process environment.

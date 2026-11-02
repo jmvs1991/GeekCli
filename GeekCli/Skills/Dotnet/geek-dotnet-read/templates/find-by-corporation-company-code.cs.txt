@@ -1,0 +1,21 @@
+using Connection.Catalog.Entities;
+using EntityFrameworkExtension.Abstraction.Repository.Read.Entity.Paginationful.Filterless;
+using EntityFrameworkExtension.ExtensionMethod;
+using Microsoft.EntityFrameworkCore;
+
+namespace Connection.Catalog.Repositories.Brand.Read
+{
+    public class BrandReadRepository : EntityReadRepositoryWithCorporationAndCompanyAsync<BrandEntity, CatalogContext>, IBrandReadRepository
+    {
+        public BrandReadRepository(CatalogContext dbContext) : base(dbContext)
+        {
+        }
+
+        public Task<BrandEntity?> FindAsync(string corporation, string company, string code)
+        {
+            return _dbSet.FilterByCorporationAndCompany(corporation, company)
+                         .Where(b => b.Codbrand == code)
+                         .FirstOrDefaultAsync();
+        }
+    }
+}

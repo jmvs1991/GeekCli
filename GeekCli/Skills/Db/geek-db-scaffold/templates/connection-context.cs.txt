@@ -1,0 +1,23 @@
+using Connection.Catalog.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace Connection.Catalog
+{
+    public class CatalogContext : DbContext
+    {
+        public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasDefaultSchema("Catalog");
+            modelBuilder.HasAnnotation("Relational:Collation", "Modern_Spanish_CI_AS");
+
+            modelBuilder.Entity<BrandEntity>(BrandEntity.Builder);
+            modelBuilder.Entity<CategoryEntity>(CategoryEntity.Builder);
+            modelBuilder.Entity<ProductEntity>(ProductEntity.Builder);
+            modelBuilder.Entity<ProductPriceEntity>(ProductPriceEntity.Builder);
+        }
+    }
+}

@@ -7,6 +7,16 @@ description: Use the Geek CLI dotnet_read MCP tool to generate a .NET read repos
 
 Use this skill when the user asks to generate a Geek .NET read repository from an installed template.
 
+## Connection conventions
+
+When generating a repository for Connection in an existing API solution, inspect the target schema and follow its established naming and namespace conventions. Place entity repositories under `Repositories/<Entity>/Read` and view repositories under `Repositories/<View>/Read`, with interface and implementation in their respective folders. Views are read-only. Verify generated file paths, filenames, namespaces, and interface-to-implementation mapping against the target project. Register each generated repository in the consuming API project's `ExtensionMethods/IServiceCollectionExtension.cs`, inside `AddRepositories`, following its existing service lifetime. If the registration location, mapping, or lifetime is missing or ambiguous, ask before adding registrations. Report any correction and ask the user to review Connection before advancing to another section.
+
+### Complete `FindAsync` for corporation, company, and code
+
+When the target entity is scoped by corporation and company and its agreed lookup key also includes a code, complete the generated read repository's `FindAsync` to filter by all three values. Use the reference template in `templates/find-by-corporation-company-code.cs.txt`, adapting entity, context, repository, and code-property names to the inspected solution.
+
+Do not add this overload or assume a code property when the target entity's lookup key does not establish it. Inspect the entity and repository interface; ask the user if the lookup fields or naming are ambiguous. Verify the repository applies both scope filters and the code predicate before `FirstOrDefaultAsync`.
+
 ## Prerequisites and inputs
 
 - The `dotnet_read` MCP tool and .NET SDK must be available. The selected Geek read repository template must already be installed and usable in the MCP process environment.
