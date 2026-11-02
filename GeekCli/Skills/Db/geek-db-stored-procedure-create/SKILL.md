@@ -10,6 +10,7 @@ Use this skill when the user asks to add an individual stored procedure to an ex
 ## Required context
 
 - Obtain the path to the existing SQL file previously generated through `geek-db-script`. Work in that file only. Do not invoke `geek-db-script`, generate scripts or synonyms, or execute SQL against a database.
+- Obtain the existing migration that will integrate the procedure and synonym scripts. If it has not been supplied, request it and keep migration integration pending; do not create a migration or treat the integration as complete.
 - Identify the schema, exact table name, operation (`INSERT`, `UPDATE`, `DELETE`, or a user-defined operation), table definition, complete primary key, table scope, and target-project precedents.
 - Inspect the table and project precedents when available. Ask for missing information that affects the procedure. Keep the affected work pending when required information or precedents are unavailable; do not invent it or report it as complete.
 - Name the procedure `SP_<EXACT_TABLE_NAME>_<OPERATION>` in the table's schema. Preserve the table's exact spelling, including its singular or plural form.
@@ -41,6 +42,12 @@ Use `templates/update-procedure.sql.txt`. Include only the business assignments 
 ### DELETE template
 
 Use `templates/delete-procedure.sql.txt`. Supply the complete primary key and scope parameters; do not add `@user`, a pre-delete existence check, or a returned `SELECT`.
+
+### Migration integration template
+
+Use `templates/migration-integration.cs.txt` as an adaptation pattern for the supplied existing migration, not as a replacement migration class. Resolve the procedure schema, scripts folder, and filenames from the supplied artifacts and target-project precedents. In `Up`, integrate procedure creation with `CreateOrAlterSpFromSqlFile` and synonym creation with `CreateOrAlterSynomFromSqlFile` using the `dbo` schema. In `Down`, integrate their respective removal scripts with `RollbackSpFromSqlFile` and `RollbackSynomFromSqlFile`, in procedure-then-synonym order. Use `CREATE_<SP>.sql` and `ROLLBACK_CREATE_<SP>.sql`; the procedure and synonym scripts share each filename in their respective directories.
+
+Preserve the migration's attributes, metadata, and unrelated operations. Reuse existing schema and folder constants where applicable, and do not add duplicate declarations or matching migration calls. If a required script or migration is missing, request it and leave integration pending; do not generate it or report integration complete.
 
 ## Error handling and completion
 

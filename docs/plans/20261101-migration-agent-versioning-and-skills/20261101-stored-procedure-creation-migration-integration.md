@@ -4,7 +4,7 @@ Related backlog: [Migration agent versioning and skills](../../backlog/20261101-
 
 Story: 10
 
-Status: Pending
+Status: Completed
 
 ## Story
 
@@ -12,17 +12,17 @@ As a database maintainer, I want the stored-procedure creation skill to also req
 
 ## Acceptance criteria
 
-- [ ] Given the scripts already requested by the skill, when no existing migration has been supplied, then the skill requests that migration and leaves integration pending until it is provided.
-- [ ] Given the four scripts and an existing migration, when stored-procedure creation is completed, then Up references procedure and synonym creation and Down references their respective removal, preserving existing migration operations.
-- [ ] Given the updated skill, when its reusable integration template is consulted, then it shows all four references following the supplied example, with replaceable schema, folder, and filenames.
+- [x] Given the scripts already requested by the skill, when no existing migration has been supplied, then the skill requests that migration and leaves integration pending until it is provided.
+- [x] Given the four scripts and an existing migration, when stored-procedure creation is completed, then Up references procedure and synonym creation and Down references their respective removal, preserving existing migration operations.
+- [x] Given the updated skill, when its reusable integration template is consulted, then it shows all four references following the supplied example, with replaceable schema, folder, and filenames.
 
 ## Plan
 
-- [ ] Add the requirement to request an existing migration while retaining the current script-request workflow.
-- [ ] Include a reusable migration integration template alongside the existing procedure templates.
-- [ ] Update the instructions to integrate all four references while preserving existing migration content and avoiding duplicate calls or constants.
-- [ ] Validate instructions, template, and diff through direct review; TDD is not required because the repository has no test project.
-- [ ] Keep this plan and the related backlog statuses consistent with verified implementation progress.
+- [x] Add the requirement to request an existing migration while retaining the current script-request workflow.
+- [x] Include a reusable migration integration template alongside the existing procedure templates.
+- [x] Update the instructions to integrate all four references while preserving existing migration content and avoiding duplicate calls or constants.
+- [x] Validate instructions, template, and diff through direct review; TDD is not required because the repository has no test project.
+- [x] Keep this plan and the related backlog statuses consistent with verified implementation progress.
 
 ## Template contract
 

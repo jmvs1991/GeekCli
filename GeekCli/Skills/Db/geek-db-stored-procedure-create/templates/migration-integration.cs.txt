@@ -1,0 +1,14 @@
+private const string __SCHEMA__ = "<SCHEMA>";
+private const string __FOLDER__ = "<FOLDER>";
+
+protected override void Up(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.CreateOrAlterSpFromSqlFile(__SCHEMA__, __FOLDER__, "CREATE_<SP>.sql");
+    migrationBuilder.CreateOrAlterSynomFromSqlFile("dbo", __FOLDER__, "CREATE_<SP>.sql");
+}
+
+protected override void Down(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.RollbackSpFromSqlFile(__SCHEMA__, __FOLDER__, "ROLLBACK_CREATE_<SP>.sql");
+    migrationBuilder.RollbackSynomFromSqlFile("dbo", __FOLDER__, "ROLLBACK_CREATE_<SP>.sql");
+}
