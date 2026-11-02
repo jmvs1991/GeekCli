@@ -93,12 +93,26 @@ namespace GeekCliServices.Services.Ai.Agents
             string? stagingPath = null;
             try
             {
+                string agentName = Path.GetFileNameWithoutExtension(catalogPath);
+                string recommendationPath = Path.Combine(Path.GetDirectoryName(catalogPath)!, $"{agentName}.AGENTS.md");
+                string? recommendation = File.Exists(recommendationPath)
+                    ? File.ReadAllText(recommendationPath)
+                    : null;
+
                 string parent = Path.GetDirectoryName(destination)!;
                 Directory.CreateDirectory(parent);
                 stagingPath = Path.Combine(parent, $".{command.Name}.{Guid.NewGuid():N}.tmp");
                 File.Copy(catalogPath, stagingPath);
                 File.Move(stagingPath, destination, command.Overwrite);
                 CommandOutput.Info($"Installed subagent '{command.Name}' to '{destination}'.");
+                if (!string.IsNullOrWhiteSpace(recommendation))
+                {
+                    string instructionsPath = command.Scope.Equals("project", StringComparison.OrdinalIgnoreCase)
+                        ? Path.Combine(Path.GetFullPath(command.ProjectPath!), "AGENTS.md")
+                        : "the target project's AGENTS.md";
+                    CommandOutput.Info($"Recommended text for {instructionsPath}:{Environment.NewLine}{recommendation.Trim()}");
+                }
+
                 return 0;
             }
             catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
