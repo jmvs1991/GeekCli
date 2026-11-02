@@ -1,0 +1,12 @@
+private const string __SCHEMA__ = "<SCHEMA>";
+private const string __FOLDER__ = "<ISSUE_FOLDER>";
+
+protected override void Up(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.CreateOrAlterSpFromSqlFile(__SCHEMA__, __FOLDER__, "<UP_SQL_FILENAME>");
+}
+
+protected override void Down(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.CreateOrAlterSpFromSqlFile(__SCHEMA__, __FOLDER__, "<DOWN_SQL_FILENAME>");
+}

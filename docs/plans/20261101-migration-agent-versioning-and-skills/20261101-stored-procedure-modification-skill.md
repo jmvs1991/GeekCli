@@ -4,7 +4,7 @@ Related backlog: [Migration agent versioning and skills](../../backlog/20261101-
 
 Story: 7
 
-Status: Pending
+Status: In progress
 
 ## Story
 
@@ -18,8 +18,8 @@ As a database maintainer, I want to modify an existing stored procedure through 
 
 ## Plan
 
-- [ ] Define `geek-db-stored-procedure-modify`, receiving the generated migration, both existing SQL files, and the requested change.
-- [ ] Include an integration template with private string constants `__SCHEMA__` and `__FOLDER__`, and `CreateOrAlterSpFromSqlFile` calls in Up and Down referencing their respective SQL files.
+- [x] Define `geek-db-stored-procedure-modify`, receiving the generated migration, both existing SQL files, and the requested change.
+- [x] Include an integration template with private string constants `__SCHEMA__` and `__FOLDER__`, and `CreateOrAlterSpFromSqlFile` calls in Up and Down referencing their respective SQL files.
 - [ ] Establish the previous definition from migration history and referenced SQL, present the proposed change and restoration for review, and complete the SQL files after confirmation.
 - [ ] Adapt the template to actual values, reuse equivalent existing constants where applicable, and preserve migration attributes, metadata, and unrelated operations.
 - [ ] Review instructions, template, references, reversal, and insufficient-information scenarios; update plan and backlog statuses only according to verified progress.
@@ -64,4 +64,4 @@ Validate by directly reviewing skill instructions, the bundled template, and the
 
 ## Refinement decisions
 
-The user selected existing SQL files as inputs and requested that the skill prepare the modified procedure. The user additionally required an already generated migration, integration of both SQL files through `CreateOrAlterSpFromSqlFile`, a private `__SCHEMA__` string constant instead of a schema identifier such as `Sales`, and a bundled integration template. This document records the requested plan; implementation has not started.
+The user selected existing SQL files as inputs and requested that the skill prepare the modified procedure. The user additionally required an already generated migration, integration of both SQL files through `CreateOrAlterSpFromSqlFile`, a private `__SCHEMA__` string constant instead of a schema identifier such as `Sales`, and a bundled integration template. The reusable skill and integration template are implemented; exercising a confirmed modification against migration history and actual SQL files remains pending.
