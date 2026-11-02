@@ -65,7 +65,17 @@ dotnet build .\GeekCliSolution.sln
 dotnet build .\GeekCli\GeekCli.csproj -c Release
 ```
 
-`Taskfile.yml` also provides `task geek-cli:build`. To create a tool package when needed:
+Run the tasks defined in `Taskfile.yml` from the repository root with the Task CLI:
+
+| Command | Behavior |
+| --- | --- |
+| `task geek-cli:build` | Build `GeekCli/GeekCli.csproj` in Release mode. |
+| `task geek-cli:pack` | Pack the Geek CLI tool in Release mode. |
+| `task geek-cli:install-tool` | Run `geek-cli:pack`, then install `GeekCli` globally with detailed verbosity. |
+| `task geek-cli:update-tool` | Run `geek-cli:pack`, then update the global `GeekCli` installation with detailed verbosity. |
+| `task geek-cli:uninstall-tool` | On Windows, run `scripts/stop-geek-cli-mcp.ps1` to stop active Geek CLI MCP servers, then uninstall `GeekCli` globally. On other platforms, only uninstall the tool. |
+
+The install, update, and uninstall tasks change the global tool installation; run them when the requested work requires that change. The build and pack tasks execute in the `GeekCli` directory. To create a tool package directly when needed:
 
 ```powershell
 dotnet pack .\GeekCli\GeekCli.csproj -c Release
