@@ -21,6 +21,7 @@ Use this skill when the user asks to generate Geek .NET message resources for lo
 - Select the scope that matches the entity. The MCP chooses the corresponding template and base class: `basic` uses `ResourceBase`, `corp` uses `ResourceWithCorporationBase`, `corp-co` uses `ResourceWithCorporationCompanyBase`, and `corp-co-code` uses `ResourceWithCorporationCompanyAndCodeBase`.
 - Adapt the supplied `BrandResource` reference pattern: accept `CultureInfo` in the constructor and pass it to the base class; implement localized message properties by calling `Localization<BrandResource>.GetValue("MessageKey", _culture)`.
 - Keep message keys and meanings aligned between English and Spanish resources. Write clear, descriptive messages. Add placeholders such as `{{code}}` only when they provide useful context, and keep the same placeholders in both languages. The consuming code is responsible for replacing placeholders.
+- Inspect all resource entries and replace template filler or generic sample text with clear, feature-specific messages in both languages. Do not treat the presence of matching keys as proof that translations are complete or meaningful.
 - Treat these examples as skill reference templates for adapting generated output; they do not replace the installed `dotnet new` template used by the MCP tool.
 
 ### Reference templates

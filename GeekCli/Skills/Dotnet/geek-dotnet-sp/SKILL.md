@@ -17,7 +17,7 @@ Use this skill when the user asks to generate a Geek .NET stored procedure class
 ## API Services conventions
 
 - Place stored procedure classes under `<Schema>Services/<Entity>/Models/Sp`, using the entity name without the `Entity` suffix for its folder.
-- Each entity has at least `SpInsert`, `SpUpdate`, and `SpDelete`; additional stored procedure classes may be needed for its operations. Views do not have stored procedure classes.
+- Each entity with CRUD operations has `SpInsert`, `SpUpdate`, and `SpDelete`. Features may also define operation-specific stored procedure models, such as `SpFactor`, and related models such as `PriceModel`; inspect the existing feature and its service methods rather than limiting generation to the CRUD trio. Views do not have stored procedure classes.
 - For a `corp-co-code` entity, select `corp-co`, the strongest supported SP scope. Do not pass `corp-co-code`; it is unsupported by this generator.
 - Follow the target project's examples for `init` properties, protected parameter helper methods, and readable `MapToSqlParameters()` declarations with one parameter per line. Do not add shared inheritance solely to remove repeated properties across SP classes.
 - Start from the entity's properties and infer operation-specific parameter inclusion from the existing solution and supplied Insert, Update, and Delete reference examples. Ask when the target conventions or inclusion rules remain ambiguous.

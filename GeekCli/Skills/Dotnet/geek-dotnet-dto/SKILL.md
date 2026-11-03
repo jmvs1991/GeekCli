@@ -22,6 +22,7 @@ Use this skill when the user asks to create a Geek .NET DTO or view DTO from an 
 - The DTO generator does not support `corp-co-code`. For an entity with that scope, use the `corp-co` DTO template as agreed; do not pass an unsupported scope.
 - View DTOs use the corresponding `ViewDTO`/`IViewDTO`, `ViewDTOWithCorporation`/`IViewDTOWithCorporation`, or `ViewDTOWithCorporationAndCompany`/`IViewDTOWithCorporationAndCompany` pattern for `basic`, `corp`, or `corp-co`.
 - Adapt the supplied `BrandDTO` reference from the target project for private setters, its transform delegate, constructors, and bidirectional entity mapping. Preserve the established mapping behavior when adapting generated output; ask if the target example conflicts with these conventions.
+- Review existing DTOs for fields projected from related data or composed from multiple sources, such as currency descriptions and prices. A DTO may expose these values without mapping each one directly to a property on its primary entity. Preserve the target feature's established mapping and do not force one-to-one property mapping.
 - Treat reference examples as guides for adapting and validating generated output. The MCP still invokes the installed `dotnet new` template.
 
 ## Invoke the tool
