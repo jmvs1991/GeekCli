@@ -1,0 +1,17 @@
+using ServiceDomain.Abstraction.Translate;
+using ServiceDomain.Translate;
+using System.Globalization;
+
+namespace CatalogServices.Brand.Resources
+{
+    public class BrandResource : ResourceWithCorporationBase
+    {
+        public override string notFoundMsg => Localization<BrandResource>.GetValue("NotFoundMsg", _culture);
+
+        public override string notFoundByCorporationMsg => Localization<BrandResource>.GetValue("NotFoundByCorporationMsg", _culture);
+
+        public BrandResource(CultureInfo culture) : base(culture)
+        {
+        }
+    }
+}
