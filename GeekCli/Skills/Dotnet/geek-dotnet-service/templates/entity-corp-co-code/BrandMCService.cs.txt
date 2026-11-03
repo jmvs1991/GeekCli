@@ -1,0 +1,22 @@
+using CatalogCache.Brand;
+using CatalogServices.Brand.Models;
+using CatalogServices.Brand.Models.Sp;
+using Connection.Catalog.Entities;
+using ServiceDomain.Abstraction.Services.Cache.Paginationful.Filterless.Transactionless;
+
+namespace CatalogServices.Brand.Services
+{
+    public class BrandMCService : ServiceCacheWithCorporationCompanyAndCodeBaseAsync<BrandDTO,
+                                                                                     BrandEntity,
+                                                                                     IBrandCache<BrandDTO>,
+                                                                                     IBrandService,
+                                                                                     SpInsert,
+                                                                                     SpUpdate,
+                                                                                     SpDelete>,
+                                  IBrandService
+    {
+        public BrandMCService(IBrandService service, IBrandCache<BrandDTO> cache) : base(service, cache)
+        {
+        }
+    }
+}

@@ -1,0 +1,39 @@
+using Connection.Network.Repositories.ClientProfileDailyRegistrationKpi.Read;
+using Connection.Network.Views;
+using Microsoft.AspNetCore.Http;
+using NetworkServices.ClientProfileDailyRegistrationKpi.Models;
+using NetworkServices.ClientProfileDailyRegistrationKpi.Resources;
+using ServiceDomain.Abstraction.Services.Read.Paginationful.Filterless.Transactionless;
+using ServiceDomain.Exceptions;
+using ServiceDomain.Translate;
+using SolutionDomain.Domains.EntityFramework.Models;
+using SolutionDomain.Domains.Services.Models;
+
+namespace NetworkServices.ClientProfileDailyRegistrationKpi.Services
+{
+    public class ClientProfileDailyRegistrationKpiDBService : ViewServiceWithCorporationAndCompanyAsyncBase<ClientProfileDailyRegistrationKpiDTO,
+                                                                                                            ClientProfilesDailyRegistrationKpiView,
+                                                                                                            IClientProfileDailyRegistrationKpiReadRepository,
+                                                                                                            ClientProfileDailyRegistrationKpiResource>,
+                                                              IClientProfileDailyRegistrationKpiService
+    {
+        protected override Func<ClientProfilesDailyRegistrationKpiView, ClientProfileDailyRegistrationKpiDTO> transform => ClientProfileDailyRegistrationKpiDTO.transform;
+
+        public ClientProfileDailyRegistrationKpiDBService(IClientProfileDailyRegistrationKpiReadRepository read,
+                                                          IHttpContextAccessor httpcontextAccessor) : base(read, new ClientProfileDailyRegistrationKpiResource(httpcontextAccessor.HttpContext.Request.Headers.GetCultureInfo()))
+        {
+        }
+
+        public async Task<ServicePaginationResult<ClientProfileDailyRegistrationKpiDTO>> FindAsync(string corporation, string company, int year, int month, int pageNumber, int pageSize)
+        {
+            Result<ClientProfilesDailyRegistrationKpiView> result = await _read.FindAsync(corporation, company, year, month, pageNumber, pageSize);
+
+            if (!result.Value.Any())
+            {
+                throw new EntityException(_resource.notFoundByCorporationAndCompanyMsg.ReplaceCorporationInMessage(corporation).ReplaceCompanyInMessage(company));
+            }
+
+            return ServicePaginationResult<ClientProfileDailyRegistrationKpiDTO>.DataFromDB(data: result.Value.Select(transform).ToList(), totalRecords: result.TotalRecords);
+        }
+    }
+}

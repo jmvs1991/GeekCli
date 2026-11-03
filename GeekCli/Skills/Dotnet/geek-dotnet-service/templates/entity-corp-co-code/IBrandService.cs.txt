@@ -1,0 +1,13 @@
+using CatalogServices.Brand.Models;
+using CatalogServices.Brand.Models.Sp;
+using Connection.Catalog.Entities;
+using SolutionDomain.Domains.Services.Interfaces.Read.Paginationful.Filterless;
+using SolutionDomain.Domains.Services.Interfaces.Write.Modelful;
+
+namespace CatalogServices.Brand.Services
+{
+    public interface IBrandService : IServiceWithCorporationCompanyAndCodeAsync<BrandDTO, BrandEntity>,
+                                     IServiceCRUD<BrandDTO, BrandEntity, SpInsert, SpUpdate, SpDelete>
+    {
+    }
+}
