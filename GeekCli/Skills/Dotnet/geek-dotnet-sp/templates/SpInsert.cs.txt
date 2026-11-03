@@ -1,0 +1,34 @@
+using Microsoft.Data.SqlClient;
+using ServiceDomain.Abstraction.Sp;
+using SolutionDomain.Domains.Sp;
+
+namespace CatalogServices.Brand.Models.Sp
+{
+    public class SpInsert : SpBaseWithCorporationAndCompany, ISpWithCorporationAndCompany
+    {
+        public string Name { get; init; } = "";
+        public string Description { get; init; } = "";
+
+        protected SqlParameter GetNameParameter() => new SqlParameter("@name", Name);
+        protected SqlParameter GetDescriptionParameter() => new SqlParameter("@description", Description);
+
+        public override (string sp, SqlParameter[] parameters) MapToSqlParameters()
+        {
+            const string sp = "SP_MR_BRAND_INSERT " +
+                              "@corporation," +
+                              "@company," +
+                              "@name," +
+                              "@description," +
+                              "@user";
+            SqlParameter[] parameters =
+            {
+                GetCorporationParameter(),
+                GetCompanyParameter(),
+                GetNameParameter(),
+                GetDescriptionParameter(),
+                GetUserParameter()
+            };
+            return (sp, parameters);
+        }
+    }
+}

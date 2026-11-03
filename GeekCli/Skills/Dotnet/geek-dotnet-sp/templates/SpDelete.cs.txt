@@ -1,0 +1,27 @@
+using Microsoft.Data.SqlClient;
+using ServiceDomain.Abstraction.Sp;
+using SolutionDomain.Domains.Sp;
+
+namespace CatalogServices.Brand.Models.Sp
+{
+    public class SpDelete : SpBaseWithCorporationAndCompany, ISpWithCorporationAndCompany
+    {
+        public string Codbrand { get; init; } = "";
+        protected SqlParameter GetCodbrandParameter() => new SqlParameter("@codbrand", Codbrand);
+
+        public override (string sp, SqlParameter[] parameters) MapToSqlParameters()
+        {
+            const string sp = "SP_MR_BRAND_DELETE " +
+                              "@corporation," +
+                              "@company," +
+                              "@codbrand";
+            SqlParameter[] parameters =
+            {
+                GetCorporationParameter(),
+                GetCompanyParameter(),
+                GetCodbrandParameter()
+            };
+            return (sp, parameters);
+        }
+    }
+}

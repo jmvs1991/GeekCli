@@ -1,0 +1,38 @@
+using Connection.Catalog.Entities;
+using ServiceDomain.Abstraction.DTOs;
+using SolutionDomain.Domains.Services.Interfaces.DTOs;
+
+namespace CatalogServices.Brand.Models
+{
+    public class BrandDTO : DTOWithCorporationAndCompany<BrandEntity>, IDTOWithCorporationAndCompany<BrandEntity>
+    {
+        public string Codbrand { get; private set; } = "";
+        public string Name { get; private set; } = "";
+        public string Description { get; private set; } = "";
+        public bool IsActive { get; private set; }
+
+        public static readonly Func<BrandEntity, BrandDTO> transform = entity => new BrandDTO(entity);
+
+        public BrandDTO() : base() { }
+        public BrandDTO(BrandEntity entity) : base(entity) { }
+
+        public override BrandEntity MapDtoToEntity()
+        {
+            BrandEntity entity = base.MapDtoToEntity();
+            entity.Codbrand = Codbrand;
+            entity.Name = Name;
+            entity.Description = Description;
+            entity.IsActive = IsActive;
+            return entity;
+        }
+
+        public override void MapEntityToDto(BrandEntity entity)
+        {
+            base.MapEntityToDto(entity);
+            Codbrand = entity.Codbrand;
+            Name = entity.Name;
+            Description = entity.Description;
+            IsActive = entity.IsActive;
+        }
+    }
+}

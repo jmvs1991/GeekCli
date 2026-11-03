@@ -1,0 +1,42 @@
+using Microsoft.Data.SqlClient;
+using ServiceDomain.Abstraction.Sp;
+using SolutionDomain.Domains.Sp;
+
+namespace CatalogServices.Brand.Models.Sp
+{
+    public class SpUpdate : SpBaseWithCorporationAndCompany, ISpWithCorporationAndCompany
+    {
+        public string Codbrand { get; init; } = "";
+        public string Name { get; init; } = "";
+        public string Description { get; init; } = "";
+        public bool IsActive { get; init; } = true;
+
+        protected SqlParameter GetCodbrandParameter() => new SqlParameter("@codbrand", Codbrand);
+        protected SqlParameter GetNameParameter() => new SqlParameter("@name", Name);
+        protected SqlParameter GetDescriptionParameter() => new SqlParameter("@description", Description);
+        protected SqlParameter GetIsActiveParameter() => new SqlParameter("@is_active", IsActive);
+
+        public override (string sp, SqlParameter[] parameters) MapToSqlParameters()
+        {
+            const string sp = "SP_MR_BRAND_UPDATE " +
+                              "@corporation," +
+                              "@company," +
+                              "@codbrand," +
+                              "@name," +
+                              "@description," +
+                              "@is_active," +
+                              "@user";
+            SqlParameter[] parameters =
+            {
+                GetCorporationParameter(),
+                GetCompanyParameter(),
+                GetCodbrandParameter(),
+                GetNameParameter(),
+                GetDescriptionParameter(),
+                GetIsActiveParameter(),
+                GetUserParameter()
+            };
+            return (sp, parameters);
+        }
+    }
+}
