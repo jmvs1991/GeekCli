@@ -15,6 +15,15 @@ Use this skill when the user asks to create a Geek .NET DTO or view DTO from an 
 - Optional `view` defaults to `false`. Use `false` for a regular DTO and `true` for a view DTO. Clarify the variant if the request does not make it clear.
 - The tool has no working-directory parameter. Confirm that the MCP process working directory and template environment target the intended workspace before execution; clarify if they may point elsewhere.
 
+## API Services conventions
+
+- Place entity and view DTOs under `<Schema>Services/<Entity>/Models`. Remove the `Entity` suffix from the entity name; for example, `BrandEntity` uses `BrandDTO`.
+- Entity DTOs use the matching base class and interface: `DTO`/`IDTO` for `basic`, `DTOWithCorporation`/`IDTOWithCorporation` for `corp`, and `DTOWithCorporationAndCompany`/`IDTOWithCorporationAndCompany` for `corp-co`.
+- The DTO generator does not support `corp-co-code`. For an entity with that scope, use the `corp-co` DTO template as agreed; do not pass an unsupported scope.
+- View DTOs use the corresponding `ViewDTO`/`IViewDTO`, `ViewDTOWithCorporation`/`IViewDTOWithCorporation`, or `ViewDTOWithCorporationAndCompany`/`IViewDTOWithCorporationAndCompany` pattern for `basic`, `corp`, or `corp-co`.
+- Adapt the supplied `BrandDTO` reference from the target project for private setters, its transform delegate, constructors, and bidirectional entity mapping. Preserve the established mapping behavior when adapting generated output; ask if the target example conflicts with these conventions.
+- Treat reference examples as guides for adapting and validating generated output. The MCP still invokes the installed `dotnet new` template.
+
 ## Invoke the tool
 
 Once the required inputs, scope, variant, and target context are clear, call `dotnet_dto` with the confirmed values. Use the MCP tool as the only generation path. Do not run `dotnet new` or another command as a fallback.
