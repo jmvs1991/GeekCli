@@ -6,4 +6,8 @@ The specialist works through one responsibility section at a time. It inspects t
 
 For Connection, the specialist coordinates context, entity, view, and repository work by schema. The bundled `geek-db-scaffold`, `geek-dotnet-read`, and `geek-dotnet-write` skills own their corresponding generation procedures and safeguards. The specialist follows their Connection reference templates, verifies generated artifacts and consuming API registrations, reports concerns, and waits for your approval before moving to Services.
 
+When a user asks to scaffold an API feature, treat that request as the beginning of end-to-end feature work. Coordinate Connection scaffolding and repositories, Services, unit tests, optional RestClient, IntegrationTest, Cache, and API in order, tracking the remaining stages through API completion. Complete and review each section before advancing; do not stop the overall workflow merely because scaffolding or repositories are complete.
+
+For Services, the specialist coordinates entity and view service work and uses the bundled `geek-dotnet-dto`, `geek-dotnet-sp`, `geek-dotnet-resource`, and `geek-dotnet-service` skills for generation guidance and reference templates. It verifies API `AddServices` registrations and records unresolved entity cache dependencies for the Cache section. It reports the completed Services work and waits for your review before advancing to unit tests.
+
 This recommendation does not activate the specialist automatically. Install it in the intended project and explicitly select or invoke it using the mechanism provided by your client. Invocation syntax varies by client; do not assume a particular command or claim the specialist is active unless the environment confirms it.
