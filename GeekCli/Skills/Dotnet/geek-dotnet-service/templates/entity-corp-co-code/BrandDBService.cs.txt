@@ -1,0 +1,31 @@
+using CatalogServices.Brand.Models;
+using CatalogServices.Brand.Models.Sp;
+using CatalogServices.Brand.Resources;
+using Connection.Catalog.Entities;
+using Connection.Catalog.Repositories.Brand.Read;
+using Connection.Catalog.Repositories.Brand.Write;
+using Microsoft.AspNetCore.Http;
+using ServiceDomain.Abstraction.Services.Read.Paginationful.Filterless.Transactionless;
+using ServiceDomain.Translate;
+
+namespace CatalogServices.Brand.Services
+{
+    public class BrandDBService : ServiceWithCorporationCompanyAndCodeAsyncBase<BrandDTO,
+                                                                                BrandEntity,
+                                                                                IBrandReadRepository,
+                                                                                IBrandWriteRepository,
+                                                                                BrandResource,
+                                                                                SpInsert,
+                                                                                SpUpdate,
+                                                                                SpDelete>,
+                                  IBrandService
+    {
+        protected override Func<BrandEntity, BrandDTO> transform => BrandDTO.transform;
+
+        public BrandDBService(IBrandReadRepository read,
+                              IBrandWriteRepository write,
+                              IHttpContextAccessor httpcontextAccessor) : base(read, write, new BrandResource(httpcontextAccessor.HttpContext.Request.Headers.GetCultureInfo()))
+        {
+        }
+    }
+}

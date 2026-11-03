@@ -1,0 +1,9 @@
+using NetworkServices.ClientProfileDailyRegistrationKpi.Models;
+using SolutionDomain.Domains.Services.Interfaces.Read.Paginationful.Filterless;
+
+namespace NetworkServices.ClientProfileDailyRegistrationKpi.Services
+{
+    public interface IClientProfileDailyRegistrationKpiService : IServiceWithCorporationAndCompanyAsync<ClientProfileDailyRegistrationKpiDTO>
+    {
+    }
+}
