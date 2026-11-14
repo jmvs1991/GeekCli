@@ -268,6 +268,10 @@ geek-cli db
 geek-cli db migration add InitSchema --project Booking --issue ABC-123 --init
 ```
 
+Run migration commands from the solution directory containing `<Project>.Manager` and `<Project>.SchemaInitialization` (with `--init`) or `<Project>.SchemaUpdates` (the default). Add, remove, and rollback resolve project paths using the operating system directory separator on Windows, macOS, and Linux. The database wizard and MCP tools `db_migration_add`, `db_migration_remove`, and `db_migration_rollback` use the same services and directory convention.
+
+For example, the equivalent MCP add parameters are `projectName: "Booking"`, `migrationName: "InitSchema"`, `issue: "ABC-123"`, and `init: true`.
+
 ### Scaffold a table directly
 
 ```bash

@@ -11,11 +11,13 @@ namespace GeekCliServices.Services.Db.Migrations.Add
             string issue = command.Issue;
             string migration = command.MigrationName;
             string manager = $"{command.ProjectName}.Manager";
+            string projectPath = Path.Combine(".", project, $"{project}.csproj");
+            string managerPath = Path.Combine(".", manager, $"{manager}.csproj");
 
 
             return $"ef migrations add {migration} " +
-                   $"--project .\\{project}\\{project}.csproj " +
-                   $"--startup-project .\\{manager}\\{manager}.csproj " +
+                   $"--project \"{projectPath}\" " +
+                   $"--startup-project \"{managerPath}\" " +
                    $"-o Migrations/{issue} -v -- --Assembly:{project}";
         }
     }
