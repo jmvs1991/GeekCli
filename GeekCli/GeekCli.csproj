@@ -8,7 +8,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <PackAsTool>true</PackAsTool>
 	  <ToolCommandName>geek-cli</ToolCommandName>
-	  <Version>2.11.0</Version>
+	  <Version>2.12.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Skills\**\*">
+    <Compile Remove="Skills\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Skills\**\*" Exclude="Skills\**\bin\**;Skills\**\obj\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackagePath>tools/net8.0/any/Skills/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
