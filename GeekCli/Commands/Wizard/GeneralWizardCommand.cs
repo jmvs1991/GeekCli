@@ -1,6 +1,7 @@
 using GeekCli.Commands.Db.Wizard;
 using GeekCli.Commands.Ai.Wizard;
 using GeekCli.Commands.Dotnet.Wizard;
+using GeekCli.Commands.EditorConfig.Wizard;
 using GeekCli.Commands.Ngx.Wizard;
 using GeekCli.Commands.Rx.Wizard;
 using Spectre.Console;
@@ -15,6 +16,7 @@ namespace GeekCli.Commands.Wizard
         private const string AngularOption = "Angular";
         private const string ReactOption = "React / React Native";
         private const string AiOption = "AI skills and agents";
+        private const string EditorConfigOption = "EditorConfig";
         private const string ExitOption = "Exit";
 
         private readonly IDbWizard _dbWizardCommand;
@@ -22,18 +24,21 @@ namespace GeekCli.Commands.Wizard
         private readonly INgxWizard _ngxWizardCommand;
         private readonly IRxWizard _rxWizardCommand;
         private readonly IAiWizard _aiWizardCommand;
+        private readonly IEditorConfigWizard _editorConfigWizard;
 
         public GeneralWizardCommand(IDbWizard dbWizardCommand,
                                     IDotnetWizard dotnetWizardCommand,
                                     INgxWizard ngxWizardCommand,
                                     IRxWizard rxWizardCommand,
-                                    IAiWizard aiWizardCommand)
+                                    IAiWizard aiWizardCommand,
+                                    IEditorConfigWizard editorConfigWizard)
         {
             _dbWizardCommand = dbWizardCommand;
             _dotnetWizardCommand = dotnetWizardCommand;
             _ngxWizardCommand = ngxWizardCommand;
             _rxWizardCommand = rxWizardCommand;
             _aiWizardCommand = aiWizardCommand;
+            _editorConfigWizard = editorConfigWizard;
         }
 
         protected override int Execute(CommandContext context, CancellationToken cancellationToken)
@@ -49,7 +54,7 @@ namespace GeekCli.Commands.Wizard
                     new SelectionPrompt<string>()
                         .Title("What do you want to work on?")
                         .PageSize(10)
-                        .AddChoices(DatabaseOption, DotnetOption, AngularOption, ReactOption, AiOption, ExitOption));
+                        .AddChoices(DatabaseOption, DotnetOption, AngularOption, ReactOption, AiOption, EditorConfigOption, ExitOption));
 
                 switch (area)
                 {
@@ -67,6 +72,9 @@ namespace GeekCli.Commands.Wizard
                         break;
                     case AiOption:
                         _aiWizardCommand.RunWizard(showBackOption: true);
+                        break;
+                    case EditorConfigOption:
+                        _editorConfigWizard.RunWizard(showBackOption: true);
                         break;
                     case ExitOption:
                         return 0;

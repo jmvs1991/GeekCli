@@ -1,0 +1,156 @@
+# ==========================================
+# VERSION: 1.0.0
+# DESCRIPTION: Geek .NET Coding Standards
+# ==========================================
+
+root = true
+
+# ==========================================
+# GENERAL
+# ==========================================
+
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# ==========================================
+# INDENTATION
+# ==========================================
+
+[*.{cs,csproj,props,targets}]
+indent_style = space
+indent_size = 4
+
+# ==========================================
+# C#
+# ==========================================
+
+[*.cs]
+
+# ------------------------------------------
+# Formatting - Braces
+# ------------------------------------------
+
+# Opening braces on a new line (Allman style)
+csharp_new_line_before_open_brace = all
+
+# ------------------------------------------
+# IDE0008 - Explicit types instead of var
+# ------------------------------------------
+
+csharp_style_var_for_built_in_types = false
+csharp_style_var_when_type_is_apparent = false
+csharp_style_var_elsewhere = false
+dotnet_diagnostic.IDE0008.severity = error
+
+# ------------------------------------------
+# IDE0044 - Readonly fields
+# ------------------------------------------
+
+dotnet_style_readonly_field = true
+dotnet_diagnostic.IDE0044.severity = error
+
+# ------------------------------------------
+# IDE0040 - Explicit accessibility modifiers
+# ------------------------------------------
+
+dotnet_style_require_accessibility_modifiers = for_non_interface_members
+dotnet_diagnostic.IDE0040.severity = error
+
+# ------------------------------------------
+# IDE0025 - Expression-bodied properties
+# ------------------------------------------
+
+csharp_style_expression_bodied_properties = when_on_single_line
+dotnet_diagnostic.IDE0025.severity = suggestion
+
+# ------------------------------------------
+# IDE0001 / IDE0002 - Simplify names
+# ------------------------------------------
+
+dotnet_diagnostic.IDE0001.severity = error
+dotnet_diagnostic.IDE0002.severity = error
+
+# ------------------------------------------
+# Using directives
+# ------------------------------------------
+
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+
+# IDE0005 - Remove unnecessary using directives
+dotnet_diagnostic.IDE0005.severity = error
+
+# IDE0059 - Remove unnecessary assignments
+dotnet_diagnostic.IDE0059.severity = warning
+
+# IDE0060 - Remove unused parameters
+dotnet_code_quality_unused_parameters = non_public
+dotnet_diagnostic.IDE0060.severity = warning
+
+# IDE0032 - Prefer auto properties
+dotnet_diagnostic.IDE0032.severity = suggestion
+
+# ==========================================
+# NAMING - CONSTANTS
+# ==========================================
+
+# Require __CONSTANT_NAME__
+
+dotnet_naming_rule.constants_rule.severity = error
+dotnet_naming_rule.constants_rule.symbols = constants
+dotnet_naming_rule.constants_rule.style = constants_style
+
+dotnet_naming_symbols.constants.applicable_kinds = field
+dotnet_naming_symbols.constants.required_modifiers = const
+dotnet_naming_symbols.constants.applicable_accessibilities = *
+
+dotnet_naming_style.constants_style.capitalization = all_upper
+dotnet_naming_style.constants_style.required_prefix = __
+dotnet_naming_style.constants_style.required_suffix = __
+dotnet_naming_style.constants_style.word_separator = _
+
+# ==========================================
+# NAMING - INTERFACES
+# ==========================================
+
+# Require IInterfaceName
+
+dotnet_naming_rule.interfaces_rule.severity = error
+dotnet_naming_rule.interfaces_rule.symbols = interfaces
+dotnet_naming_rule.interfaces_rule.style = interfaces_style
+
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
+dotnet_naming_symbols.interfaces.applicable_accessibilities = *
+
+dotnet_naming_style.interfaces_style.required_prefix = I
+dotnet_naming_style.interfaces_style.capitalization = pascal_case
+
+# ==========================================
+# IF / ELSE / CONTROL FLOW
+# ==========================================
+
+# IDE0011 - Require braces
+csharp_prefer_braces = true
+dotnet_diagnostic.IDE0011.severity = error
+
+# Require spaces after control flow keywords
+csharp_space_after_keywords_in_control_flow_statements = true
+
+# Opening braces on a new line
+csharp_new_line_before_open_brace = all
+
+# Else on a new line
+csharp_new_line_before_else = true
+
+# IDE0075 - Simplify boolean expressions
+dotnet_diagnostic.IDE0075.severity = warning
+
+# IDE0045 - Do not suggest ternary expressions for assignments
+csharp_style_prefer_conditional_expression_over_assignment = false
+dotnet_diagnostic.IDE0045.severity = none
+
+# IDE0046 - Do not suggest ternary expressions for returns
+csharp_style_prefer_conditional_expression_over_return = false
+dotnet_diagnostic.IDE0046.severity = none

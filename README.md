@@ -42,6 +42,8 @@ geek-cli
 │   ├── service
 │   ├── unittest-service
 │   └── unittest-api
+├── editorconfig
+│   └── add
 ├── ngx
 │   ├── page
 │   ├── component
@@ -64,7 +66,7 @@ Running `geek-cli` with no arguments opens the general wizard.
 
 Running `geek-cli db`, `geek-cli ngx`, `geek-cli rx`, or `geek-cli ai` opens the wizard for that branch. The AI wizard can also be opened from the general wizard and offers individual, bulk, and update operations for skills, plus subagent installation. The bundled `geek-db-migration-specialist` agent coordinates reviewed migration work one approved plan part at a time and requires the `geek-db-migration-add`, `geek-db-migration-remove`, `geek-db-migration-rollback`, `geek-db-script`, `geek-db-table-create`, `geek-db-table-alter`, `geek-db-stored-procedure-create`, and `geek-db-stored-procedure-modify` skills; some operations also require their corresponding MCP tools. The agent installer does not install these skills; install them separately in the target Codex environment. Bulk skill operations summarize the scope and destination before confirmation. Updating warns that complete skill folders will be replaced, including local changes. The Angular wizard can generate pages, components, and services. For services, it can select an Nx application or library tagged `tech:angular`, asks for a project-relative folder, and shows a summary for confirmation before generation.
 
-Running `geek-cli dotnet` lists the installed Geek .NET templates.
+Running `geek-cli dotnet` opens the .NET wizard.
 
 ### Install an AI skill
 
@@ -301,6 +303,20 @@ geek-cli db migration rollback InitSchema --project Booking
 ```bash
 geek-cli dotnet list
 ```
+
+### Add an .editorconfig to a project
+
+```bash
+geek-cli editorconfig add
+geek-cli editorconfig add --type angular --project-path "./My Angular Project"
+geek-cli editorconfig add --type react --project-path "./My React Project"
+```
+
+The command copies the selected template into the current directory by default. Use `--project-path` to choose an existing directory and `--type` to select `csharp` (the default), `angular`, or `react`. An existing `.editorconfig` is preserved.
+
+Run `geek-cli editorconfig` to open the EditorConfig wizard, or choose **EditorConfig** from the general wizard. Select the project type and destination, then confirm the copy.
+
+To update the templates included in future builds, edit the physical files under `GeekCli/Templates/EditorConfig/`. Each template is copied as-is.
 
 ### Generate a DTO directly
 

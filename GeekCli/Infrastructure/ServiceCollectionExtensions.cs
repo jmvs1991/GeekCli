@@ -2,6 +2,7 @@ using GeekCli.Branches;
 using GeekCli.Commands.Ai.Wizard;
 using GeekCli.Commands.Db.Wizard;
 using GeekCli.Commands.Dotnet.Wizard;
+using GeekCli.Commands.EditorConfig.Wizard;
 using GeekCli.Commands.Ngx.Wizard;
 using GeekCli.Commands.Rx.Wizard;
 using GeekCli.Commands.Wizard;
@@ -24,6 +25,7 @@ using GeekCliServices.Services.Dotnet.Service;
 using GeekCliServices.Services.Dotnet.Sp;
 using GeekCliServices.Services.Dotnet.UnitTestService;
 using GeekCliServices.Services.Dotnet.Write;
+using GeekCliServices.Services.EditorConfig;
 using GeekCliServices.Services.Ngx.Component;
 using GeekCliServices.Services.Ngx.Page;
 using GeekCliServices.Services.Ngx.Service;
@@ -43,6 +45,7 @@ namespace GeekCli.Infrastructure
         public static IServiceCollection AddGeekCliServices(this IServiceCollection services)
         {
             services.AddSingleton<IDotnetListService, DotnetListService>();
+            services.AddSingleton<IEditorConfigService, EditorConfigService>();
             services.AddSingleton<ISkillInstallService, SkillInstallService>();
             services.AddSingleton<IAgentInstallService, AgentInstallService>();
             services.AddSingleton<IDotnetDtoService, DotnetDtoService>();
@@ -69,6 +72,7 @@ namespace GeekCli.Infrastructure
             services.AddSingleton<IRxNativeScreenService, RxNativeScreenService>();
             services.AddSingleton<IDbWizard>(provider => provider.GetRequiredService<DbWizardCommand>());
             services.AddSingleton<IDotnetWizard>(provider => provider.GetRequiredService<DotnetWizardCommand>());
+            services.AddSingleton<IEditorConfigWizard>(provider => provider.GetRequiredService<EditorConfigWizardCommand>());
             services.AddSingleton<INgxWizard>(provider => provider.GetRequiredService<NgxWizardCommand>());
             services.AddSingleton<IRxWizard>(provider => provider.GetRequiredService<RxWizardCommand>());
             services.AddSingleton<IAiWizard>(provider => provider.GetRequiredService<AiWizardCommand>());
@@ -91,6 +95,7 @@ namespace GeekCli.Infrastructure
                 config.AddDB();
                 config.AddNgx();
                 config.AddDotnet();
+                config.AddEditorConfig();
             });
 
             return app.Run(args);
